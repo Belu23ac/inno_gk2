@@ -8,9 +8,7 @@ import { Colors } from "./Colors";
 export const GlobalNavigation = {
   headerStyle: {
     backgroundColor: Colors.primary,
-    shadowColor: Colors.boxShadow || '#000',
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    boxShadow: `0px 0px 3.84px rgba(0, 0, 0, 0.25)`,
     elevation: 3,
   },
   headerTintColor: Colors.inactive,

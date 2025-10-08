@@ -1,8 +1,10 @@
 // /Users/bertram/Documents/Skole/inno/gk1/screens/ScanScreen.js
-import React from "react";
+import React, { useState, useRef } from "react";
 import { StatusBar } from "expo-status-bar";
-import { Text, View, Button } from "react-native";
+import { Text, View, Button, Alert, Image } from "react-native";
+import { CameraView, useCameraPermissions } from "expo-camera";
 import { GlobalStyle } from "../styles/GlobalStyle";
+import { ScanScreenStyle } from "../styles/ScanScreenStyle";
 const {
   Animated,
   Easing,
@@ -22,6 +24,12 @@ const SAMPLE_BEERS = [
 ];
 
 export default function ScanScreen({ navigation }) {
+  const [permission, requestPermission] = useCameraPermissions();
+  const [isScanning, setIsScanning] = useState(false);
+  const [capturedPhoto, setCapturedPhoto] = useState(null);
+  const cameraRef = useRef(null);
+  const scanAnim = React.useRef(new Animated.Value(0)).current;
+
   const scanBarcode = () => {
     // dummy scan -> pick a random beer
     const beer = SAMPLE_BEERS[Math.floor(Math.random() * SAMPLE_BEERS.length)];
@@ -30,9 +38,23 @@ export default function ScanScreen({ navigation }) {
     navigation.navigate("Selected Beer", { beer });
   };
 
-  const scanAnim = React.useRef(new Animated.Value(0)).current;
+  const takePicture = async () => {
+    if (!cameraRef.current) return;
+    
+    try {
+      const photo = await cameraRef.current.takePictureAsync({
+        quality: 0.8,
+        base64: false,
+      });
+      setCapturedPhoto(photo);
+      startScanAnimation();
+    } catch (error) {
+      Alert.alert("Error", "Failed to take picture");
+    }
+  };
 
-  const startScan = () => {
+  const startScanAnimation = () => {
+    setIsScanning(true);
     // reset
     scanAnim.setValue(0);
 
@@ -59,8 +81,14 @@ export default function ScanScreen({ navigation }) {
     loopAnim.start(() => {
       const beer =
         SAMPLE_BEERS[Math.floor(Math.random() * SAMPLE_BEERS.length)];
+      setIsScanning(false);
+      setCapturedPhoto(null);
       navigation.navigate("Selected Beer", { beer });
     });
+  };
+
+  const startScan = () => {
+    startScanAnimation();
   };
 
   const translateY = scanAnim.interpolate({
@@ -72,38 +100,67 @@ export default function ScanScreen({ navigation }) {
     i % 3 === 0 ? 6 : i % 2 === 0 ? 3 : 1
   );
 
-  return (
-    <View style={GlobalStyle.container}>
-      <Text>Press the barcode to start scanning</Text>
+  // Handle camera permissions
+  if (!permission) {
+    return <View style={GlobalStyle.container}><Text>Loading...</Text></View>;
+  }
 
-      <TouchableOpacity activeOpacity={0.85} onPress={startScan}>
-        <View style={GlobalStyle.barcode}>
-          <View style={GlobalStyle.bars}>
-            {barPattern.map((w, i) => (
-              <View
-                key={i}
-                style={[
-                  GlobalStyle.bar,
-                  {
-                    width: w,
-                    backgroundColor: i % 2 === 0 ? "#000" : "#fff",
-                  },
-                ]}
-              />
-            ))}
+  if (!permission.granted) {
+    return (
+      <View style={GlobalStyle.container}>
+        <Text style={GlobalStyle.text}>We need your permission to show the camera</Text>
+        <TouchableOpacity style={GlobalStyle.primaryButton} onPress={requestPermission}>
+          <Text style={GlobalStyle.buttonText}>Grant Permission</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
+  // Show scanning animation over the captured photo if scanning is in progress
+  if (isScanning && capturedPhoto) {
+    return (
+      <View style={ScanScreenStyle.fullscreenContainer}>
+        <Text style={ScanScreenStyle.instructionText}>Scanning your photo...</Text>
+        <View style={ScanScreenStyle.photoScanContainer}>
+          <Image source={{ uri: capturedPhoto.uri }} style={ScanScreenStyle.capturedImage} />
+          
+          {/* Scanner overlay */}
+          <View style={ScanScreenStyle.scannerOverlay}>
+            <Animated.View
+              pointerEvents="none"
+              style={[
+                ScanScreenStyle.photoScanLine,
+                {
+                  transform: [{ translateY }],
+                },
+              ]}
+            />
           </View>
-
-          <Animated.View
-            pointerEvents="none"
-            style={[
-              GlobalStyle.scanLine,
-              {
-                transform: [{ translateY }],
-              },
-            ]}
-          />
         </View>
-      </TouchableOpacity>
+        <StatusBar style="auto" />
+      </View>
+    );
+  }
+
+  return (
+    <View style={ScanScreenStyle.fullscreenContainer}>
+      <Text style={ScanScreenStyle.instructionText}>Take a picture to scan for beer information</Text>
+      
+      <View style={ScanScreenStyle.cameraContainer}>
+        <CameraView
+          ref={cameraRef}
+          style={ScanScreenStyle.camera}
+          facing="back"
+        />
+        <View style={ScanScreenStyle.cameraOverlay}>
+          <TouchableOpacity 
+            style={ScanScreenStyle.captureButton} 
+            onPress={takePicture}
+          >
+            <View style={ScanScreenStyle.captureButtonInner} />
+          </TouchableOpacity>
+        </View>
+      </View>
       <StatusBar style="auto" />
     </View>
   );
