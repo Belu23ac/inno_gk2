@@ -4,7 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "@react-native-vector-icons/ionicons";
 import HomeScreen from "./screens/HomeScreen";
-import DetailsScreen from "./screens/DetailsScreen";
+import MapScreen from "./screens/MapScreen";
 import ScanStack from "./stack/ScanStack";
 import SearchStack from "./stack/SearchStack";
 import SettingsStack from "./stack/SettingsStack";
@@ -27,15 +27,15 @@ export default function App() {
             let iconName;
 
             if (route.name === "Home") {
-              iconName = "home";
-            } else if (route.name === "Details") {
-              iconName = "list";
+              iconName = "home-outline";
+            } else if (route.name === "Map") {
+              iconName = "map-outline";
             } else if (route.name === "Search") {
-              iconName = "search";
-            } else if (route.name === "Settings") {
-              iconName = "settings";
+              iconName = "search-outline";
+            } else if (route.name === "Profile") {
+              iconName = "person-circle-outline";
             } else if (route.name === "Scan") {
-              iconName = "scan";
+              iconName = "scan-outline";
             }
 
             return <Ionicons name={iconName} size={size} color={color} />;
@@ -53,9 +53,9 @@ export default function App() {
           component={ScanStack}
           options={{ headerShown: false }}
         />
-        <Tab.Screen name="Details" component={DetailsScreen} />
+        <Tab.Screen name="Map" component={MapScreen} />
         <Tab.Screen
-          name="Settings"
+          name="Profile"
           component={SettingsStack}
           options={{ headerShown: false }}
         />
