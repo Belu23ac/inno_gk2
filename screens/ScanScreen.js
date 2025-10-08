@@ -161,7 +161,6 @@ export default function ScanScreen({ navigation }) {
           </View>
         </CameraView>
       </View>
-      
       <StatusBar style="auto" />
     </View>
   );

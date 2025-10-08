@@ -89,10 +89,7 @@ export const GlobalStyle = StyleSheet.create({
     width: "100%",
     maxWidth: 640,
     alignSelf: "center",
-    shadowColor: Colors.shadow,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    boxShadow: `0px 1px 4px rgba(0, 0, 0, 0.1)`,
     elevation: 2,
   },
   divider: {
@@ -148,10 +145,7 @@ export const GlobalStyle = StyleSheet.create({
     right: 0,
     height: 4,
     backgroundColor: Colors.barcodeScanner,
-    shadowColor: Colors.barcodeScannerShadow,
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.9,
-    shadowRadius: 6,
+    boxShadow: `0px 0px 6px rgba(0, 0, 0, 0.9)`,
   },
 
   // HomeScreen specific styles
@@ -228,9 +222,7 @@ export const GlobalStyle = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 12,
     width: '100%',
-    shadowColor: '#000',
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
+    boxShadow: `0px 0px 8px rgba(0, 0, 0, 0.06)`,
     elevation: 3,
   },
   avatarProfile: {
