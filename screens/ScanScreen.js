@@ -94,11 +94,11 @@ export default function ScanScreen({ navigation }) {
           </View>
 
           <Animated.View
-            pointerEvents="none"
             style={[
               GlobalStyle.scanLine,
               {
                 transform: [{ translateY }],
+                pointerEvents: 'none',
               },
             ]}
           />
