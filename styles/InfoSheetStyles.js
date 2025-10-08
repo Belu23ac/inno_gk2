@@ -25,6 +25,26 @@ const InfoSheetStyles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 5,
   },
+  openingHoursContainer: {
+    marginVertical: 10,
+  },
+  openingHoursRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 5,
+  },
+  day: {
+    fontSize: 16,
+    fontWeight: 'normal', // Fjern fed skrift
+    textAlign: 'left', // Sørg for, at dagene står til venstre
+    flex: 1, // Sørger for, at dagene fylder den venstre kolonne
+  },
+  hours: {
+    fontSize: 16,
+    fontWeight: 'normal', // Sørg for, at åbningstiderne ikke er fede
+    textAlign: 'right', // Sørg for, at åbningstiderne står til højre
+    flex: 1, // Sørger for, at åbningstiderne fylder den højre kolonne
+  },
 });
 
 export default InfoSheetStyles;
