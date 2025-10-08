@@ -1,43 +1,30 @@
 import { StyleSheet } from 'react-native';
 
-export default StyleSheet.create({
-  sheet: {
+const InfoSheetStyles = StyleSheet.create({
+  container: {
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: '#fff',
+    backgroundColor: 'white',
+    padding: 20,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    padding: 20,
     shadowColor: '#000',
-    shadowOpacity: 0.15,
-    shadowRadius: 10,
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
     elevation: 5,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
   },
   title: {
     fontSize: 18,
-    fontWeight: '600',
-    color: '#222',
+    fontWeight: 'bold',
+    marginBottom: 10,
   },
-  subtitle: {
-    color: '#555',
-    fontSize: 14,
-    marginTop: 4,
-  },
-  distance: {
-    marginTop: 8,
-    fontSize: 14,
-    color: '#007AFF',
-    fontWeight: '500',
-  },
-  closeButton: {
-    fontSize: 20,
-    color: '#888',
+  details: {
+    fontSize: 16,
+    marginBottom: 5,
   },
 });
+
+export default InfoSheetStyles;

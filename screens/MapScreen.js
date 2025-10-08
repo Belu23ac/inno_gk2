@@ -29,28 +29,16 @@ export default function MapScreen() {
         console.error("Fejl ved hentning af placering:", error);
         Alert.alert('Fejl', 'Kunne ikke hente placering.');
       } finally {
-        setLoading(false); // Sørg for, at loading stopper
+        setLoading(false);
       }
     })();
   }, []);
-
-  useEffect(() => {
-    (async () => {
-      await AsyncStorage.removeItem("bars");
-    })();
-  }, [location]);
 
   useEffect(() => {
     if (!location) return;
 
     const fetchBars = async () => {
       try {
-        const cachedBars = await AsyncStorage.getItem("bars");
-        if (cachedBars) {
-          setBars(JSON.parse(cachedBars));
-          return;
-        }
-
         const query = `
           [out:json];
           node["amenity"~"bar|pub|biergarten|restaurant"](around:2000,${location.latitude},${location.longitude});
@@ -72,14 +60,9 @@ export default function MapScreen() {
         }));
 
         setBars(barsWithDistance);
-
-        // Gem resultaterne i AsyncStorage
-        await AsyncStorage.setItem("bars", JSON.stringify(barsWithDistance));
       } catch (error) {
         console.error("Fejl ved hentning af steder:", error);
         Alert.alert('Fejl', 'Kunne ikke hente steder.');
-      } finally {
-        setLoading(false); // Sørg for, at loading stopper
       }
     };
 
@@ -114,10 +97,21 @@ export default function MapScreen() {
               longitude: bar.longitude,
             }}
             title={bar.name}
-            description={`${bar.address}\n${bar.openingHours}`}
+            description={
+              bar.address && bar.openingHours
+                ? `${bar.address}\n${bar.openingHours}`
+                : "Ingen yderligere oplysninger"
+            }
+            onPress={() => setSelectedBar(bar)}
           />
         ))}
       </MapView>
+      {selectedBar && (
+        <InfoSheet
+          bar={selectedBar}
+          onClose={() => setSelectedBar(null)}
+        />
+      )}
     </View>
   );
 }
