@@ -1,12 +1,26 @@
 import { StyleSheet } from "react-native";
 
 export const ScanScreenStyle = StyleSheet.create({
+  fullscreenContainer: {
+    flex: 1,
+    backgroundColor: '#000',
+  },
+  instructionText: {
+    position: 'absolute',
+    top: 20,
+    left: 20,
+    right: 20,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    color: 'white',
+    textAlign: 'center',
+    padding: 12,
+    borderRadius: 8,
+    fontSize: 16,
+    zIndex: 1,
+  },
   cameraContainer: {
-    width: 300,
-    height: 400,
-    borderRadius: 12,
-    overflow: 'hidden',
-    marginVertical: 20,
+    flex: 1,
+    width: '100%',
     position: 'relative',
   },
   camera: {
@@ -40,11 +54,8 @@ export const ScanScreenStyle = StyleSheet.create({
     backgroundColor: 'white',
   },
   photoScanContainer: {
-    width: 300,
-    height: 400,
-    borderRadius: 12,
-    overflow: 'hidden',
-    marginVertical: 20,
+    flex: 1,
+    width: '100%',
     position: 'relative',
   },
   capturedImage: {
