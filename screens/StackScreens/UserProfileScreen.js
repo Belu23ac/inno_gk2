@@ -9,6 +9,7 @@ import {
   ScrollView,
 } from 'react-native';
 import { GlobalStyle } from '../../styles/GlobalStyle';
+import { UserProfileScreenStyle } from '../../styles/UserProfileScreenStyle';
 
 export default function UserProfileScreen({ navigation }) {
   const user = {
@@ -23,19 +24,19 @@ export default function UserProfileScreen({ navigation }) {
 
   return (
     <ScrollView contentContainerStyle={[GlobalStyle.container]}>
-      <View style={GlobalStyle.profileCard}>
-        <Image source={{ uri: user.avatar }} style={GlobalStyle.avatarProfile} />
-        <Text style={GlobalStyle.name}>{user.name}</Text>
-        <Text style={GlobalStyle.email}>{user.email}</Text>
-        <Text style={GlobalStyle.bio}>{user.bio}</Text>
+      <View style={UserProfileScreenStyle.profileCard}>
+        <Image source={{ uri: user.avatar }} style={UserProfileScreenStyle.avatarProfile} />
+        <Text style={UserProfileScreenStyle.name}>{user.name}</Text>
+        <Text style={UserProfileScreenStyle.email}>{user.email}</Text>
+        <Text style={UserProfileScreenStyle.bio}>{user.bio}</Text>
 
-        <View style={GlobalStyle.buttonsRow}>
-          <TouchableOpacity style={[GlobalStyle.buttonProfile, GlobalStyle.primary]} onPress={onEdit}>
-            <Text style={[GlobalStyle.buttonText, GlobalStyle.primaryText]}>Edit Profile</Text>
+        <View style={UserProfileScreenStyle.buttonsRow}>
+          <TouchableOpacity style={[UserProfileScreenStyle.buttonProfile, UserProfileScreenStyle.primary]} onPress={onEdit}>
+            <Text style={[UserProfileScreenStyle.buttonText, UserProfileScreenStyle.primaryText]}>Edit Profile</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={[GlobalStyle.buttonProfile, GlobalStyle.secondary]} onPress={onLogout}>
-            <Text style={[GlobalStyle.buttonText, GlobalStyle.secondaryText]}>Logout</Text>
+          <TouchableOpacity style={[UserProfileScreenStyle.buttonProfile, UserProfileScreenStyle.secondary]} onPress={onLogout}>
+            <Text style={[UserProfileScreenStyle.buttonText, UserProfileScreenStyle.secondaryText]}>Logout</Text>
           </TouchableOpacity>
         </View>
       </View>
