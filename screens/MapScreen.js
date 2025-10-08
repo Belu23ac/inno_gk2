@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, ActivityIndicator, Alert } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import styles from '../styles/MapScreenStyles';
 import InfoSheet from '../components/InfoSheet';
 import { calculateDistance } from '../utils/distance';
@@ -14,44 +15,71 @@ export default function MapScreen() {
 
   useEffect(() => {
     (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        Alert.alert('Placering nægtet', 'Appen har brug for adgang til din placering.');
-        setLoading(false);
-        return;
-      }
+      try {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+          Alert.alert('Placering nægtet', 'Appen har brug for adgang til din placering.');
+          setLoading(false);
+          return;
+        }
 
-      let loc = await Location.getCurrentPositionAsync({});
-      setLocation(loc.coords);
+        let loc = await Location.getCurrentPositionAsync({});
+        setLocation(loc.coords);
+      } catch (error) {
+        console.error("Fejl ved hentning af placering:", error);
+        Alert.alert('Fejl', 'Kunne ikke hente placering.');
+      } finally {
+        setLoading(false); // Sørg for, at loading stopper
+      }
     })();
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      await AsyncStorage.removeItem("bars");
+    })();
+  }, [location]);
 
   useEffect(() => {
     if (!location) return;
 
     const fetchBars = async () => {
       try {
+        const cachedBars = await AsyncStorage.getItem("bars");
+        if (cachedBars) {
+          setBars(JSON.parse(cachedBars));
+          return;
+        }
+
         const query = `
           [out:json];
-          node["amenity"~"bar|pub|biergarten"](around:2000,${location.latitude},${location.longitude});
+          node["amenity"~"bar|pub|biergarten|restaurant"](around:2000,${location.latitude},${location.longitude});
           out;
         `;
         const url = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`;
         const response = await fetch(url);
         const data = await response.json();
 
-        // Tilføj afstand til hvert sted
         const barsWithDistance = data.elements.map((bar) => ({
-          ...bar,
+          id: bar.id,
+          name: bar.tags.name || "Ukendt sted",
+          amenity: bar.tags.amenity,
+          address: bar.tags["addr:street"] || "Ingen adresse",
+          openingHours: bar.tags.opening_hours || "Ingen åbningstider",
+          latitude: bar.lat,
+          longitude: bar.lon,
           distance: calculateDistance(location.latitude, location.longitude, bar.lat, bar.lon),
         }));
 
         setBars(barsWithDistance);
-      } catch (err) {
-        console.error(err);
-        Alert.alert('Fejl', 'Kunne ikke hente data fra OpenStreetMap.');
+
+        // Gem resultaterne i AsyncStorage
+        await AsyncStorage.setItem("bars", JSON.stringify(barsWithDistance));
+      } catch (error) {
+        console.error("Fejl ved hentning af steder:", error);
+        Alert.alert('Fejl', 'Kunne ikke hente steder.');
       } finally {
-        setLoading(false);
+        setLoading(false); // Sørg for, at loading stopper
       }
     };
 
@@ -60,16 +88,8 @@ export default function MapScreen() {
 
   if (loading) {
     return (
-      <View style={styles.center}>
-        <ActivityIndicator size="large" color="#000" />
-      </View>
-    );
-  }
-
-  if (!location) {
-    return (
-      <View style={styles.center}>
-        <ActivityIndicator size="large" color="#000" />
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#0000ff" />
       </View>
     );
   }
@@ -90,23 +110,14 @@ export default function MapScreen() {
           <Marker
             key={bar.id}
             coordinate={{
-              latitude: bar.lat,
-              longitude: bar.lon,
+              latitude: bar.latitude,
+              longitude: bar.longitude,
             }}
-            title={bar.tags.name || 'Ukendt bar'}
-            description={bar.tags.amenity}
-            onPress={() =>
-              setSelectedBar({
-                name: bar.tags.name,
-                amenity: bar.tags.amenity,
-                distance: bar.distance,
-              })
-            }
+            title={bar.name}
+            description={`${bar.address}\n${bar.openingHours}`}
           />
         ))}
       </MapView>
-
-      <InfoSheet selectedBar={selectedBar} onClose={() => setSelectedBar(null)} />
     </View>
   );
 }
