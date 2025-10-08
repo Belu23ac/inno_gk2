@@ -4,6 +4,7 @@ import { StatusBar } from "expo-status-bar";
 import { Text, View, Button, Alert, Image } from "react-native";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { GlobalStyle } from "../styles/GlobalStyle";
+import { ScanScreenStyle } from "../styles/ScanScreenStyle";
 const {
   Animated,
   Easing,
@@ -120,15 +121,15 @@ export default function ScanScreen({ navigation }) {
     return (
       <View style={GlobalStyle.container}>
         <Text>Scanning your photo...</Text>
-        <View style={styles.photoScanContainer}>
-          <Image source={{ uri: capturedPhoto.uri }} style={styles.capturedImage} />
+        <View style={ScanScreenStyle.photoScanContainer}>
+          <Image source={{ uri: capturedPhoto.uri }} style={ScanScreenStyle.capturedImage} />
           
           {/* Scanner overlay */}
-          <View style={styles.scannerOverlay}>
+          <View style={ScanScreenStyle.scannerOverlay}>
             <Animated.View
               pointerEvents="none"
               style={[
-                styles.photoScanLine,
+                ScanScreenStyle.photoScanLine,
                 {
                   transform: [{ translateY }],
                 },
@@ -145,18 +146,18 @@ export default function ScanScreen({ navigation }) {
     <View style={GlobalStyle.container}>
       <Text style={GlobalStyle.text}>Take a picture to scan for beer information</Text>
       
-      <View style={styles.cameraContainer}>
+      <View style={ScanScreenStyle.cameraContainer}>
         <CameraView
           ref={cameraRef}
-          style={styles.camera}
+          style={ScanScreenStyle.camera}
           facing="back"
         >
-          <View style={styles.cameraOverlay}>
+          <View style={ScanScreenStyle.cameraOverlay}>
             <TouchableOpacity 
-              style={styles.captureButton} 
+              style={ScanScreenStyle.captureButton} 
               onPress={takePicture}
             >
-              <View style={styles.captureButtonInner} />
+              <View style={ScanScreenStyle.captureButtonInner} />
             </TouchableOpacity>
           </View>
         </CameraView>
@@ -165,72 +166,3 @@ export default function ScanScreen({ navigation }) {
     </View>
   );
 }
-
-const styles = {
-  cameraContainer: {
-    width: 300,
-    height: 400,
-    borderRadius: 12,
-    overflow: 'hidden',
-    marginVertical: 20,
-  },
-  camera: {
-    flex: 1,
-  },
-  cameraOverlay: {
-    flex: 1,
-    backgroundColor: 'transparent',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    paddingBottom: 20,
-  },
-  captureButton: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 3,
-    borderColor: 'white',
-  },
-  captureButtonInner: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: 'white',
-  },
-  photoScanContainer: {
-    width: 300,
-    height: 400,
-    borderRadius: 12,
-    overflow: 'hidden',
-    marginVertical: 20,
-    position: 'relative',
-  },
-  capturedImage: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
-  },
-  scannerOverlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  photoScanLine: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    height: 4,
-    backgroundColor: '#ff4444',
-    shadowColor: '#ff4444',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.9,
-    shadowRadius: 8,
-  }
-};
