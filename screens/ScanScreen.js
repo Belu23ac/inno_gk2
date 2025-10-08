@@ -119,8 +119,8 @@ export default function ScanScreen({ navigation }) {
   // Show scanning animation over the captured photo if scanning is in progress
   if (isScanning && capturedPhoto) {
     return (
-      <View style={GlobalStyle.container}>
-        <Text>Scanning your photo...</Text>
+      <View style={ScanScreenStyle.fullscreenContainer}>
+        <Text style={ScanScreenStyle.instructionText}>Scanning your photo...</Text>
         <View style={ScanScreenStyle.photoScanContainer}>
           <Image source={{ uri: capturedPhoto.uri }} style={ScanScreenStyle.capturedImage} />
           
@@ -143,8 +143,8 @@ export default function ScanScreen({ navigation }) {
   }
 
   return (
-    <View style={GlobalStyle.container}>
-      <Text style={GlobalStyle.text}>Take a picture to scan for beer information</Text>
+    <View style={ScanScreenStyle.fullscreenContainer}>
+      <Text style={ScanScreenStyle.instructionText}>Take a picture to scan for beer information</Text>
       
       <View style={ScanScreenStyle.cameraContainer}>
         <CameraView
