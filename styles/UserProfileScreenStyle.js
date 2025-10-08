@@ -5,12 +5,12 @@ export const UserProfileScreenStyle = StyleSheet.create({
   // UserProfileScreen specific styles
   profileCard: {
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: Colors.white,
     paddingVertical: 30,
     paddingHorizontal: 20,
     borderRadius: 12,
     width: '100%',
-    boxShadow: `0px 0px 8px rgba(0, 0, 0, 0.06)`,
+    boxShadow: `0px 0px 8px ${Colors.shadowLight}`,
     elevation: 3,
   },
   avatarProfile: {
@@ -18,7 +18,7 @@ export const UserProfileScreenStyle = StyleSheet.create({
     height: 120,
     borderRadius: 60,
     marginBottom: 16,
-    backgroundColor: '#eee',
+    backgroundColor: Colors.lightGray,
   },
   name: {
     fontSize: 22,
@@ -27,12 +27,12 @@ export const UserProfileScreenStyle = StyleSheet.create({
   },
   email: {
     fontSize: 14,
-    color: '#666',
+    color: Colors.darkGray,
     marginBottom: 12,
   },
   bio: {
     fontSize: 14,
-    color: '#444',
+    color: Colors.textDark,
     textAlign: 'center',
     marginBottom: 20,
     paddingHorizontal: 8,

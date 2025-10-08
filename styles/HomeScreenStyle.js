@@ -29,7 +29,7 @@ export const HomeScreenStyle = StyleSheet.create({
     fontSize: 16 
   },
   time: { 
-    color: "#777", 
+    color: Colors.textMuted, 
     fontSize: 12 
   },
   body: { 
@@ -40,7 +40,7 @@ export const HomeScreenStyle = StyleSheet.create({
     fontWeight: "700" 
   },
   breweryName: { 
-    color: "#333", 
+    color: Colors.textPrimary, 
     marginTop: 2 
   },
   starsRow: { 
@@ -52,14 +52,14 @@ export const HomeScreenStyle = StyleSheet.create({
     marginRight: 2 
   },
   starFilled: { 
-    color: "#f5b301" 
+    color: Colors.starYellow 
   },
   starEmpty: { 
-    color: "#ccc" 
+    color: Colors.mediumGray 
   },
   review: { 
     marginTop: 8, 
-    color: "#333" 
+    color: Colors.textPrimary 
   },
   actionsRow: {
     flexDirection: "row",
@@ -70,7 +70,7 @@ export const HomeScreenStyle = StyleSheet.create({
     marginLeft: 12 
   },
   actionText: { 
-    color: "#007AFF", 
+    color: Colors.linkBlue, 
     fontWeight: "600" 
   },
 });

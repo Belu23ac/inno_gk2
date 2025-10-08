@@ -9,14 +9,14 @@ export const DetailsScreenStyle = StyleSheet.create({
     marginBottom: 12,
   },
   empty: {
-    color: '#555',
+    color: Colors.textSecondary,
     marginBottom: 12,
   },
   item: {
     paddingVertical: 12,
     paddingHorizontal: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#eee',
+    borderBottomColor: Colors.lightGray,
   },
   itemHeader: {
     flexDirection: 'row',
@@ -28,7 +28,7 @@ export const DetailsScreenStyle = StyleSheet.create({
   },
   ratingNumber: {
     fontSize: 14,
-    color: '#666',
+    color: Colors.darkGray,
     marginLeft: 8,
   },
   starButton: {

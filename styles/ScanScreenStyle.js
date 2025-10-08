@@ -1,17 +1,18 @@
 import { StyleSheet } from "react-native";
+import { Colors } from "./Colors";
 
 export const ScanScreenStyle = StyleSheet.create({
   fullscreenContainer: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: Colors.scannerBackground,
   },
   instructionText: {
     position: 'absolute',
     top: 20,
     left: 20,
     right: 20,
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    color: 'white',
+    backgroundColor: Colors.overlayDark,
+    color: Colors.scannerWhite,
     textAlign: 'center',
     padding: 12,
     borderRadius: 8,
@@ -31,7 +32,7 @@ export const ScanScreenStyle = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: 'transparent',
+    backgroundColor: Colors.transparent,
     justifyContent: 'flex-end',
     alignItems: 'center',
     paddingBottom: 20,
@@ -41,17 +42,17 @@ export const ScanScreenStyle = StyleSheet.create({
     width: 70,
     height: 70,
     borderRadius: 35,
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    backgroundColor: Colors.overlayLight,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 3,
-    borderColor: 'white',
+    borderColor: Colors.scannerWhite,
   },
   captureButtonInner: {
     width: 50,
     height: 50,
     borderRadius: 25,
-    backgroundColor: 'white',
+    backgroundColor: Colors.scannerWhite,
   },
   photoScanContainer: {
     flex: 1,
@@ -77,8 +78,8 @@ export const ScanScreenStyle = StyleSheet.create({
     left: 0,
     right: 0,
     height: 4,
-    backgroundColor: '#ff4444',
-    shadowColor: '#ff4444',
+    backgroundColor: Colors.scanRed,
+    shadowColor: Colors.scanRed,
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.9,
     shadowRadius: 8,

@@ -89,7 +89,7 @@ export const GlobalStyle = StyleSheet.create({
     width: "100%",
     maxWidth: 640,
     alignSelf: "center",
-    boxShadow: `0px 1px 4px rgba(0, 0, 0, 0.1)`,
+    boxShadow: `0px 1px 4px ${Colors.shadowMedium}`,
     elevation: 2,
   },
   divider: {
@@ -152,7 +152,7 @@ export const GlobalStyle = StyleSheet.create({
     right: 0,
     height: 4,
     backgroundColor: Colors.barcodeScanner,
-    boxShadow: `0px 0px 6px rgba(0, 0, 0, 0.9)`,
+    boxShadow: `0px 0px 6px ${Colors.shadowScanLine}`,
   },
 
 

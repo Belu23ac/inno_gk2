@@ -16,14 +16,14 @@ export const AppDetailsScreenStyle = StyleSheet.create({
     width: 72,
     height: 72,
     borderRadius: 12,
-    backgroundColor: '#f2b138',
+    backgroundColor: Colors.orange,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
   },
   logoText: {
     fontSize: 36,
-    color: '#fff',
+    color: Colors.white,
     fontWeight: '700',
   },
   titleBlock: {
@@ -35,7 +35,7 @@ export const AppDetailsScreenStyle = StyleSheet.create({
   },
   subtitleAppDetails: {
     fontSize: 14,
-    color: '#666',
+    color: Colors.darkGray,
     marginTop: 4,
   },
   sectionTitle: {
@@ -46,7 +46,7 @@ export const AppDetailsScreenStyle = StyleSheet.create({
   },
   paragraph: {
     fontSize: 14,
-    color: '#333',
+    color: Colors.textPrimary,
     lineHeight: 20,
   },
   bulletList: {
@@ -54,12 +54,12 @@ export const AppDetailsScreenStyle = StyleSheet.create({
   },
   bullet: {
     fontSize: 14,
-    color: '#333',
+    color: Colors.textPrimary,
     marginBottom: 6,
   },
   detail: {
     fontSize: 14,
-    color: '#444',
+    color: Colors.textDark,
     marginBottom: 4,
   },
   actions: {
@@ -68,7 +68,7 @@ export const AppDetailsScreenStyle = StyleSheet.create({
     gap: 8,
   },
   buttonAppDetails: {
-    backgroundColor: '#1e90ff',
+    backgroundColor: Colors.blue,
     paddingVertical: 10,
     paddingHorizontal: 12,
     borderRadius: 8,
@@ -76,15 +76,15 @@ export const AppDetailsScreenStyle = StyleSheet.create({
     marginTop: 8,
   },
   secondaryButtonAppDetails: {
-    backgroundColor: '#fff',
+    backgroundColor: Colors.white,
     borderWidth: 1,
-    borderColor: '#1e90ff',
+    borderColor: Colors.blue,
   },
   buttonTextAppDetails: {
-    color: '#fff',
+    color: Colors.white,
     fontWeight: '600',
   },
   secondaryButtonTextAppDetails: {
-    color: '#1e90ff',
+    color: Colors.blue,
   },
 });
