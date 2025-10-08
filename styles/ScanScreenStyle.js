@@ -7,16 +7,21 @@ export const ScanScreenStyle = StyleSheet.create({
     borderRadius: 12,
     overflow: 'hidden',
     marginVertical: 20,
+    position: 'relative',
   },
   camera: {
     flex: 1,
   },
   cameraOverlay: {
-    flex: 1,
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
     backgroundColor: 'transparent',
     justifyContent: 'flex-end',
     alignItems: 'center',
     paddingBottom: 20,
+    height: 100,
   },
   captureButton: {
     width: 70,

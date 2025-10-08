@@ -151,16 +151,15 @@ export default function ScanScreen({ navigation }) {
           ref={cameraRef}
           style={ScanScreenStyle.camera}
           facing="back"
-        >
-          <View style={ScanScreenStyle.cameraOverlay}>
-            <TouchableOpacity 
-              style={ScanScreenStyle.captureButton} 
-              onPress={takePicture}
-            >
-              <View style={ScanScreenStyle.captureButtonInner} />
-            </TouchableOpacity>
-          </View>
-        </CameraView>
+        />
+        <View style={ScanScreenStyle.cameraOverlay}>
+          <TouchableOpacity 
+            style={ScanScreenStyle.captureButton} 
+            onPress={takePicture}
+          >
+            <View style={ScanScreenStyle.captureButtonInner} />
+          </TouchableOpacity>
+        </View>
       </View>
       <StatusBar style="auto" />
     </View>
