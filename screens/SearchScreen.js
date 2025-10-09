@@ -21,8 +21,8 @@ export default function SearchScreen({ navigation }) {
   const handleSearch = async () => {
     Keyboard.dismiss();
   // Fetch beers from RapidAPI using the brewery query
-    const breweryQuery = encodeURIComponent(searchText?.trim() || "Berkshire brewing company");
-    const url = `https://beer9.p.rapidapi.com/?brewery=${breweryQuery}`;
+    const params = new URLSearchParams({ name: (searchText?.trim() || "Carlsberg") });
+    const url = `https://beer9.p.rapidapi.com/?${params.toString()}`;
     setLoading(true);
     setError(null);
     try {
