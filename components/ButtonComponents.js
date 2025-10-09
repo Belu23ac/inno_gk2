@@ -4,7 +4,7 @@ import { GlobalStyle } from '../styles/GlobalStyle';
 export default function ButtonComponent({ title, onPress }){
   return (
     <Pressable style={GlobalStyle.primaryButton} onPress={onPress}>
-        <Text style={GlobalStyle.primaryText}>{title}</Text>
+        <Text style={GlobalStyle.buttonText}>{title}</Text>
     </Pressable>
   );
 };
