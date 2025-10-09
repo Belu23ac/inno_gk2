@@ -1,73 +1,100 @@
 import { StatusBar } from "expo-status-bar";
-import { Text, View } from "react-native";
+import React from "react";
+import { Text, View, Image, TextInput, Pressable, ScrollView } from "react-native";
 import { GlobalStyle } from "../../styles/GlobalStyle";
+import { SelectedBeerScreenStyle as S } from "../../styles/SelectedBeerScreenStyle";
 
 export default function SelectedBeerScreen({ route }) {
+  const [reviews, setReviews] = React.useState([]);
+  const [stars, setStars] = React.useState(0);
+  const [comment, setComment] = React.useState("");
   // safely handle nested params coming from nested navigators
   const beer =
     route?.params?.beer ?? // normal case
     route?.params?.params?.beer ?? // nested params (as in your log)
     undefined;
 
-  const reviews = [
-    { id: '1', user: 'Mikael Doe', rating: 5, text: 'Fantastic aroma and finish.' },
-    { id: '2', user: 'William Parker', rating: 4, text: 'Very drinkable, a touch bitter.' },
-    { id: '3', user: 'Sofia Weston', rating: 3, text: 'Decent but a bit flat for me.' },
-    { id: '4', user: 'Liam Smith', rating: 4, text: 'Great balance of flavors.' },
-  ];
+  const raw = beer?._raw ?? {};
+  const imageUrl = raw?.image || raw?.image_url || raw?.label || raw?.logo || raw?.photo || raw?.thumb || raw?.icon || null;
+  const info = [
+    { label: 'Brewery', value: beer?.brewery },
+    { label: 'ABV', value: beer?.abv },
+    { label: 'Style', value: raw?.style || raw?.beer_style || raw?.type },
+    { label: 'IBU', value: raw?.ibu },
+    { label: 'Country', value: raw?.country || raw?.origin || raw?.location },
+    { label: 'Category', value: raw?.category },
+    { label: 'Description', value: raw?.description || raw?.desc },
+  ].filter((row) => row.value != null && row.value !== '');
+
+  const handleSubmitReview = () => {
+    if (!stars || !comment.trim()) return;
+    setReviews((prev) => [
+      { id: String(Date.now()), user: 'You', stars, text: comment.trim() },
+      ...prev,
+    ]);
+    setStars(0);
+    setComment("");
+  };
 
   return (
-    <View style={GlobalStyle.container}>
+    <ScrollView contentContainerStyle={[GlobalStyle.content, S.container]}>
       {beer ? (
-        <View>
-          <Text>Name: {beer.name}</Text>
-          <Text>Brewery: {beer.brewery}</Text>
-          {(() => {
-            const rating = Math.floor(Math.random() * 5) + 1;
-            const stars = '★'.repeat(rating) + '☆'.repeat(5 - rating);
-            return (
-              <Text style={{ marginTop: 8 }}>
-                Rating:{' '}
-                <Text style={{ color: '#f1c40f' }}>{stars}</Text>
-              </Text>
-            );
-          })()}
-          {/* Render other beer details here */}
+        <View style={S.card}>
+          {imageUrl ? (
+            <Image source={{ uri: String(imageUrl) }} style={S.hero} resizeMode="cover" />
+          ) : null}
+          <Text style={S.title}>{beer.name}</Text>
+          <View style={S.divider} />
+          {info.map((row) => (
+            <View key={row.label} style={S.row}>
+              <Text style={S.label}>{row.label}:</Text>
+              <Text style={S.value}>{String(row.value)}</Text>
+            </View>
+          ))}
+
+          <View style={S.reviewCard}>
+            <Text style={{ fontSize: 16, fontWeight: '700', marginBottom: 6 }}>Add a review</Text>
+            <View style={S.starsRow}>
+              {[1,2,3,4,5].map((i) => (
+                <Pressable key={i} onPress={() => setStars(i)}>
+                  <Text style={[S.star, { opacity: i <= stars ? 1 : 0.35 }]}>{i <= stars ? '★' : '☆'}</Text>
+                </Pressable>
+              ))}
+            </View>
+            <TextInput
+              style={[S.input, { marginTop: 10 }]}
+              placeholder="Write your review"
+              multiline
+              value={comment}
+              onChangeText={setComment}
+            />
+            <Pressable style={S.submitBtn} onPress={handleSubmitReview}>
+              <Text style={S.submitText}>Submit</Text>
+            </Pressable>
+
+          </View>
+
+          <View style={S.reviewCard}>
+            <Text style={{ fontSize: 16, fontWeight: '700', marginBottom: 6 }}>Reviews</Text>
+            {reviews.length === 0 ? (
+              <Text style={{ color: '#666' }}>no reviews yet</Text>
+            ) : (
+              reviews.map((r) => (
+                <View key={r.id} style={S.reviewItem}>
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <Text style={S.reviewAuthor}>{r.user}</Text>
+                    <Text style={{ color: '#f1c40f' }}>{'★'.repeat(r.stars) + '☆'.repeat(5 - r.stars)}</Text>
+                  </View>
+                  <Text style={S.reviewText}>{r.text}</Text>
+                </View>
+              ))
+            )}
+          </View>
         </View>
       ) : (
         <Text>No beer data provided.</Text>
       )}
-
-      <View
-        style={{
-          marginTop: 20,
-          backgroundColor: '#fff',
-          padding: 12,
-          borderRadius: 8,
-          boxShadow: `0px 2px 4px rgba(0, 0, 0, 0.08)`,
-          elevation: 3,
-        }}
-      >
-        <Text style={{ fontSize: 16, fontWeight: '600', marginBottom: 8 }}>Reviews</Text>
-
-        {reviews.map((r) => (
-          <View
-            key={r.id}
-            style={{
-              paddingVertical: 8,
-              borderTopWidth: r.id === '1' ? 0 : 1,
-              borderTopColor: '#eee',
-            }}
-          >
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Text style={{ fontWeight: '600' }}>{r.user}</Text>
-              <Text style={{ color: '#f1c40f' }}>{'★'.repeat(r.rating) + '☆'.repeat(5 - r.rating)}</Text>
-            </View>
-            <Text style={{ color: '#444', marginTop: 4 }}>{r.text}</Text>
-          </View>
-        ))}
-      </View>
       <StatusBar style="auto" />
-    </View>
+    </ScrollView>
   );
 }
