@@ -9,25 +9,50 @@ A React Native app built with Expo for discovering beers and breweries. Features
 See a walkthrough of the Beer Discovery App's main features, including the social feed, map exploration, and barcode scanning.
 
 ## Features
+- **Firebase Authentication** - User registration and login
 - Social feed with beer reviews and ratings
 - Interactive map showing nearby bars, pubs, and breweries
 - Barcode scanning for beer identification
 - Search for beers and breweries
-- User profiles and settings
-- Bottom tab navigation with 5 main sectionsanner App (React Native / Expo)
+- User profiles and settings with logout functionality
+- Bottom tab navigation with 5 main sections
 
-A small React Native app built with Expo for scanning and browsing beers. It includes screens for scanning barcodes, searching, viewing details, and basic settings.
+## Firebase Setup
 
-## Demo
+This app uses Firebase for user authentication. To set up Firebase:
 
-[▶️ Watch Demo Video on Vimeo](???)
+### 1. Create a Firebase Project
+1. Go to the [Firebase Console](https://console.firebase.google.com/)
+2. Click "Create a project" and follow the setup wizard
+3. Enable Authentication in your project
+4. Go to Authentication > Sign-in method
+5. Enable "Email/Password" as a sign-in provider
 
-See a walkthrough of the Beer Scanner App’s main features, including barcode scanning and beer search.
+### 2. Get your Firebase configuration
+1. In your Firebase project, go to Project Settings (gear icon)
+2. Scroll down to "Your apps" section
+3. Click "Web app" (</>) and register your app
+4. Copy the Firebase configuration object
 
-## Features
-- Scan beer barcodes
-- Search for beers
-- View details for selected beers
+### 3. Update the Firebase config
+1. Open `firebase.js` in your project
+2. Replace the placeholder config with your actual Firebase configuration:
+
+```javascript
+const firebaseConfig = {
+  apiKey: "your-actual-api-key",
+  authDomain: "your-project-id.firebaseapp.com",
+  projectId: "your-actual-project-id",
+  storageBucket: "your-project-id.appspot.com",
+  messagingSenderId: "your-actual-sender-id",
+  appId: "your-actual-app-id"
+};
+```
+
+### 4. Test Authentication
+- Run the app with `npm start`
+- You should see login/register screens
+- Create an account to test the authentication flow
 - Simple navigation stacks for Scan, Search and Settings
 
 ## Stack / Tech

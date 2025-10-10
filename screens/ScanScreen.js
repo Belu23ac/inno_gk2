@@ -1,15 +1,10 @@
 // /Users/bertram/Documents/Skole/inno/gk1/screens/ScanScreen.js
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
-import { Text, View, Button, Alert, Image } from "react-native";
+import { Text, View, TouchableOpacity, Animated, Easing, Image } from "react-native";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { GlobalStyle } from "../styles/GlobalStyle";
 import { ScanScreenStyle } from "../styles/ScanScreenStyle";
-const {
-  Animated,
-  Easing,
-  TouchableOpacity,
-} = require("react-native");
 
 const SAMPLE_BEERS = [
   {
@@ -17,40 +12,87 @@ const SAMPLE_BEERS = [
     name: "Hoppy Trails IPA",
     brewery: "Trailside Brewery",
     abv: "6.5%",
+    _raw: {
+      style: "American IPA",
+      ibu: "65",
+      country: "USA",
+      category: "Craft Beer",
+      description: "A bold IPA with citrus and pine notes from Cascade hops. Perfect for hop lovers seeking adventure.",
+      image: "https://example.com/hoppy-trails.jpg"
+    }
   },
-  { id: "2", name: "Sunset Lager", brewery: "Golden Road", abv: "4.7%" },
-  { id: "3", name: "Midnight Stout", brewery: "Dark Harbor", abv: "8.2%" },
-  { id: "4", name: "Citrus Ale", brewery: "Brightside Brewing", abv: "5.0%" },
+  {
+    id: "2",
+    name: "Sunset Lager",
+    brewery: "Golden Road",
+    abv: "4.7%",
+    _raw: {
+      style: "American Lager",
+      ibu: "20",
+      country: "USA",
+      category: "Lager",
+      description: "Smooth and crisp lager with golden hues, ideal for watching the sunset. Clean finish with subtle malt sweetness.",
+      image: "https://example.com/sunset-lager.jpg"
+    }
+  },
+  {
+    id: "3",
+    name: "Midnight Stout",
+    brewery: "Dark Harbor",
+    abv: "8.2%",
+    _raw: {
+      style: "Russian Imperial Stout",
+      ibu: "75",
+      country: "USA",
+      category: "Stout",
+      description: "Rich and robust imperial stout with notes of dark chocolate, coffee, and roasted malt. A midnight indulgence.",
+      image: "https://example.com/midnight-stout.jpg"
+    }
+  },
+  {
+    id: "4",
+    name: "Citrus Ale",
+    brewery: "Brightside Brewing",
+    abv: "5.0%",
+    _raw: {
+      style: "American Pale Ale",
+      ibu: "45",
+      country: "USA",
+      category: "Ale",
+      description: "Bright and refreshing pale ale bursting with citrus flavors from American hops. A sunny companion for any occasion.",
+      image: "https://example.com/citrus-ale.jpg"
+    }
+  },
 ];
 
 export default function ScanScreen({ navigation }) {
   const [permission, requestPermission] = useCameraPermissions();
   const [isScanning, setIsScanning] = useState(false);
+  const [showInstruction, setShowInstruction] = useState(true);
   const [capturedPhoto, setCapturedPhoto] = useState(null);
   const cameraRef = useRef(null);
   const scanAnim = React.useRef(new Animated.Value(0)).current;
+  const animationRef = useRef(null);
 
-  const scanBarcode = () => {
-    // dummy scan -> pick a random beer
-    const beer = SAMPLE_BEERS[Math.floor(Math.random() * SAMPLE_BEERS.length)];
+  useEffect(() => {
+    return () => {
+      if (animationRef.current) {
+        animationRef.current.stop();
+        animationRef.current = null;
+      }
+    };
+  }, []);
 
-    // navigate to Selected Beer and pass the beer object as a param
-    navigation.navigate("Selected Beer", { beer });
-  };
-
-  const takePicture = async () => {
-    if (!cameraRef.current) return;
-    
+  const handleStartScan = async () => {
+    if (isScanning || !cameraRef.current) return;
     try {
-      const photo = await cameraRef.current.takePictureAsync({
-        quality: 0.8,
-        base64: false,
-      });
+      const photo = await cameraRef.current.takePictureAsync({ quality: 0.8 });
       setCapturedPhoto(photo);
-      startScanAnimation();
     } catch (error) {
-      Alert.alert("Error", "Failed to take picture");
+      console.warn('Capture failed', error);
     }
+    setShowInstruction(false);
+    startScanAnimation();
   };
 
   const startScanAnimation = () => {
@@ -76,29 +118,24 @@ export default function ScanScreen({ navigation }) {
 
     // run the cycle 3 times => 3 seconds total
     const loopAnim = Animated.loop(cycle, { iterations: 3 });
+    animationRef.current = loopAnim;
 
     // start and navigate when all iterations complete
     loopAnim.start(() => {
       const beer =
         SAMPLE_BEERS[Math.floor(Math.random() * SAMPLE_BEERS.length)];
+      animationRef.current = null;
       setIsScanning(false);
+      setShowInstruction(true);
       setCapturedPhoto(null);
       navigation.navigate("Selected Beer", { beer });
     });
   };
 
-  const startScan = () => {
-    startScanAnimation();
-  };
-
   const translateY = scanAnim.interpolate({
     inputRange: [0, 1],
-    outputRange: [-70, 70],
+    outputRange: [-110, 110],
   });
-
-  const barPattern = Array.from({ length: 100 }).map((_, i) =>
-    i % 3 === 0 ? 6 : i % 2 === 0 ? 3 : 1
-  );
 
   // Handle camera permissions
   if (!permission) {
@@ -116,52 +153,51 @@ export default function ScanScreen({ navigation }) {
     );
   }
 
-  // Show scanning animation over the captured photo if scanning is in progress
-  if (isScanning && capturedPhoto) {
-    return (
-      <View style={ScanScreenStyle.fullscreenContainer}>
-        <Text style={ScanScreenStyle.instructionText}>Scanning your photo...</Text>
-        <View style={ScanScreenStyle.photoScanContainer}>
-          <Image source={{ uri: capturedPhoto.uri }} style={ScanScreenStyle.capturedImage} />
-          
-          {/* Scanner overlay */}
-          <View style={ScanScreenStyle.scannerOverlay}>
-            <Animated.View
-              pointerEvents="none"
-              style={[
-                ScanScreenStyle.photoScanLine,
-                {
-                  transform: [{ translateY }],
-                },
-              ]}
-            />
+  return (
+    <View style={ScanScreenStyle.screen}>
+      <CameraView ref={cameraRef} style={ScanScreenStyle.camera} facing="back" />
+      {capturedPhoto && (
+        <Image source={{ uri: capturedPhoto.uri }} style={ScanScreenStyle.preview} />
+      )}
+
+      <View style={ScanScreenStyle.overlay}>
+  <View style={ScanScreenStyle.centerWrapper} pointerEvents="box-none">
+          <View style={ScanScreenStyle.reticle}>
+            <View style={ScanScreenStyle.reticleInner} />
+            {isScanning && (
+              <Animated.View
+                pointerEvents="none"
+                style={[
+                  ScanScreenStyle.scanLine,
+                  { transform: [{ translateY }] },
+                ]}
+              />
+            )}
           </View>
         </View>
-        <StatusBar style="auto" />
-      </View>
-    );
-  }
 
-  return (
-    <View style={ScanScreenStyle.fullscreenContainer}>
-      <Text style={ScanScreenStyle.instructionText}>Take a picture to scan for beer information</Text>
-      
-      <View style={ScanScreenStyle.cameraContainer}>
-        <CameraView
-          ref={cameraRef}
-          style={ScanScreenStyle.camera}
-          facing="back"
-        />
-        <View style={ScanScreenStyle.cameraOverlay}>
-          <TouchableOpacity 
-            style={ScanScreenStyle.captureButton} 
-            onPress={takePicture}
-          >
-            <View style={ScanScreenStyle.captureButtonInner} />
-          </TouchableOpacity>
-        </View>
+        {showInstruction && (
+          <>
+            <View style={ScanScreenStyle.instructionCard}>
+              <Text style={ScanScreenStyle.instructionTitle}>Keep it steady</Text>
+              <Text style={ScanScreenStyle.instructionCopy}>
+                Align the label inside the frame before you start scanning.
+              </Text>
+            </View>
+
+            <TouchableOpacity
+              style={ScanScreenStyle.cameraButton}
+              onPress={handleStartScan}
+              activeOpacity={0.8}
+            >
+              <View style={ScanScreenStyle.cameraRing}>
+                <View style={ScanScreenStyle.cameraCore} />
+              </View>
+            </TouchableOpacity>
+          </>
+        )}
       </View>
-      <StatusBar style="auto" />
+      <StatusBar style="light" />
     </View>
   );
 }

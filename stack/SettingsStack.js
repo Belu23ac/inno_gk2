@@ -4,6 +4,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 import SettingsScreen from "../screens/SettingsScreen";
 import UserProfileScreen from "../screens/StackScreens/UserProfileScreen";
 import AppDetailsScreen from "../screens/StackScreens/AppDetailsScreen";
+import AccountSettingsScreen from "../screens/StackScreens/AccountSettingsScreen";
+import FavoritesScreen from "../screens/StackScreens/FavoritesScreen";
 import { GlobalNavigation } from "../styles/GlobalNavigation";
 
 const Stack = createStackNavigator();
@@ -24,9 +26,11 @@ export default function SettingsStackNavigation() {
         // internal route name (unique) — set a friendly title for the UI
         name="SettingsMain"
         component={SettingsScreen}
-        options={{ title: "Settings" }}
+        options={{ title: "Profile" }}
       />
       <Stack.Screen name="User Profile" component={UserProfileScreen} />
+      <Stack.Screen name="Account Settings" component={AccountSettingsScreen} />
+      <Stack.Screen name="My Favorites" component={FavoritesScreen} />
       <Stack.Screen name="App Details" component={AppDetailsScreen} />
     </Stack.Navigator>
   );

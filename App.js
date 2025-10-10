@@ -1,16 +1,42 @@
+import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "@react-native-vector-icons/ionicons";
-import HomeScreen from "./screens/HomeScreen";
+import { ActivityIndicator, View, StyleSheet } from "react-native";
+import HomeStack from "./stack/HomeStack";
 import MapScreen from "./screens/MapScreen";
 import ScanStack from "./stack/ScanStack";
 import SearchStack from "./stack/SearchStack";
 import SettingsStack from "./stack/SettingsStack";
+import AuthStack from "./stack/AuthStack";
 import { GlobalNavigation } from "./styles/GlobalNavigation";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import { Colors } from "./styles/Colors";
 
 const Tab = createBottomTabNavigator();
 
-export default function App() {
+// Main App Navigator Component
+const AppNavigator = () => {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color={Colors.primary || "#007AFF"} />
+      </View>
+    );
+  }
+
+  // If user is not authenticated, show auth screens
+  if (!user) {
+    return (
+      <NavigationContainer>
+        <AuthStack />
+      </NavigationContainer>
+    );
+  }
+
+  // If user is authenticated, show main app
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -21,26 +47,30 @@ export default function App() {
           tabBarStyle: GlobalNavigation.tabBarStyle,
           tabBarActiveTintColor: GlobalNavigation.tabBarActiveTintColor,
           tabBarInactiveTintColor: GlobalNavigation.tabBarInactiveTintColor,
-          tabBarIcon: ({ color, size }) => {
+          tabBarIcon: ({ color, size, focused }) => {
             let iconName;
-
+            // switch between filled and outline icons when focused
             if (route.name === "Home") {
-              iconName = "home-outline";
+              iconName = focused ? "home" : "home-outline";
             } else if (route.name === "Map") {
-              iconName = "map-outline";
+              iconName = focused ? "map" : "map-outline";
             } else if (route.name === "Search") {
-              iconName = "search-outline";
+              iconName = focused ? "search" : "search-outline";
             } else if (route.name === "Profile") {
-              iconName = "person-circle-outline";
+              iconName = focused ? "person-circle" : "person-circle-outline";
             } else if (route.name === "Scan") {
-              iconName = "scan-outline";
+              iconName = focused ? "scan" : "scan-outline";
             }
 
             return <Ionicons name={iconName} size={size} color={color} />;
           },
         })}
       >
-        <Tab.Screen name="Home" component={HomeScreen} />
+        <Tab.Screen
+          name="Home"
+          component={HomeStack}
+          options={{ headerShown: false }}
+        />
         <Tab.Screen
           name="Search"
           component={SearchStack}
@@ -51,7 +81,11 @@ export default function App() {
           component={ScanStack}
           options={{ headerShown: false }}
         />
-        <Tab.Screen name="Map" component={MapScreen} />
+        <Tab.Screen
+          name="Map"
+          component={MapScreen}
+          options={{ headerShown: false }}
+        />
         <Tab.Screen
           name="Profile"
           component={SettingsStack}
@@ -60,4 +94,22 @@ export default function App() {
       </Tab.Navigator>
     </NavigationContainer>
   );
+};
+
+// Main App Component with Auth Provider
+export default function App() {
+  return (
+    <AuthProvider>
+      <AppNavigator />
+    </AuthProvider>
+  );
 }
+
+const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: Colors.background || "#fff",
+  },
+});
