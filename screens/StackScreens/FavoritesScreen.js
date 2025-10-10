@@ -3,13 +3,18 @@ import { ScrollView, View, Text } from 'react-native';
 import Ionicons from '@react-native-vector-icons/ionicons';
 import { FavoritesScreenStyle } from '../../styles/FavoritesScreenStyle';
 import { Colors } from '../../styles/Colors';
+import SAMPLE_BEERS from '../../contexts/MockBeers';
 
-const mockFavorites = [
-  { id: 'fav-1', name: 'Cervisia IPA', style: 'Hazy IPA', location: 'Copenhagen, DK', rating: 4.7, badge: 'C' },
-  { id: 'fav-2', name: 'Aurora Saison', style: 'Farmhouse Ale', location: 'Aarhus, DK', rating: 4.5, badge: 'A' },
-  { id: 'fav-3', name: 'Midnight Porter', style: 'Robust Porter', location: 'Odense, DK', rating: 4.2, badge: 'M' },
-  { id: 'fav-4', name: 'Nordic Pils', style: 'Crisp Pilsner', location: 'Aalborg, DK', rating: 4.4, badge: 'N' },
-];
+// Map the existing mock beers into a favorites format (use some DK sample locations)
+const dkCities = ['Copenhagen, DK', 'Aarhus, DK', 'Odense, DK', 'Aalborg, DK'];
+const mockFavorites = SAMPLE_BEERS.map((b, i) => ({
+  id: b.id || `fav-${i}`,
+  name: b.name,
+  style: b._raw?.style || 'Unknown',
+  location: dkCities[i % dkCities.length],
+  rating: parseFloat((Math.random() * (4.8 - 4.1) + 4.1).toFixed(1)),
+  badge: (b.name && b.name[0]) || 'B',
+}));
 
 const FavoritesScreen = () => {
   const favorites = useMemo(() => mockFavorites, []);
