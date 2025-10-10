@@ -17,10 +17,6 @@ export default function SelectedBeerScreen({ route }) {
   const raw = beer?._raw ?? {};
   const imageUrl = raw?.image || raw?.image_url || raw?.label || raw?.logo || raw?.photo || raw?.thumb || raw?.icon || null;
 
-  // Resolve image source to support:
-  // - module ids (require('../../assets/foo.png')) -> number
-  // - uri strings (http(s)://, file://, data:...) -> { uri }
-  // - Expo Asset modules (Asset.fromModule(...) objects) if passed
   const resolveImageSource = (img) => {
     if (!img) return null;
     // already a module id (number) or object accepted by <Image>
