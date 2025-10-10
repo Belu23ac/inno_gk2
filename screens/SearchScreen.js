@@ -6,22 +6,35 @@ import {
   ScrollView,
   Pressable,
   Keyboard,
+  ActivityIndicator,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import ButtonComponent from "../components/ButtonComponents";
 import { GlobalStyle } from "../styles/GlobalStyle";
 import { SearchScreenStyle } from "../styles/SearchScreenStyle";
+import { Colors } from "../styles/Colors";
 
 export default function SearchScreen({ navigation }) {
   const [searchText, setSearchText] = React.useState("");
   const [results, setResults] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(null);
+  const [activeChip, setActiveChip] = React.useState("");
 
-  const handleSearch = async () => {
+  const quickSuggestions = React.useMemo(
+    () => ["Carlsberg", "Guinness Draught", "Heineken", "Sierra Nevada Pale Ale", "Samuel Adams"],
+    []
+  );
+
+  // (inspiration ideas removed; UI focuses on beers only)
+
+  const runSearch = useCallback(async (queryValue) => {
     Keyboard.dismiss();
-  // Fetch beers from RapidAPI using the brewery query
-    const params = new URLSearchParams({ name: (searchText?.trim() || "Carlsberg") });
+  const fallback = "Carlsberg"; // default beer name fallback
+    const trimmed = queryValue?.trim();
+    const query = trimmed?.length ? trimmed : fallback;
+  // Fetch beers from RapidAPI using the beer name/style query
+    const params = new URLSearchParams({ name: query });
     const url = `https://beer9.p.rapidapi.com/?${params.toString()}`;
     setLoading(true);
     setError(null);
@@ -55,6 +68,10 @@ export default function SearchScreen({ navigation }) {
       });
 
       setResults(normalized);
+      // If we got at least one result, open the Selected Beer screen for the first match
+      if (normalized && normalized.length > 0) {
+        navigation.navigate("Selected Beer", { beer: normalized[0] });
+      }
     } catch (e) {
       console.error(e);
       setError("Failed to fetch beers. Please try again.");
@@ -62,7 +79,20 @@ export default function SearchScreen({ navigation }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [navigation]);
+
+  const handleSearch = useCallback(() => {
+    runSearch(searchText);
+  }, [runSearch, searchText]);
+
+  const handleQuickSelect = useCallback(
+    (term) => {
+      setActiveChip(term);
+      setSearchText(term);
+      runSearch(term);
+    },
+    [runSearch]
+  );
 
   const handlePressBeer = (beer) => {
     navigation.navigate("Selected Beer", {
@@ -78,57 +108,91 @@ export default function SearchScreen({ navigation }) {
       return () => {
         setSearchText("");
         setResults([]);
+        setActiveChip("");
       };
     }, [])
   );
 
+  const showEmptyState = !loading && !error && results.length === 0;
+
   return (
     <View style={[GlobalStyle.container, SearchScreenStyle.container]}>
-      <View style={SearchScreenStyle.content}>
-        <View style={SearchScreenStyle.searchRow}>
-          <TextInput
-            style={SearchScreenStyle.input}
-            placeholder="Search beer, brewery or style"
-            editable={true} // non-functional on purpose
-            value={searchText}
-            onChangeText={setSearchText}
-            returnKeyType="search"
-            onSubmitEditing={handleSearch}
-          />
-          <View style={{ marginLeft: 8 }}>
+      <ScrollView
+        contentContainerStyle={SearchScreenStyle.content}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={SearchScreenStyle.heroCard}>
+          <Text style={SearchScreenStyle.heroEyebrow}>Discover</Text>
+          <Text style={SearchScreenStyle.heroTitle}>Find your next favorite pour</Text>
+          <Text style={SearchScreenStyle.heroSubtitle}>
+            Search our beer catalog — find beers by name and open details instantly.
+          </Text>
+        </View>
+
+        <View style={SearchScreenStyle.searchCard}>
+          <Text style={SearchScreenStyle.searchTitle}>Search the library</Text>
+          <Text style={SearchScreenStyle.searchSubtitle}>
+            Type a beer name. Not sure where to start? Try one of the quick suggestions below.
+          </Text>
+
+          <View style={SearchScreenStyle.searchRow}>
+            <TextInput
+              style={SearchScreenStyle.input}
+              placeholder="Search beer name"
+              value={searchText}
+              onChangeText={(text) => {
+                setSearchText(text);
+                if (activeChip) {
+                  setActiveChip("");
+                }
+              }}
+              returnKeyType="search"
+              onSubmitEditing={handleSearch}
+            />
             <ButtonComponent title="Search" onPress={handleSearch} />
+          </View>
+
+          <View style={SearchScreenStyle.chipRow}>
+            {quickSuggestions.map((term) => (
+              <Pressable
+                key={term}
+                onPress={() => handleQuickSelect(term)}
+                style={({ pressed }) => [
+                  SearchScreenStyle.chip,
+                  activeChip === term && SearchScreenStyle.chipActive,
+                  pressed && { opacity: 0.75 },
+                ]}
+              >
+                <Text
+                  style={[
+                    SearchScreenStyle.chipText,
+                    activeChip === term && SearchScreenStyle.chipTextActive,
+                  ]}
+                >
+                  {term}
+                </Text>
+              </Pressable>
+            ))}
           </View>
         </View>
 
-      {loading && (
-        <View style={{ marginVertical: 12 }}>
-          <Text>Loading…</Text>
-        </View>
-      )}
+        {loading && (
+          <View style={SearchScreenStyle.loadingRow}>
+            <ActivityIndicator color={Colors.primary} />
+            <Text style={SearchScreenStyle.loadingText}>Pouring in the latest results…</Text>
+          </View>
+        )}
 
-      {error && (
-        <View style={{ marginVertical: 12 }}>
-          <Text style={{ color: "red" }}>{error}</Text>
-        </View>
-      )}
+        {error && (
+          <View style={SearchScreenStyle.emptyState}>
+            <Text style={SearchScreenStyle.emptyTitle}>Something spilled</Text>
+            <Text style={SearchScreenStyle.emptySubtitle}>{error}</Text>
+          </View>
+        )}
 
-      <ScrollView>
-        {results.map((beer) => (
-          <Pressable
-            key={beer.id}
-            onPress={() => handlePressBeer(beer)}
-            style={({ pressed }) => [GlobalStyle.card, pressed && { opacity: 0.8 }]}
-          >
-            <View style={SearchScreenStyle.cardInfo}>
-              <Text style={SearchScreenStyle.cardName}>{beer.name}</Text>
-              <Text style={SearchScreenStyle.cardMeta}>
-                {beer.brewery} • {beer.abv}
-              </Text>
-            </View>
-          </Pressable>
-        ))}
+        {/* results are intentionally hidden from the Search tab; searches navigate to Selected Beer */}
       </ScrollView>
-      </View>
     </View>
   );
 }
