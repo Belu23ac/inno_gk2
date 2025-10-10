@@ -22,10 +22,10 @@ const OFFER_OF_WEEK = {
     name: "Aurora Borealis Triple IPA",
     brewery: "Fjord & Foam",
     abv: "9.5%",
-    _raw: {
+      _raw: {
       style: "Triple IPA",
       ibu: "75",
-      country: "Norway",
+      country: "Denmark",
       category: "Craft Beer",
       description: "Spruce tipped seasonal from Fjord & Foam. Pre-order and save 20%. A bold, hoppy triple IPA with notes of pine and citrus.",
       image: "https://example.com/aurora-borealis.jpg" // Placeholder image URL
@@ -60,21 +60,21 @@ const CURATED_PICKS = [
 const TRENDING_BREWERIES = [
   {
     id: "brew-1",
-    name: "Fjord & Foam",
-    location: "Oslo, NO",
-    highlight: "4.8 rating • 320 check-ins this week",
+    name: "Øresund Brewers",
+    location: "Copenhagen, DK",
+    highlight: "4.9 rating • weekly tap takeover & smørrebrød pairings",
   },
   {
     id: "brew-2",
-    name: "Harbor House",
-    location: "Bergen, NO",
-    highlight: "Cellar tours available Thu-Sun",
+    name: "Jutland Barrelworks",
+    location: "Aarhus, DK",
+    highlight: "Sour and farmhouse saisons aged in oak",
   },
   {
     id: "brew-3",
-    name: "Arctic Fox Lab",
-    location: "Tromsø, NO",
-    highlight: "New coffee stout collab just dropped",
+    name: "Funen Fermentary",
+    location: "Odense, DK",
+    highlight: "Rye-forward stouts and Nordic hops experiments",
   },
 ];
 

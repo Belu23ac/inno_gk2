@@ -5,10 +5,10 @@ import { FavoritesScreenStyle } from '../../styles/FavoritesScreenStyle';
 import { Colors } from '../../styles/Colors';
 
 const mockFavorites = [
-  { id: 'fav-1', name: 'Cervisia IPA', style: 'Hazy IPA', location: 'Oslo, NO', rating: 4.7, badge: 'C' },
-  { id: 'fav-2', name: 'Aurora Saison', style: 'Farmhouse Ale', location: 'Bergen, NO', rating: 4.5, badge: 'A' },
-  { id: 'fav-3', name: 'Midnight Porter', style: 'Robust Porter', location: 'Trondheim, NO', rating: 4.2, badge: 'M' },
-  { id: 'fav-4', name: 'Nordic Pils', style: 'Crisp Pilsner', location: 'Stavanger, NO', rating: 4.4, badge: 'N' },
+  { id: 'fav-1', name: 'Cervisia IPA', style: 'Hazy IPA', location: 'Copenhagen, DK', rating: 4.7, badge: 'C' },
+  { id: 'fav-2', name: 'Aurora Saison', style: 'Farmhouse Ale', location: 'Aarhus, DK', rating: 4.5, badge: 'A' },
+  { id: 'fav-3', name: 'Midnight Porter', style: 'Robust Porter', location: 'Odense, DK', rating: 4.2, badge: 'M' },
+  { id: 'fav-4', name: 'Nordic Pils', style: 'Crisp Pilsner', location: 'Aalborg, DK', rating: 4.4, badge: 'N' },
 ];
 
 const FavoritesScreen = () => {
