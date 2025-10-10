@@ -1,3 +1,8 @@
+import hoppyTrailsImg from "../assets/hoppy-trails.png";
+import sunsetLagerImg from "../assets/sunset-lager.png";
+import midnightStoutImg from "../assets/midnight-stout.png";
+import citrusAleImg from "../assets/citrus-ale.png";
+
 const SAMPLE_BEERS = [
   {
     id: "1",
@@ -10,6 +15,7 @@ const SAMPLE_BEERS = [
       country: "USA",
       category: "Craft Beer",
       description: "A bold IPA with citrus and pine notes from Cascade hops. Perfect for hop lovers seeking adventure.",
+      image: hoppyTrailsImg
     }
   },
   {
@@ -23,7 +29,7 @@ const SAMPLE_BEERS = [
       country: "USA",
       category: "Lager",
       description: "Smooth and crisp lager with golden hues, ideal for watching the sunset. Clean finish with subtle malt sweetness.",
-      image: "https://example.com/sunset-lager.jpg"
+      image: sunsetLagerImg
     }
   },
   {
@@ -37,7 +43,7 @@ const SAMPLE_BEERS = [
       country: "USA",
       category: "Stout",
       description: "Rich and robust imperial stout with notes of dark chocolate, coffee, and roasted malt. A midnight indulgence.",
-      image: "https://example.com/midnight-stout.jpg"
+      image: midnightStoutImg
     }
   },
   {
@@ -51,7 +57,7 @@ const SAMPLE_BEERS = [
       country: "USA",
       category: "Ale",
       description: "Bright and refreshing pale ale bursting with citrus flavors from American hops. A sunny companion for any occasion.",
-      image: "https://example.com/citrus-ale.jpg"
+      image: citrusAleImg
     }
   },
 ];
