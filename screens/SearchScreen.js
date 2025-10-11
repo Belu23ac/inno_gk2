@@ -68,10 +68,6 @@ export default function SearchScreen({ navigation }) {
       });
 
       setResults(normalized);
-      // If we got at least one result, open the Selected Beer screen for the first match
-      if (normalized && normalized.length > 0) {
-        navigation.navigate("Selected Beer", { beer: normalized[0] });
-      }
     } catch (e) {
       console.error(e);
       setError("Failed to fetch beers. Please try again.");
@@ -191,7 +187,47 @@ export default function SearchScreen({ navigation }) {
           </View>
         )}
 
-        {/* results are intentionally hidden from the Search tab; searches navigate to Selected Beer */}
+        {/* Results box at the bottom */}
+        <View style={[SearchScreenStyle.searchCard, { marginTop: 8 }]}>
+          <Text style={SearchScreenStyle.searchTitle}>Results</Text>
+          <View style={SearchScreenStyle.resultsList}>
+            {results.map((beer) => (
+              <Pressable
+                key={beer.id}
+                onPress={() => handlePressBeer(beer)}
+                style={({ pressed }) => [SearchScreenStyle.resultCard, pressed && { opacity: 0.9 }]}
+              >
+                <Text
+                  style={SearchScreenStyle.resultTitle}
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                >
+                  {beer.name}
+                </Text>
+                <View style={SearchScreenStyle.resultMetaRow}>
+                  <View style={SearchScreenStyle.badge}>
+                    <Text style={SearchScreenStyle.badgeText}>BREWERY</Text>
+                  </View>
+                  <Text
+                    style={SearchScreenStyle.resultMeta}
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                  >
+                    {beer.brewery} • {beer.abv}
+                  </Text>
+                </View>
+              </Pressable>
+            ))}
+            {showEmptyState && (
+              <View style={SearchScreenStyle.emptyState}>
+                <Text style={SearchScreenStyle.emptyTitle}>No results yet</Text>
+                <Text style={SearchScreenStyle.emptySubtitle}>
+                  Try searching above or tap a suggestion to see matches here.
+                </Text>
+              </View>
+            )}
+          </View>
+        </View>
       </ScrollView>
     </View>
   );

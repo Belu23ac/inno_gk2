@@ -130,6 +130,7 @@ export const SearchScreenStyle = StyleSheet.create({
   resultsList: {
     marginTop: 16,
     gap: 14,
+    width: '100%',
   },
   resultCard: {
     borderRadius: 18,
@@ -140,17 +141,21 @@ export const SearchScreenStyle = StyleSheet.create({
     shadowOpacity: 0.08,
     shadowRadius: 16,
     elevation: 4,
+    width: '100%',
+    alignSelf: 'stretch',
   },
   resultTitle: {
     fontSize: 17,
     fontWeight: "700",
     color: Colors.text,
+    flexShrink: 1,
   },
   resultMetaRow: {
     flexDirection: "row",
     alignItems: "center",
     marginTop: 10,
     gap: 10,
+    width: '100%',
   },
   badge: {
     paddingHorizontal: 12,
@@ -168,6 +173,8 @@ export const SearchScreenStyle = StyleSheet.create({
   resultMeta: {
     color: Colors.subtitle ?? "#6b7280",
     fontSize: 14,
+    flexShrink: 1,
+    flex: 1,
   },
   emptyState: {
     marginTop: 20,
