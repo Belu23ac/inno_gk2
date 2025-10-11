@@ -1,28 +1,26 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import ScanScreen from "../screens/ScanScreen";
+import HomeScreen from "../screens/HomeScreen";
 import SelectedBeerScreen from "../screens/StackScreens/SelectedBeerScreen";
 import { GlobalNavigation } from "../styles/GlobalNavigation";
 
 const Stack = createStackNavigator();
 
-export default function ScanStackNavigation() {
+export default function HomeStackNavigation() {
   return (
     <Stack.Navigator
-      initialRouteName="ScanMain"
+      initialRouteName="HomeMain"
       screenOptions={{
         headerStyle: GlobalNavigation.headerStyle,
         headerTitleStyle: GlobalNavigation.title,
         headerTintColor: GlobalNavigation.headerTintColor,
-        headerShown: false,
       }}
     >
       <Stack.Screen
-        // internal route name (unique) — set a friendly title for the UI
-        name="ScanMain"
-        component={ScanScreen}
-        options={{ title: "Scan", tabBarStyle: { display: 'none' } }}
+        name="HomeMain"
+        component={HomeScreen}
+        options={{ title: "Home" }}
       />
-      <Stack.Screen name="Selected Beer" component={SelectedBeerScreen} options={{ headerShown: true }} />
+      <Stack.Screen name="Selected Beer" component={SelectedBeerScreen} />
     </Stack.Navigator>
   );
 }

@@ -8,10 +8,13 @@ export const Colors = {
   titleHome: "#111111",
   buttonText: "#f9f7f3",
   text: "#111111",
+    subtitle: "#5f5f5f",
   inputBorder: "#ab0000ff",
   boxShadow: "#000000",
   badge: "#ff3b30",
   card: "#ffffff",
+    surface: "#ffffff",
+    surfaceAlt: "#f5f1ea",
   barcodeScanner: "rgba(0,200,0,0.9)",
   barcodeScannerShadow: "#0f0",
   
@@ -24,6 +27,7 @@ export const Colors = {
   lightGray: "#eee",
   mediumGray: "#ccc", 
   darkGray: "#666",
+  gray: "#666",
   textMuted: "#777",
   textSecondary: "#555",
   textDark: "#444",
@@ -36,14 +40,21 @@ export const Colors = {
   // Yellows and oranges
   starYellow: "#f5b301",
   orange: "#f2b138",
+    accent: "#f4a259",
+    primarySoft: "#3f8f63",
+    favorite: "#f1c453",
   
   // Reds
   scanRed: "#ff4444",
+
+  // Inputs
+  inputBackground: "#f9f9f9",
   
   // Shadows and overlays
   shadowLight: "rgba(0, 0, 0, 0.06)",
   shadowMedium: "rgba(0, 0, 0, 0.1)",
   shadowDark: "rgba(0, 0, 0, 0.25)",
+  shadowSoft: "rgba(31, 41, 55, 0.08)",
   shadowScanLine: "rgba(0, 0, 0, 0.9)",
   overlayDark: "rgba(0, 0, 0, 0.7)",
   overlayLight: "rgba(255, 255, 255, 0.3)",
@@ -51,4 +62,5 @@ export const Colors = {
   // Scanner colors
   scannerBackground: "#000",
   scannerWhite: "white",
+    border: "#e3ded6",
 };

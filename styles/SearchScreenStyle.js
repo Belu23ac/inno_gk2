@@ -6,54 +6,204 @@ export const SearchScreenStyle = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.background,
-    justifyContent: 'flex-start', // ensure content starts at the top
-    alignItems: 'center', // keep content centered horizontally
   },
   content: {
-    flex: 1,
+    flexGrow: 1,
     width: "100%",
-    maxWidth: 900,
     alignSelf: "center",
-    paddingHorizontal: 12,
-    paddingTop: 24, // add visible space below header
+    paddingHorizontal: 20,
+    paddingTop: 32,
+    paddingBottom: 48,
+    gap: 24,
   },
-  // Puts spacing below the top app bar/header and lays out the input + button
+  heroCard: {
+    backgroundColor: Colors.primary,
+    borderRadius: 26,
+    paddingVertical: 28,
+    paddingHorizontal: 24,
+    shadowColor: Colors.black,
+    shadowOffset: { width: 0, height: 14 },
+    shadowOpacity: 0.22,
+    shadowRadius: 18,
+    elevation: 8,
+  },
+  heroEyebrow: {
+    color: Colors.scannerWhite,
+    opacity: 0.7,
+    fontSize: 13,
+    letterSpacing: 1,
+    textTransform: "uppercase",
+    marginBottom: 6,
+    fontWeight: "600",
+  },
+  heroTitle: {
+    color: Colors.scannerWhite,
+    fontSize: 28,
+    fontWeight: "800",
+    lineHeight: 34,
+    marginBottom: 6,
+  },
+  heroSubtitle: {
+    color: Colors.scannerWhite,
+    opacity: 0.85,
+    fontSize: 15,
+    lineHeight: 22,
+  },
+  searchCard: {
+    borderRadius: 22,
+    backgroundColor: Colors.surface ?? "#fff",
+    padding: 20,
+    shadowColor: Colors.black,
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.12,
+    shadowRadius: 22,
+    elevation: 6,
+  },
+  searchTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: Colors.text,
+  },
+  searchSubtitle: {
+    marginTop: 6,
+    fontSize: 14,
+    color: Colors.subtitle ?? "#6b7280",
+  },
   searchRow: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 8,
-    marginTop: 12,
-    marginBottom: 12,
+    marginTop: 16,
+    gap: 12,
   },
   input: {
     flex: 1,
-    height: 44,
+    height: 48,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: Colors.border ?? "#d1d5db",
+    paddingHorizontal: 18,
+    backgroundColor: Colors.background,
+    fontSize: 15,
+  },
+  chipRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    marginTop: 18,
+    gap: 10,
+  },
+  chip: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 999,
     borderWidth: 1,
     borderColor: Colors.primary,
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    backgroundColor: Colors.background,
+    backgroundColor: "rgba(19, 99, 223, 0.07)",
   },
-  // Suggestion header styles
-  suggestionContainer: {
-    marginBottom: 8,
+  chipActive: {
+    backgroundColor: Colors.primary,
   },
-  resultsTitle: {
-    fontSize: 16,
+  chipText: {
+    color: Colors.primary,
     fontWeight: "600",
-    color: Colors.text,
+    letterSpacing: 0.2,
   },
-  // Card layout helpers used locally on SearchScreen
-  cardInfo: {
-    flexDirection: "column",
+  chipTextActive: {
+    color: Colors.scannerWhite,
   },
-  cardName: {
-    fontSize: 16,
+  sectionHeader: {
+    marginTop: 8,
+    fontSize: 18,
     fontWeight: "700",
-  },
-  cardMeta: {
     color: Colors.text,
-    opacity: 0.7,
+  },
+  loadingRow: {
+    marginTop: 20,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  loadingText: {
+    color: Colors.subtitle ?? "#6b7280",
+  },
+  resultsList: {
+    marginTop: 16,
+    gap: 14,
+  },
+  resultCard: {
+    borderRadius: 18,
+    padding: 18,
+    backgroundColor: Colors.surface ?? "#fff",
+    shadowColor: Colors.black,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.08,
+    shadowRadius: 16,
+    elevation: 4,
+  },
+  resultTitle: {
+    fontSize: 17,
+    fontWeight: "700",
+    color: Colors.text,
+  },
+  resultMetaRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 10,
+    gap: 10,
+  },
+  badge: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 999,
+    backgroundColor: "rgba(19, 99, 223, 0.12)",
+  },
+  badgeText: {
+    color: Colors.primary,
+    fontSize: 12,
+    fontWeight: "700",
+    letterSpacing: 0.3,
+    textTransform: "uppercase",
+  },
+  resultMeta: {
+    color: Colors.subtitle ?? "#6b7280",
+    fontSize: 14,
+  },
+  emptyState: {
+    marginTop: 20,
+    padding: 24,
+    borderRadius: 20,
+    backgroundColor: "rgba(15, 23, 42, 0.05)",
+    gap: 16,
+  },
+  emptyTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: Colors.text,
+  },
+  emptySubtitle: {
+    fontSize: 14,
+    color: Colors.subtitle ?? "#6b7280",
+    lineHeight: 20,
+  },
+  ideaList: {
+    gap: 10,
+  },
+  ideaRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
+  ideaBullet: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: Colors.primary,
     marginTop: 2,
+  },
+  ideaText: {
+    flex: 1,
+    color: Colors.text,
+    fontSize: 14,
   },
 });

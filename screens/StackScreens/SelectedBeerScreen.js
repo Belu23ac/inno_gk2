@@ -16,6 +16,21 @@ export default function SelectedBeerScreen({ route }) {
 
   const raw = beer?._raw ?? {};
   const imageUrl = raw?.image || raw?.image_url || raw?.label || raw?.logo || raw?.photo || raw?.thumb || raw?.icon || null;
+
+  const resolveImageSource = (img) => {
+    if (!img) return null;
+    // already a module id (number) or object accepted by <Image>
+    if (typeof img === 'number' || (typeof img === 'object' && img !== null && (img.uri || img.default))) return img;
+    if (typeof img === 'string') {
+      const s = img.trim();
+      // remote, file or data URIs
+      if (s.startsWith('http') || s.startsWith('file:') || s.startsWith('data:')) return { uri: s };
+      // fallback: try as uri
+      return { uri: s };
+    }
+    return null;
+  };
+  const resolvedImage = resolveImageSource(imageUrl);
   const info = [
     { label: 'Brewery', value: beer?.brewery },
     { label: 'ABV', value: beer?.abv },
@@ -40,8 +55,8 @@ export default function SelectedBeerScreen({ route }) {
     <ScrollView contentContainerStyle={[GlobalStyle.content, S.container]}>
       {beer ? (
         <View style={S.card}>
-          {imageUrl ? (
-            <Image source={{ uri: String(imageUrl) }} style={S.hero} resizeMode="cover" />
+          {resolvedImage ? (
+            <Image source={resolvedImage} style={S.hero} resizeMode="cover" />
           ) : null}
           <Text style={S.title}>{beer.name}</Text>
           <View style={S.divider} />

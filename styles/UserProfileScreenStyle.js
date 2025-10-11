@@ -13,6 +13,47 @@ export const UserProfileScreenStyle = StyleSheet.create({
     boxShadow: `0px 0px 8px ${Colors.shadowLight}`,
     elevation: 3,
   },
+  title: {
+    fontSize: 24,
+    fontWeight: '700',
+    marginBottom: 20,
+    color: Colors.text,
+  },
+  inputContainer: {
+    width: '100%',
+    marginBottom: 20,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 8,
+    color: Colors.text,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: Colors.lightGray,
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 16,
+    backgroundColor: Colors.inputBackground,
+    color: Colors.text,
+  },
+  inputDisabled: {
+    backgroundColor: Colors.lightGray,
+    color: Colors.darkGray,
+  },
+  bioInput: {
+    height: 80,
+    textAlignVertical: 'top',
+  },
+  caption: {
+    fontSize: 12,
+    color: Colors.subtitle,
+    marginTop: 4,
+  },
+  buttonDisabled: {
+    opacity: 0.6,
+  },
   avatarProfile: {
     width: 120,
     height: 120,

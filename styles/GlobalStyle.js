@@ -154,6 +154,4 @@ export const GlobalStyle = StyleSheet.create({
     backgroundColor: Colors.barcodeScanner,
     boxShadow: `0px 0px 6px ${Colors.shadowScanLine}`,
   },
-
-
 });

@@ -2,75 +2,226 @@ import { StyleSheet } from "react-native";
 import { Colors } from "./Colors";
 
 export const HomeScreenStyle = StyleSheet.create({
-  // HomeScreen specific styles
   safe: {
     flex: 1,
-    justifyContent: "center",
-    paddingHorizontal: 12,
+    backgroundColor: Colors.background,
   },
-  titleRow: { 
-    marginBottom: 12 
+  scrollContent: {
+    padding: 24,
+    paddingBottom: 40,
+    paddingTop: 40,
+    width: '100%',
+    maxWidth: 720,
+    alignSelf: 'center',
   },
-  headerRow: { 
-    flexDirection: "row", 
-    alignItems: "center" 
+  heroCard: {
+    backgroundColor: Colors.surface,
+    borderRadius: 24,
+    padding: 24,
+    marginBottom: 24,
+    boxShadow: `0px 16px 30px ${Colors.shadowSoft}`,
+    elevation: 4,
   },
-  avatar: { 
-    width: 44, 
-    height: 44, 
-    borderRadius: 22, 
-    marginRight: 10 
-  },
-  headerText: { 
-    flexDirection: "column" 
-  },
-  username: { 
-    fontWeight: "700", 
-    fontSize: 16 
-  },
-  time: { 
-    color: Colors.textMuted, 
-    fontSize: 12 
-  },
-  body: { 
-    marginTop: 8 
-  },
-  beerName: { 
-    fontSize: 16, 
-    fontWeight: "700" 
-  },
-  breweryName: { 
-    color: Colors.textPrimary, 
-    marginTop: 2 
-  },
-  starsRow: { 
-    flexDirection: "row", 
-    marginTop: 6 
-  },
-  star: { 
-    fontSize: 16, 
-    marginRight: 2 
-  },
-  starFilled: { 
-    color: Colors.starYellow 
-  },
-  starEmpty: { 
-    color: Colors.mediumGray 
-  },
-  review: { 
-    marginTop: 8, 
-    color: Colors.textPrimary 
-  },
-  actionsRow: {
+  heroChip: {
     flexDirection: "row",
+    alignItems: "center",
+    alignSelf: "flex-start",
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 14,
+    backgroundColor: Colors.surfaceAlt,
+    marginBottom: 16,
+  },
+  heroChipText: {
+    marginLeft: 6,
+    fontSize: 12,
+    fontWeight: "600",
+    color: Colors.primary,
+    textTransform: "uppercase",
+  },
+  heroTitle: {
+    fontSize: 26,
+    fontWeight: "700",
+    color: Colors.text,
+  },
+  heroSubtitle: {
+    fontSize: 14,
+    color: Colors.subtitle,
+    marginTop: 8,
+  },
+  heroActions: {
+    flexDirection: "row",
+    marginTop: 20,
+  },
+  heroActionPrimary: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: Colors.primary,
+    paddingVertical: 12,
+    paddingHorizontal: 18,
+    borderRadius: 14,
+    marginRight: 12,
+  },
+  heroActionPrimaryText: {
+    color: Colors.buttonText,
+    fontWeight: "700",
+    marginLeft: 8,
+  },
+  heroActionSecondary: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 18,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    backgroundColor: Colors.surfaceAlt,
+  },
+  heroActionSecondaryText: {
+    color: Colors.primary,
+    fontWeight: "700",
+    marginLeft: 8,
+  },
+  offerCard: {
+    backgroundColor: Colors.primarySoft,
+    borderRadius: 24,
+    padding: 24,
+    marginBottom: 28,
+  },
+  offerBadge: {
+    alignSelf: "flex-start",
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 12,
+    backgroundColor: Colors.surface,
+    marginBottom: 14,
+  },
+  offerBadgeText: {
+    fontSize: 12,
+    fontWeight: "700",
+    color: Colors.primary,
+    textTransform: "uppercase",
+    letterSpacing: 0.6,
+  },
+  offerTitle: {
+    fontSize: 22,
+    fontWeight: "700",
+    color: Colors.buttonText,
+  },
+  offerSubtitle: {
+    fontSize: 14,
+    color: Colors.buttonText,
+    marginTop: 8,
+    opacity: 0.9,
+  },
+  offerFooter: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginTop: 18,
+  },
+  offerMeta: {
+    fontSize: 13,
+    color: Colors.buttonText,
+    fontWeight: "600",
+  },
+  offerButton: {
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 12,
+    backgroundColor: Colors.surface,
+  },
+  offerButtonText: {
+    fontSize: 14,
+    fontWeight: "700",
+    color: Colors.primary,
+  },
+  section: {
+    marginBottom: 28,
+  },
+  sectionHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 16,
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: "700",
+    color: Colors.text,
+  },
+  sectionLink: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: Colors.primary,
+  },
+  horizontalList: {
+    paddingRight: 8,
+  },
+  curatedCard: {
+    width: 240,
+    backgroundColor: Colors.surface,
+    borderRadius: 20,
+    padding: 18,
+    marginRight: 14,
+    boxShadow: `0px 12px 24px ${Colors.shadowSoft}`,
+    elevation: 3,
+  },
+  curatedLabel: {
+    fontSize: 12,
+    fontWeight: "700",
+    color: Colors.primary,
+    textTransform: "uppercase",
+    letterSpacing: 0.6,
+  },
+  curatedTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: Colors.text,
     marginTop: 10,
-    justifyContent: "flex-end",
   },
-  actionButton: { 
-    marginLeft: 12 
+  curatedSubtitle: {
+    fontSize: 13,
+    color: Colors.subtitle,
+    marginTop: 6,
   },
-  actionText: { 
-    color: Colors.linkBlue, 
-    fontWeight: "600" 
+  curatedFooter: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginTop: 18,
+  },
+  curatedMeta: {
+    fontSize: 13,
+    color: Colors.subtitle,
+    fontWeight: "600",
+  },
+  trendingCard: {
+    backgroundColor: Colors.surface,
+    borderRadius: 18,
+    padding: 18,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: Colors.border,
+  },
+  trendingHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 6,
+  },
+  trendingName: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: Colors.text,
+    marginLeft: 8,
+  },
+  trendingLocation: {
+    fontSize: 13,
+    color: Colors.subtitle,
+  },
+  trendingHighlight: {
+    fontSize: 13,
+    color: Colors.textPrimary,
+    marginTop: 6,
   },
 });
