@@ -29,7 +29,7 @@ export default function SearchScreen({ navigation }) {
       const response = await fetch(url, {
         method: "GET",
         headers: {
-          "x-rapidapi-key": "66a9f0df03msh92cfad6fd0e885ap17abe0jsn785fac5bf0bb",
+          "x-rapidapi-key": "e4e173ad62msh6d2bcb67ac5ad4ep16e038jsn5d45302705ca",
           "x-rapidapi-host": "beer9.p.rapidapi.com",
         },
       });
