@@ -14,6 +14,10 @@ import { GlobalStyle } from "../styles/GlobalStyle";
 import { SearchScreenStyle } from "../styles/SearchScreenStyle";
 import { Colors } from "../styles/Colors";
 
+// RapidAPI constants
+const RAPIDAPI_HOST = "beer9.p.rapidapi.com";
+const RAPIDAPI_KEY = "e4e173ad62msh6d2bcb67ac5ad4ep16e038jsn5d45302705ca";
+
 export default function SearchScreen({ navigation }) {
   const [searchText, setSearchText] = React.useState("");
   const [results, setResults] = React.useState([]);
@@ -26,14 +30,20 @@ export default function SearchScreen({ navigation }) {
     []
   );
 
-  // (inspiration ideas removed; UI focuses on beers only)
+  // normalize raw API item into a display-friendly object
+  const normalize = React.useCallback((item, idx) => {
+    const name = item?.name || item?.beer || item?.beer_name || item?.title || "Unknown";
+    const brewery = item?.brewery || item?.brewery_name || item?.brand || item?.company || "Unknown brewery";
+    const abvRaw = item?.abv ?? item?.alcohol ?? item?.abv_percent;
+    const abv = abvRaw == null ? "N/A" : `${String(abvRaw).includes("%") ? abvRaw : `${abvRaw}%`}`;
+    const id = String(item?.id || item?._id || item?.beer_id || `${name}-${brewery}-${idx}`);
+    return { id, name, brewery, abv, _raw: item };
+  }, []);
 
   const runSearch = useCallback(async (queryValue) => {
     Keyboard.dismiss();
-  const fallback = "Carlsberg"; // default beer name fallback
-    const trimmed = queryValue?.trim();
-    const query = trimmed?.length ? trimmed : fallback;
-  // Fetch beers from RapidAPI using the beer name/style query
+    const query = (queryValue?.trim() || "Carlsberg"); // default beer name fallback
+    // Fetch beers from RapidAPI using the beer name query
     const params = new URLSearchParams({ name: query });
     const url = `https://beer9.p.rapidapi.com/?${params.toString()}`;
     setLoading(true);
@@ -42,8 +52,8 @@ export default function SearchScreen({ navigation }) {
       const response = await fetch(url, {
         method: "GET",
         headers: {
-          "x-rapidapi-key": "e4e173ad62msh6d2bcb67ac5ad4ep16e038jsn5d45302705ca",
-          "x-rapidapi-host": "beer9.p.rapidapi.com",
+          "x-rapidapi-key": RAPIDAPI_KEY,
+          "x-rapidapi-host": RAPIDAPI_HOST,
         },
       });
 
@@ -58,14 +68,7 @@ export default function SearchScreen({ navigation }) {
 
       const list = Array.isArray(raw) ? raw : Array.isArray(raw?.data) ? raw.data : [];
 
-      const normalized = list.map((item, idx) => {
-        const name = item?.name || item?.beer || item?.beer_name || item?.title || "Unknown";
-        const brewery = item?.brewery || item?.brewery_name || item?.brand || item?.company || "Unknown brewery";
-        const abvRaw = item?.abv ?? item?.alcohol ?? item?.abv_percent;
-        const abv = abvRaw == null ? "N/A" : `${String(abvRaw).includes("%") ? abvRaw : `${abvRaw}%`}`;
-        const id = String(item?.id || item?._id || item?.beer_id || `${name}-${brewery}-${idx}`);
-        return { id, name, brewery, abv, _raw: item };
-      });
+      const normalized = list.map(normalize);
 
       setResults(normalized);
     } catch (e) {
@@ -139,9 +142,7 @@ export default function SearchScreen({ navigation }) {
               value={searchText}
               onChangeText={(text) => {
                 setSearchText(text);
-                if (activeChip) {
-                  setActiveChip("");
-                }
+                if (activeChip) setActiveChip("");
               }}
               returnKeyType="search"
               onSubmitEditing={handleSearch}
