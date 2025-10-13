@@ -27,16 +27,7 @@ const AppNavigator = () => {
     );
   }
 
-  // If user is not authenticated, show auth screens
-  if (!user) {
-    return (
-      <NavigationContainer>
-        <AuthStack />
-      </NavigationContainer>
-    );
-  }
-
-  // If user is authenticated, show main app
+  // Allow users to access the app without authentication
   return (
     <NavigationContainer>
       <Tab.Navigator

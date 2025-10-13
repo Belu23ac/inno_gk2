@@ -6,6 +6,8 @@ import UserProfileScreen from "../screens/StackScreens/UserProfileScreen";
 import AppDetailsScreen from "../screens/StackScreens/AppDetailsScreen";
 import AccountSettingsScreen from "../screens/StackScreens/AccountSettingsScreen";
 import FavoritesScreen from "../screens/StackScreens/FavoritesScreen";
+import LoginScreen from "../screens/LoginScreen";
+import RegisterScreen from "../screens/RegisterScreen";
 import { GlobalNavigation } from "../styles/GlobalNavigation";
 
 const Stack = createStackNavigator();
@@ -32,6 +34,16 @@ export default function SettingsStackNavigation() {
       <Stack.Screen name="Account Settings" component={AccountSettingsScreen} />
       <Stack.Screen name="My Favorites" component={FavoritesScreen} />
       <Stack.Screen name="App Details" component={AppDetailsScreen} />
+      <Stack.Screen 
+        name="Login" 
+        component={LoginScreen}
+        options={{ title: "Sign In" }}
+      />
+      <Stack.Screen 
+        name="Register" 
+        component={RegisterScreen}
+        options={{ title: "Create Account" }}
+      />
     </Stack.Navigator>
   );
 }

@@ -12,6 +12,8 @@ import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../contexts/AuthContext";
 import { HomeScreenStyle } from "../styles/HomeScreenStyle";
 import { Colors } from "../styles/Colors";
+import auroraImage from "../assets/aurora-borealis.png";
+const importedMockBeers = require("../contexts/MockBeers");
 
 const OFFER_OF_WEEK = {
   label: "Offer of the week",
@@ -22,40 +24,32 @@ const OFFER_OF_WEEK = {
     name: "Aurora Borealis Triple IPA",
     brewery: "Fjord & Foam",
     abv: "9.5%",
-      _raw: {
+    _raw: {
       style: "Triple IPA",
       ibu: "75",
       country: "Denmark",
       category: "Craft Beer",
       description: "Spruce tipped seasonal from Fjord & Foam. Pre-order and save 20%. A bold, hoppy triple IPA with notes of pine and citrus.",
-      image: "https://example.com/aurora-borealis.jpg" // Placeholder image URL
+      image: auroraImage
     }
   }
 };
 
-const CURATED_PICKS = [
-  {
-    id: "pick-1",
-    label: "Seasonal flight",
-    title: "Winter warmers",
-    subtitle: "Smoked porters and barrel-aged stouts",
-    meta: "5 bottles",
-  },
-  {
-    id: "pick-2",
-    label: "Brewery spotlight",
-    title: "Nordic farmhouse",
-    subtitle: "Mixed fermentation saisons from rural cellars",
-    meta: "Curated by Lina",
-  },
-  {
-    id: "pick-3",
-    label: "Weeknight light",
-    title: "Low ABV heroes",
-    subtitle: "Crisp lagers under 4.5% ABV",
-    meta: "6 picks",
-  },
-];
+// load mock beers (use require so this can sit inside the file)
+const mockBeers = importedMockBeers?.default || importedMockBeers || [];
+
+// keep original meta values and map them onto the first beers from mockBeers
+const METAS = ["5 bottles", "Curated by Lina", "6 picks", "Brewed 2 km away"];
+
+const CURATED_PICKS = (Array.isArray(mockBeers) ? mockBeers.slice(0, METAS.length) : []).map((beer, idx) => ({
+  id: beer.id || `pick-${idx + 1}`,
+  label: beer._raw?.style || beer.style || "Recommended",
+  title: beer.name || beer.title || `Beer ${idx + 1}`,
+  subtitle: beer._raw?.description || beer.brewery || beer._raw?.country || "",
+  meta: METAS[idx],
+  // keep a reference to the original/full beer object so detail screens receive complete data
+  beer,
+}));
 
 const TRENDING_BREWERIES = [
   {
@@ -126,7 +120,10 @@ export default function HomeScreen() {
           <Text style={HomeScreenStyle.offerSubtitle}>{OFFER_OF_WEEK.blurb}</Text>
           <View style={HomeScreenStyle.offerFooter}>
             <Text style={HomeScreenStyle.offerMeta}>{OFFER_OF_WEEK.price}</Text>
-            <TouchableOpacity style={HomeScreenStyle.offerButton} onPress={() => navigation.navigate('Selected Beer', { beer: OFFER_OF_WEEK.beer })}>
+            <TouchableOpacity
+              style={HomeScreenStyle.offerButton}
+              onPress={() => navigation.navigate('Selected Beer', { beer: OFFER_OF_WEEK.beer })}
+            >
               <Text style={HomeScreenStyle.offerButtonText}>View details</Text>
             </TouchableOpacity>
           </View>
@@ -134,10 +131,7 @@ export default function HomeScreen() {
 
         <View style={HomeScreenStyle.section}>
           <View style={HomeScreenStyle.sectionHeader}>
-            <Text style={HomeScreenStyle.sectionTitle}>Curated picks for you</Text>
-            <TouchableOpacity>
-              <Text style={HomeScreenStyle.sectionLink}>See all</Text>
-            </TouchableOpacity>
+            <Text style={HomeScreenStyle.sectionTitle}>Curated picks for you</Text>   
           </View>
           <FlatList
             horizontal
@@ -146,7 +140,13 @@ export default function HomeScreen() {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={HomeScreenStyle.horizontalList}
             renderItem={({ item }) => (
-              <View style={HomeScreenStyle.curatedCard}>
+              <TouchableOpacity
+                style={HomeScreenStyle.curatedCard}
+                onPress={() => {
+                  // pass the original/full beer object when available (fallback to item)
+                  navigation.navigate('Selected Beer', { beer: item.beer || item });
+                }}
+              >
                 <Text style={HomeScreenStyle.curatedLabel}>{item.label}</Text>
                 <Text style={HomeScreenStyle.curatedTitle}>{item.title}</Text>
                 <Text style={HomeScreenStyle.curatedSubtitle}>{item.subtitle}</Text>
@@ -154,7 +154,7 @@ export default function HomeScreen() {
                   <Text style={HomeScreenStyle.curatedMeta}>{item.meta}</Text>
                   <Ionicons name="arrow-forward" size={16} color={Colors.primary} />
                 </View>
-              </View>
+              </TouchableOpacity>
             )}
           />
         </View>

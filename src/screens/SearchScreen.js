@@ -26,7 +26,7 @@ export default function SearchScreen({ navigation }) {
   const [activeChip, setActiveChip] = React.useState("");
 
   const quickSuggestions = React.useMemo(
-    () => ["Carlsberg", "Guinness Draught", "Heineken", "Sierra Nevada Pale Ale", "Samuel Adams"],
+    () => ["Carlsberg", "Guinness Draught", "Heineken", "IPA", "Stout", "Lager", "Pilsner", "Porter", "Wheat Beer", "Saison"],
     []
   );
 

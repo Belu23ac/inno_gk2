@@ -30,6 +30,11 @@ const LoginScreen = ({ navigation }) => {
 
     if (!result.success) {
       Alert.alert('Login Error', result.error);
+    } else {
+      // Navigate back to the previous screen after successful login
+      if (navigation.canGoBack()) {
+        navigation.goBack();
+      }
     }
   };
 

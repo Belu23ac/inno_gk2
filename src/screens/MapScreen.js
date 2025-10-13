@@ -17,7 +17,7 @@ export default function MapScreen() {
       try {
         let { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== 'granted') {
-          Alert.alert('Placering nægtet', 'Appen har brug for adgang til din placering.');
+          Alert.alert('Location denied', 'The app needs access to your location.');
           setLoading(false);
           return;
         }
@@ -25,8 +25,8 @@ export default function MapScreen() {
         let loc = await Location.getCurrentPositionAsync({});
         setLocation(loc.coords);
       } catch (error) {
-        console.error("Fejl ved hentning af placering:", error);
-        Alert.alert('Fejl', 'Kunne ikke hente placering.');
+        console.error("Error fetching location:", error);
+        Alert.alert('Error', 'Could not fetch location.');
       } finally {
         setLoading(false);
       }
@@ -37,7 +37,7 @@ export default function MapScreen() {
     if (!location) return;
 
     const fetchBars = async () => {
-      try {
+  try {
         const query = `
           [out:json];
           node["amenity"~"bar|pub|biergarten|restaurant"](around:2000,${location.latitude},${location.longitude});
@@ -49,19 +49,19 @@ export default function MapScreen() {
 
         const barsWithDistance = data.elements.map((bar) => ({
           id: bar.id,
-          name: bar.tags.name || "Ukendt sted",
+          name: bar.tags.name || "Unknown place",
           amenity: bar.tags.amenity,
-          address: bar.tags["addr:street"] || "Ingen adresse",
-          openingHours: bar.tags.opening_hours || "Ingen åbningstider",
+          address: bar.tags["addr:street"] || "No address",
+          openingHours: bar.tags.opening_hours || "No opening hours",
           latitude: bar.lat,
           longitude: bar.lon,
           distance: calculateDistance(location.latitude, location.longitude, bar.lat, bar.lon),
         }));
 
         setBars(barsWithDistance);
-      } catch (error) {
-        console.error("Fejl ved hentning af steder:", error);
-        Alert.alert('Fejl', 'Kunne ikke hente steder.');
+  } catch (error) {
+  console.error("Error fetching places:", error);
+  Alert.alert('Error', 'Could not fetch places.');
       }
     };
 
@@ -99,7 +99,7 @@ export default function MapScreen() {
             description={
               bar.address && bar.openingHours
                 ? `${bar.address}\n${bar.openingHours}`
-                : "Ingen yderligere oplysninger"
+                : "No additional information"
             }
             onPress={() => setSelectedBar(bar)}
           />

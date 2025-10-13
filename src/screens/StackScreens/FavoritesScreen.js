@@ -1,6 +1,8 @@
 import React, { useMemo } from 'react';
-import { ScrollView, View, Text } from 'react-native';
+import { ScrollView, View, Text, TouchableOpacity } from 'react-native';
 import Ionicons from '@react-native-vector-icons/ionicons';
+import { useNavigation } from '@react-navigation/native';
+import { useAuth } from '../../contexts/AuthContext';
 import { FavoritesScreenStyle } from '../../styles/FavoritesScreenStyle';
 import { Colors } from '../../styles/Colors';
 import SAMPLE_BEERS from '../../contexts/MockBeers';
@@ -17,7 +19,40 @@ const mockFavorites = SAMPLE_BEERS.map((b, i) => ({
 }));
 
 const FavoritesScreen = () => {
+  const { user } = useAuth();
+  const navigation = useNavigation();
   const favorites = useMemo(() => mockFavorites, []);
+
+  // If user is not logged in, show login prompt
+  if (!user) {
+    return (
+      <ScrollView
+        style={FavoritesScreenStyle.container}
+        contentContainerStyle={FavoritesScreenStyle.guestContainer}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={FavoritesScreenStyle.emptyIcon}>
+          <Ionicons name="heart-outline" size={60} color={Colors.subtitle} />
+        </View>
+        <Text style={FavoritesScreenStyle.guestTitle}>Log in to see your favorites</Text>
+        <Text style={FavoritesScreenStyle.guestText}>
+          Save your favorite beers, breweries, and taprooms so you can easily find them later and share with friends.
+        </Text>
+        <TouchableOpacity
+          style={FavoritesScreenStyle.guestButton}
+          onPress={() => navigation.navigate('Login')}
+        >
+          <Text style={FavoritesScreenStyle.guestButtonText}>Sign In</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={FavoritesScreenStyle.guestButtonSecondary}
+          onPress={() => navigation.navigate('Register')}
+        >
+          <Text style={FavoritesScreenStyle.guestButtonSecondaryText}>Create Account</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    );
+  }
 
   return (
     <ScrollView

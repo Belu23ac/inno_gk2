@@ -7,10 +7,15 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import Ionicons from '@react-native-vector-icons/ionicons';
+import { useAuth } from '../../contexts/AuthContext';
 import { AccountSettingsStyle } from '../../styles/AccountSettingsStyle';
 import { Colors } from '../../styles/Colors';
 
 const AccountSettingsScreen = () => {
+  const { user } = useAuth();
+  const navigation = useNavigation();
   const [pushUpdates, setPushUpdates] = useState(true);
   const [newDropAlerts, setNewDropAlerts] = useState(true);
   const [weeklyDigest, setWeeklyDigest] = useState(false);
@@ -19,6 +24,33 @@ const AccountSettingsScreen = () => {
   const toggleMessage = (label, enabled) => {
     Alert.alert(label, enabled ? 'Enabled' : 'Disabled');
   };
+
+  // If user is not logged in, show login prompt
+  if (!user) {
+    return (
+      <ScrollView contentContainerStyle={AccountSettingsStyle.guestContainer}>
+        <View style={AccountSettingsStyle.guestIcon}>
+          <Ionicons name="settings-outline" size={60} color={Colors.subtitle} />
+        </View>
+        <Text style={AccountSettingsStyle.guestTitle}>Log in to manage settings</Text>
+        <Text style={AccountSettingsStyle.guestText}>
+          Sign in to customize your notifications, privacy preferences, and account settings.
+        </Text>
+        <TouchableOpacity
+          style={AccountSettingsStyle.guestButton}
+          onPress={() => navigation.navigate('Login')}
+        >
+          <Text style={AccountSettingsStyle.guestButtonText}>Sign In</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={AccountSettingsStyle.guestButtonSecondary}
+          onPress={() => navigation.navigate('Register')}
+        >
+          <Text style={AccountSettingsStyle.guestButtonSecondaryText}>Create Account</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    );
+  }
 
   return (
     <ScrollView contentContainerStyle={AccountSettingsStyle.container}>

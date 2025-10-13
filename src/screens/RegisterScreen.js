@@ -42,6 +42,11 @@ const RegisterScreen = ({ navigation }) => {
 
     if (!result.success) {
       Alert.alert('Registration Error', result.error);
+    } else {
+      // Navigate back to the previous screen after successful registration
+      if (navigation.canGoBack()) {
+        navigation.goBack();
+      }
     }
   };
 

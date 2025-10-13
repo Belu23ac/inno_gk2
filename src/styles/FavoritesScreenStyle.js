@@ -97,4 +97,52 @@ export const FavoritesScreenStyle = StyleSheet.create({
     color: Colors.subtitle,
     lineHeight: 20,
   },
+  // Guest user styles
+  guestContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 32,
+    paddingVertical: 40,
+  },
+  guestTitle: {
+    fontSize: 22,
+    fontWeight: '700',
+    color: Colors.text,
+    marginTop: 24,
+    marginBottom: 12,
+    textAlign: 'center',
+  },
+  guestText: {
+    fontSize: 15,
+    color: Colors.subtitle,
+    textAlign: 'center',
+    lineHeight: 22,
+    marginBottom: 32,
+  },
+  guestButton: {
+    width: '100%',
+    backgroundColor: Colors.primary,
+    borderRadius: 16,
+    paddingVertical: 16,
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  guestButtonText: {
+    color: Colors.buttonText,
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  guestButtonSecondary: {
+    width: '100%',
+    backgroundColor: Colors.surface,
+    borderRadius: 16,
+    paddingVertical: 16,
+    alignItems: 'center',
+  },
+  guestButtonSecondaryText: {
+    color: Colors.text,
+    fontSize: 16,
+    fontWeight: '600',
+  },
 });
