@@ -40,43 +40,7 @@ const INTEREST_TAGS = [
 
 const SettingsScreen = ({ navigation }) => {
   const { user, logout } = useAuth();
-
-  // If user is not logged in, show login prompt
-  if (!user) {
-    return (
-      <View style={ProfileScreenStyle.safeArea}>
-        <StatusBar style="light" />
-        <View style={ProfileScreenStyle.guestContainer}>
-          <View style={ProfileScreenStyle.guestIcon}>
-            <Ionicons name="person-outline" size={60} color={Colors.subtitle} />
-          </View>
-          <Text style={ProfileScreenStyle.guestTitle}>
-            Sign in to unlock features
-          </Text>
-          <Text style={ProfileScreenStyle.guestText}>
-            Create an account to save your favorite beers, track breweries
-            you've visited, and personalize your beer discovery experience.
-          </Text>
-          <TouchableOpacity
-            style={ProfileScreenStyle.guestButton}
-            onPress={() => navigation.navigate("Login")}
-          >
-            <Text style={ProfileScreenStyle.guestButtonText}>Sign In</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={ProfileScreenStyle.guestButtonSecondary}
-            onPress={() => navigation.navigate("Register")}
-          >
-            <Text style={ProfileScreenStyle.guestButtonSecondaryText}>
-              Create Account
-            </Text>
-          </TouchableOpacity>
-
-        </View>
-      </View>
-    );
-  }
-
+  // Hooks and derived values must run on every render to preserve hook order
   const displayName = useMemo(
     () =>
       user?.displayName && user.displayName.trim().length > 0
@@ -121,9 +85,11 @@ const SettingsScreen = ({ navigation }) => {
     [user?.stats]
   );
 
+  // Handlers (always declared so hook order is stable)
   const handleEditProfile = () => navigation.navigate("User Profile");
   const handleAccountSettings = () => navigation.navigate("Account Settings");
   const handleFavorites = () => navigation.navigate("My Favorites");
+  const handleAppDetails = () => navigation.navigate("App Details");
 
   const handleSupport = () => {
     Alert.alert(
@@ -150,6 +116,42 @@ const SettingsScreen = ({ navigation }) => {
       },
     ]);
   };
+
+  // If user is not logged in, show login prompt (render after hooks)
+  if (!user) {
+    return (
+      <View style={ProfileScreenStyle.safeArea}>
+        <StatusBar style="light" />
+        <View style={ProfileScreenStyle.guestContainer}>
+          <View style={ProfileScreenStyle.guestIcon}>
+            <Ionicons name="person-outline" size={60} color={Colors.subtitle} />
+          </View>
+          <Text style={ProfileScreenStyle.guestTitle}>
+            Sign in to unlock features
+          </Text>
+          <Text style={ProfileScreenStyle.guestText}>
+            Create an account to save your favorite beers, track breweries
+            you've visited, and personalize your beer discovery experience.
+          </Text>
+          <TouchableOpacity
+            style={ProfileScreenStyle.guestButton}
+            onPress={() => navigation.navigate("Login")}
+          >
+            <Text style={ProfileScreenStyle.guestButtonText}>Sign In</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={ProfileScreenStyle.guestButtonSecondary}
+            onPress={() => navigation.navigate("Register")}
+          >
+            <Text style={ProfileScreenStyle.guestButtonSecondaryText}>
+              Create Account
+            </Text>
+          </TouchableOpacity>
+
+        </View>
+      </View>
+    );
+  }
 
   return (
     <View style={ProfileScreenStyle.safeArea}>
