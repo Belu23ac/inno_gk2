@@ -5,6 +5,7 @@ import {
   FlatList,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import Ionicons from "@react-native-vector-icons/ionicons";
@@ -105,7 +106,7 @@ export default function HomeScreen() {
               <Ionicons name="search-outline" size={18} color={Colors.buttonText} />
               <Text style={HomeScreenStyle.heroActionPrimaryText}>Find a beer</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={HomeScreenStyle.heroActionSecondary}>
+            <TouchableOpacity style={HomeScreenStyle.heroActionSecondary} onPress={() => Alert.alert('Log tasting', 'Logs tasting information.')}>
               <Ionicons name="create-outline" size={18} color={Colors.primary} />
               <Text style={HomeScreenStyle.heroActionSecondaryText}>Log tasting</Text>
             </TouchableOpacity>
