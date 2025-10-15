@@ -1,7 +1,8 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { Text, View, Image, TextInput, Pressable, ScrollView } from "react-native";
+import { Text, View, Image, TextInput, Pressable, ScrollView, ActivityIndicator } from "react-native";
 import { GlobalStyle } from "../../styles/GlobalStyle";
+import { Colors } from "../../styles/Colors";
 import { SelectedBeerScreenStyle as S } from "../../styles/SelectedBeerScreenStyle";
 
 export default function SelectedBeerScreen({ route }) {
@@ -16,6 +17,8 @@ export default function SelectedBeerScreen({ route }) {
 
   const raw = beer?._raw ?? {};
   const imageUrl = raw?.image || raw?.image_url || raw?.label || raw?.logo || raw?.photo || raw?.thumb || raw?.icon || null;
+
+  const [imageLoading, setImageLoading] = React.useState(false);
 
   const resolveImageSource = (img) => {
     if (!img) return null;
@@ -56,7 +59,21 @@ export default function SelectedBeerScreen({ route }) {
       {beer ? (
         <View style={S.card}>
           {resolvedImage ? (
-            <Image source={resolvedImage} style={S.hero} resizeMode="cover" />
+            <View style={S.hero}>
+              <Image
+                source={resolvedImage}
+                style={S.hero}
+                resizeMode="cover"
+                onLoadStart={() => setImageLoading(true)}
+                onLoadEnd={() => setImageLoading(false)}
+                onError={() => setImageLoading(false)}
+              />
+              {imageLoading && (
+                <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' }}>
+                  <ActivityIndicator size="large" color={Colors.primary} />
+                </View>
+              )}
+            </View>
           ) : null}
           <Text style={S.title}>{beer.name}</Text>
           <View style={S.divider} />

@@ -58,8 +58,8 @@ export default function ScanScreen({ navigation }) {
       }),
     ]);
 
-    // run the cycle 3 times => 3 seconds total
-    const loopAnim = Animated.loop(cycle, { iterations: 3 });
+  // run the cycle 2 times => 4 seconds total (each cycle is forward+back = 2000ms)
+  const loopAnim = Animated.loop(cycle, { iterations: 1 });
     animationRef.current = loopAnim;
 
     // start and navigate when all iterations complete
