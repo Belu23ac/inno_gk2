@@ -48,6 +48,7 @@ export const SearchScreenStyle = StyleSheet.create({
     opacity: 0.85,
     fontSize: 15,
     lineHeight: 22,
+    paddingTop: 12,
   },
   searchCard: {
     borderRadius: 22,
@@ -58,6 +59,14 @@ export const SearchScreenStyle = StyleSheet.create({
     shadowOpacity: 0.12,
     shadowRadius: 22,
     elevation: 6,
+  },
+  searchCardActive: {
+    backgroundColor: Colors.primary,
+  },
+  searchCardExpanded: {
+    paddingTop: 28,
+    paddingBottom: 28,
+    paddingHorizontal: 24,
   },
   searchTitle: {
     fontSize: 18,
@@ -73,7 +82,12 @@ export const SearchScreenStyle = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginTop: 16,
-    gap: 12,
+    gap: 8,
+  },
+  searchRowActive: {
+    alignItems: "center",
+    marginTop: 8,
+    gap: 8,
   },
   input: {
     flex: 1,
@@ -84,6 +98,55 @@ export const SearchScreenStyle = StyleSheet.create({
     paddingHorizontal: 18,
     backgroundColor: Colors.background,
     fontSize: 15,
+  },
+  inputExpanded: {
+    height: 56,
+    borderColor: Colors.surface,
+    shadowColor: Colors.black,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.08,
+    shadowRadius: 14,
+    elevation: 3,
+    backgroundColor: Colors.surface,
+  },
+  searchSmallButton: {
+    paddingHorizontal: 12,
+    height: 56, // match inputExpanded height
+    borderRadius: 14,
+    backgroundColor: Colors.secondary, // primary accent as background
+    borderWidth: 1,
+    borderColor: Colors.secondary, // primary as accent/border
+    alignItems: "center",
+    justifyContent: "center",
+    marginLeft: 6,
+    // subtle lift to separate from hero
+    shadowColor: Colors.black,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.06,
+    shadowRadius: 6,
+    elevation: 3,
+  },
+  searchSmallButtonText: {
+    color: Colors.primary,
+    fontWeight: "700",
+  },
+  // small clear button (x) placed next to search button
+  searchClearButton: {
+    paddingHorizontal: 6,
+    height: 56, // match inputExpanded height
+    borderRadius: 14,
+    borderRadius: 12,
+    backgroundColor: Colors.secondary,
+    borderWidth: 1,
+    borderColor: Colors.secondary,
+    alignItems: "center",
+  marginLeft: 6,
+    marginLeft: 6,
+    shadowColor: Colors.black,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.04,
+    shadowRadius: 6,
+    elevation: 2,
   },
   chipRow: {
     flexDirection: "row",
@@ -130,7 +193,7 @@ export const SearchScreenStyle = StyleSheet.create({
   resultsList: {
     marginTop: 16,
     gap: 14,
-    width: '100%',
+    width: "100%",
   },
   resultCard: {
     borderRadius: 18,
@@ -141,8 +204,8 @@ export const SearchScreenStyle = StyleSheet.create({
     shadowOpacity: 0.08,
     shadowRadius: 16,
     elevation: 4,
-    width: '100%',
-    alignSelf: 'stretch',
+    width: "100%",
+    alignSelf: "stretch",
   },
   resultTitle: {
     fontSize: 17,
@@ -155,7 +218,7 @@ export const SearchScreenStyle = StyleSheet.create({
     alignItems: "center",
     marginTop: 10,
     gap: 10,
-    width: '100%',
+    width: "100%",
   },
   badge: {
     paddingHorizontal: 12,
@@ -192,6 +255,9 @@ export const SearchScreenStyle = StyleSheet.create({
     fontSize: 14,
     color: Colors.subtitle ?? "#6b7280",
     lineHeight: 20,
+  },
+  resultsCard: {
+    marginTop: 8,
   },
   ideaList: {
     gap: 10,
