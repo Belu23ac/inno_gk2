@@ -1,6 +1,6 @@
 # GK2 — Beer Discovery App (React Native / Expo)
 
-En mobilapp til at opdage og dele øl og bryggerier — med kortvisning, stregkodelæser, søgning og brugerprofiler.
+En mobilapp til at opdage og dele øl og bryggerier — med stregkodelæser, søgning og brugerprofiler.
 
 ## Demo
 
