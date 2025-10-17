@@ -11,7 +11,7 @@ En mobilapp til at opdage og dele øl og bryggerier — med stregkodelæser, sø
 Nedenfor listes hvem der har implementeret hvilke nye funktionaliteter ift kravsspeficikationerne til gk2.
 
 - Bertram Lund [Belu23ac] (171387) — Login- og brugerfunktion med integrering af firebase login  
-- Benjamin
+- Benjamin Hansen [Beha23ae] (168968) - Søgefunktion med Rapidapi
 - Ravn
 - Albert
 
