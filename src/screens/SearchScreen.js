@@ -16,7 +16,7 @@ import { Colors } from "../styles/Colors";
 
 // RapidAPI constants
 const RAPIDAPI_HOST = "beer9.p.rapidapi.com";
-const RAPIDAPI_KEY = "e4e173ad62msh6d2bcb67ac5ad4ep16e038jsn5d45302705ca";
+const RAPIDAPI_KEY = "8da79668e7msha3588088efb524bp1d2d3fjsn362d5dd71216";
 
 export default function SearchScreen({ navigation }) {
   const [searchText, setSearchText] = React.useState("");
