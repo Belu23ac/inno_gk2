@@ -4,13 +4,13 @@ En mobilapp til at opdage og dele øl og bryggerier — med kortvisning, stregko
 
 ## Demo
 
-▶️ Se demovide på Vimeo.
+▶️ Se demovide på Vimeo. [https://vimeo.com/1128129557]
 
 ## Bidrag og ansvar
 
 Nedenfor listes hvem der har implementeret hvilke nye funktionaliteter ift kravsspeficikationerne til gk2.
 
-- Bertram Lund (171387) — Login- og brugerfunktion med integrering af firebase login  
+- Bertram Lund [Belu23ac] (171387) — Login- og brugerfunktion med integrering af firebase login  
 - Benjamin
 - Ravn
 - Albert
