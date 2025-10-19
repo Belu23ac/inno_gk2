@@ -200,7 +200,7 @@ export default function SearchScreen({ navigation }) {
                 setSearchText(text);
                 if (activeChip) setActiveChip("");
                 if (text.trim().length === 0) {
-                  // Reset back to discovery mode when the query is cleared.
+                  // Reset back to discovery mode when the query is cleared
                   setSearchActive(false);
                   setResults([]);
                   setError(null);
