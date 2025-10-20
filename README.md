@@ -13,7 +13,7 @@ Nedenfor listes hvem der har implementeret hvilke nye funktionaliteter ift kravs
 - Bertram Lund [Belu23ac] (171387) — Login- og brugerfunktion med integrering af firebase login  
 - Benjamin Hansen [Beha23ae] (168968) - Søgefunktion med Rapidapi
 - Mads Ravn Severinsen [Mase23ac] (170274) - Map med data fra OpenStreetMap via Overpass API.
-- Albert
+- Albert Smith [alhi23ab] (168973) - Scanning funktion
 
 ## Opsætning og kørsel
 
