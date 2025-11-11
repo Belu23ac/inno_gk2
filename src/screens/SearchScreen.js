@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
-import Ionicons from "@react-native-vector-icons/ionicons";
+import { Ionicons } from "@expo/vector-icons";
 import { GlobalStyle } from "../styles/GlobalStyle";
 import { SearchScreenStyle } from "../styles/SearchScreenStyle";
 import { Colors } from "../styles/Colors";

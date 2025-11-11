@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { StatusBar } from "expo-status-bar";
 import { ScrollView, View, Text, TouchableOpacity, Alert } from "react-native";
-import Ionicons from "@react-native-vector-icons/ionicons";
+import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "../contexts/AuthContext";
 import { ProfileScreenStyle } from "../styles/ProfileScreenStyle";
 import { Colors } from "../styles/Colors";

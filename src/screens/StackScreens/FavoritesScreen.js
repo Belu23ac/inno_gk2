@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { ScrollView, View, Text, TouchableOpacity } from 'react-native';
-import Ionicons from '@react-native-vector-icons/ionicons';
+import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../contexts/AuthContext';
 import { FavoritesScreenStyle } from '../../styles/FavoritesScreenStyle';
