@@ -3,9 +3,56 @@ import { Colors } from './Colors';
 
 export const SelectedBeerScreenStyle = StyleSheet.create({
   container: {
-    width: '100%',
-    maxWidth: 900,
+    flex: 1,
+    backgroundColor: Colors.background,
+  },
+  contentContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 16,
     paddingVertical: 16,
+  },
+  imageContainer: {
+    width: "100%",
+    height: 200,
+    marginBottom: 16,
+  },
+  image: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 12,
+  },
+  detailsContainer: {
+    width: "100%",
+    paddingHorizontal: 16,
+    marginBottom: 16,
+  },
+  beerName: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: Colors.title,
+    marginBottom: 8,
+  },
+  beerDetails: {
+    fontSize: 16,
+    color: Colors.text,
+    marginBottom: 4,
+  },
+  favoriteButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: Colors.primary,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    marginTop: 16,
+  },
+  favoriteButtonText: {
+    color: Colors.buttonText,
+    fontSize: 16,
+    fontWeight: "600",
+    marginLeft: 8,
   },
   card: {
     backgroundColor: Colors.card,

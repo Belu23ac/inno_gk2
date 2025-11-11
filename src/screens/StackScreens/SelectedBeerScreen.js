@@ -1,31 +1,42 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { Text, View, Image, ScrollView, ActivityIndicator, TouchableOpacity } from "react-native";
-import { GlobalStyle } from "../../styles/GlobalStyle";
+import {
+  Text,
+  View,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import { Colors } from "../../styles/Colors";
 import { SelectedBeerScreenStyle as S } from "../../styles/SelectedBeerScreenStyle";
-import { Ionicons } from "@expo/vector-icons"; // Importer Ionicons til favoritikon
-import { useAuth } from "../../contexts/AuthContext"; // For at få adgang til brugerens uid
-import { db } from "../../database/firebase"; // Firestore-integration
+import { Ionicons } from "@expo/vector-icons";
+import { useAuth } from "../../contexts/AuthContext";
+import { db } from "../../database/firebase";
 import { doc, getDoc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
 
-export default function SelectedBeerScreen({ route }) {
-  const { user } = useAuth(); // Hent den autentificerede bruger
-  const [isFavorite, setIsFavorite] = React.useState(false); // Tjekker om øllen er favorit
+export default function SelectedBeerScreen({ route, navigation }) {
+  const { user } = useAuth();
+  const [isFavorite, setIsFavorite] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
 
-  // Hent øl fra route params
-  const beer = route?.params?.beer;
+  // Hent beer fra route.params
+  const beer = route?.params?.beer || route?.params?.params?.beer;
 
-  // Tjek om øllen allerede er en favorit
+  console.log("Route params:", route.params);
+  console.log("Beer data:", beer);
+
+  // Hvis beer ikke findes, vis en fallback
+  if (!beer) {
+    return <Text>No beer selected</Text>;
+  }
+
+  // Tjek om øllen allerede er favorit
   React.useEffect(() => {
     const checkIfFavorite = async () => {
       if (!user?.uid || !beer?.id) return;
-
       try {
         const userFavoritesRef = doc(db, "favorites", user.uid);
         const docSnap = await getDoc(userFavoritesRef);
-
         if (docSnap.exists()) {
           const favorites = docSnap.data().beers || [];
           const isFav = favorites.some((fav) => fav.id === beer.id);
@@ -39,7 +50,6 @@ export default function SelectedBeerScreen({ route }) {
     checkIfFavorite();
   }, [user?.uid, beer?.id]);
 
-  // Tilføj eller fjern øllen fra favoritter
   const toggleFavorite = async () => {
     if (!user?.uid || !beer) return;
 
@@ -49,13 +59,11 @@ export default function SelectedBeerScreen({ route }) {
       const userFavoritesRef = doc(db, "favorites", user.uid);
 
       if (isFavorite) {
-        // Fjern fra favoritter
         await updateDoc(userFavoritesRef, {
           beers: arrayRemove(beer),
         });
         setIsFavorite(false);
       } else {
-        // Tilføj til favoritter
         await updateDoc(userFavoritesRef, {
           beers: arrayUnion(beer),
         });
@@ -69,23 +77,12 @@ export default function SelectedBeerScreen({ route }) {
   };
 
   return (
-    <ScrollView
-      style={S.container} // Brug den overordnede stil fra SelectedBeerScreenStyle
-      contentContainerStyle={S.contentContainer} // Brug contentContainerStyle til layout
-    >
+    <ScrollView style={S.container}>
       <StatusBar style="auto" />
-      <View style={S.imageContainer}>
-        {beer?.image && (
-          <Image
-            source={{ uri: beer.image }}
-            style={S.image}
-          />
-        )}
-      </View>
       <View style={S.detailsContainer}>
-        <Text style={S.beerName}>{beer?.name || "Unknown Beer"}</Text>
-        <Text style={S.beerDetails}>{beer?.style || "Unknown Style"}</Text>
-        <Text style={S.beerDetails}>{beer?.location || "Unknown Location"}</Text>
+        <Text style={S.beerName}>{beer.name || "Unknown Beer"}</Text>
+        <Text style={S.beerDetails}>{beer._raw?.style || "Unknown Style"}</Text>
+        <Text style={S.beerDetails}>{beer._raw?.region || "Unknown Location"}</Text>
       </View>
       <TouchableOpacity
         style={S.favoriteButton}
@@ -95,11 +92,9 @@ export default function SelectedBeerScreen({ route }) {
         <Ionicons
           name={isFavorite ? "heart" : "heart-outline"}
           size={32}
-          color={isFavorite ? Colors.primary : Colors.gray}
+          color={isFavorite ? "red" : "gray"}
         />
-        <Text style={S.favoriteButtonText}>
-          {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
-        </Text>
+        <Text>{isFavorite ? "Remove from Favorites" : "Add to Favorites"}</Text>
       </TouchableOpacity>
     </ScrollView>
   );
