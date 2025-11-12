@@ -25,30 +25,36 @@ export const SelectedBeerScreenStyle = StyleSheet.create({
     textAlign: "center",
   },
   favoriteButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: Colors.primary,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    marginTop: 16,
+    flexDirection: "row", // Placer ikon og tekst i en række
+    alignItems: "center", // Centrer ikon og tekst lodret
+    justifyContent: "center", // Centrer indholdet vandret
+    padding: 8, // Reducer padding
+    borderRadius: 8, // Gør knappen lidt rund
+    backgroundColor: "#f5f5f5", // Lys baggrund
+    marginVertical: 16, // Tilføj lidt afstand over og under knappen
+    alignSelf: "center", // Centrer knappen på skærmen
   },
   favoriteButtonText: {
-    color: Colors.buttonText,
-    fontSize: 16,
-    fontWeight: "600",
-    marginLeft: 8,
+    fontSize: 14, // Reducer tekststørrelsen
+    color: "gray",
+    marginLeft: 8, // Tilføj lidt afstand mellem ikon og tekst
   },
   reviewsContainer: {
     marginTop: 24,
     paddingHorizontal: 16,
   },
   sectionTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: Colors.title,
-    marginBottom: 12,
+    fontSize: 18, // Gør teksten større
+    fontWeight: "bold", // Gør teksten fed
+    color: "#000", // Sort tekst for bedre kontrast
+    marginBottom: 8, // Tilføj lidt afstand under teksten
+  },
+  reviewsTitle: {
+    fontSize: 18, // Gør teksten større
+    fontWeight: "bold", // Gør teksten fed
+    color: "#000", // Sort tekst for bedre kontrast
+    marginTop: 16, // Tilføj lidt afstand over teksten
+    marginBottom: 8, // Tilføj lidt afstand under teksten
   },
   reviewItem: {
     paddingVertical: 8,

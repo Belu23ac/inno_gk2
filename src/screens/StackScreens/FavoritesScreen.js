@@ -63,7 +63,10 @@ const FavoritesScreen = () => {
         <TouchableOpacity
           key={favorite.id}
           style={FavoritesScreenStyle.favoriteItem}
-          onPress={() => navigation.navigate('SelectedBeer', { beer: favorite })}
+          onPress={() => {
+            console.log("Navigating with favorite:", favorite);
+            navigation.navigate('SelectedBeer', { beer: favorite });
+          }}
         >
           <View style={FavoritesScreenStyle.favoriteIcon}>
             <Ionicons name="sparkles-outline" size={22} color={Colors.black} />
