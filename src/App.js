@@ -1,7 +1,7 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Ionicons } from "@expo/vector-icons";
+import Ionicons from "@react-native-vector-icons/ionicons";
 import { ActivityIndicator, View, StyleSheet } from "react-native";
 import HomeStack from "./stack/HomeStack";
 import MapScreen from "./screens/MapScreen";
