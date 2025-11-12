@@ -1,148 +1,77 @@
-import { StyleSheet } from 'react-native';
-import { Colors } from './Colors';
+import { StyleSheet } from "react-native";
+import { Colors } from "./Colors";
 
 export const FavoritesScreenStyle = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.background,
-    paddingVertical: 24,
   },
   listContent: {
-    paddingHorizontal: 20,
-    paddingBottom: 40,
+    paddingHorizontal: 16,
+    paddingBottom: 16,
   },
   header: {
-    paddingHorizontal: 20,
     marginBottom: 24,
+    paddingHorizontal: 16,
   },
   title: {
-    fontSize: 26,
-    fontWeight: '700',
-    color: Colors.text,
-    marginBottom: 6,
+    fontSize: 24,
+    fontWeight: "bold",
+    color: Colors.title,
+    marginBottom: 8,
   },
   subtitle: {
-    fontSize: 14,
-    color: Colors.subtitle,
-  },
-  card: {
-    backgroundColor: Colors.surface,
-    borderRadius: 18,
-    padding: 18,
-    marginBottom: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    boxShadow: `0px 12px 26px ${Colors.shadowSoft}`,
-    elevation: 3,
-  },
-  badge: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 16,
-  },
-  badgeText: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: Colors.black,
-  },
-  info: {
-    flex: 1,
-  },
-  name: {
     fontSize: 16,
-    fontWeight: '600',
-    color: Colors.text,
-  },
-  meta: {
-    marginTop: 4,
-    fontSize: 13,
-    color: Colors.subtitle,
-  },
-  ratingRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 12,
-  },
-  ratingText: {
-    marginLeft: 6,
-    fontSize: 13,
     color: Colors.subtitle,
   },
   emptyState: {
-    alignItems: 'center',
-    marginTop: 80,
-    paddingHorizontal: 20,
-  },
-  emptyIcon: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: Colors.surface,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 18,
-  },
-  emptyTitle: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: Colors.text,
-    marginBottom: 8,
-  },
-  emptyDescription: {
-    textAlign: 'center',
-    fontSize: 14,
-    color: Colors.subtitle,
-    lineHeight: 20,
-  },
-  // Guest user styles
-  guestContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 32,
-    paddingVertical: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 32,
   },
-  guestTitle: {
-    fontSize: 22,
-    fontWeight: '700',
-    color: Colors.text,
-    marginTop: 24,
-    marginBottom: 12,
-    textAlign: 'center',
-  },
-  guestText: {
-    fontSize: 15,
+  emptyText: {
+    fontSize: 18,
     color: Colors.subtitle,
-    textAlign: 'center',
-    lineHeight: 22,
-    marginBottom: 32,
   },
-  guestButton: {
-    width: '100%',
-    backgroundColor: Colors.primary,
-    borderRadius: 16,
-    paddingVertical: 16,
-    alignItems: 'center',
+  favoriteItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: Colors.card,
+    borderRadius: 8,
+    padding: 16,
     marginBottom: 12,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2, // For Android shadow
   },
-  guestButtonText: {
+  favoriteIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: Colors.primary,
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 16,
+  },
+  favoriteIconText: {
     color: Colors.buttonText,
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: 18,
+    fontWeight: "bold",
   },
-  guestButtonSecondary: {
-    width: '100%',
-    backgroundColor: Colors.surface,
-    borderRadius: 16,
-    paddingVertical: 16,
-    alignItems: 'center',
+  favoriteMeta: {
+    flex: 1,
   },
-  guestButtonSecondaryText: {
+  favoriteName: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: Colors.title,
+    marginBottom: 4,
+  },
+  favoriteDetails: {
+    fontSize: 14,
     color: Colors.text,
-    fontSize: 16,
-    fontWeight: '600',
   },
 });
