@@ -64,7 +64,7 @@ const FavoritesScreen = () => {
           key={favorite.id}
           style={FavoritesScreenStyle.favoriteItem}
           onPress={() => {
-            console.log("Navigating with favorite:", favorite);
+            
             navigation.navigate('SelectedBeer', { beer: favorite });
           }}
         >
@@ -74,7 +74,7 @@ const FavoritesScreen = () => {
           <View style={FavoritesScreenStyle.favoriteMeta}>
             <Text style={FavoritesScreenStyle.favoriteName}>{favorite.name}</Text>
             <Text style={FavoritesScreenStyle.favoriteDetails}>
-              {favorite.style || 'Unknown Style'} - {favorite._raw?.region || 'Unknown Region'}
+              {favorite.style || favorite._raw?.sub_category_1 || favorite._raw?.sub_category_2 || "Unknown Style"} - {favorite._raw?.region || "Unknown Region"} - {favorite._raw?.abv || "Unknown"}
             </Text>
           </View>
         </TouchableOpacity>

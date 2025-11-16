@@ -7,6 +7,7 @@ import {
   TextInput,
   Alert,
   ActivityIndicator,
+  Share,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { Ionicons } from '@expo/vector-icons';
@@ -25,6 +26,7 @@ import {
 } from 'firebase/firestore';
 import { SelectedBeerScreenStyle as S } from '../../styles/SelectedBeerScreenStyle';
 import { useFocusEffect } from "@react-navigation/native";
+import { Colors } from "../../styles/Colors";
 
 const StarRating = ({ rating, onRatingChange }) => {
   const stars = [1, 2, 3, 4, 5];
@@ -175,6 +177,18 @@ function SelectedBeerScreen({ route }) {
 
   const selectStars = (stars) => setReviewStars(stars);
 
+  const shareBeer = async () => {
+    try {
+      const message = `Check out this beer: ${beer.name}\n\nStyle: ${beer.style || "Unknown Style"}\nABV: ${beer.abv || "Unknown ABV"}\n\nDescription: ${beer._raw?.description || "No description available"}\n\nLink: https://yourapp.com/beers/${beer.id}`;
+      await Share.share({
+        message,
+      });
+    } catch (error) {
+      console.error("Error sharing beer:", error);
+      Alert.alert("Error", "Could not share the beer.");
+    }
+  };
+
   return (
     <ScrollView style={{ flex: 1, backgroundColor: "white" }}>
       <View style={{ padding: 16 }}>
@@ -189,21 +203,30 @@ function SelectedBeerScreen({ route }) {
           Description: {beer._raw?.description || "No description available"}
         </Text>
 
-        {/* Flyt favoritknappen her */}
-        <TouchableOpacity
-          style={S.favoriteButton}
-          onPress={toggleFavorite}
-          disabled={loading}
-        >
-          <Ionicons
-            name={isFavorite ? "heart" : "heart-outline"}
-            size={24}
-            color={isFavorite ? "red" : "gray"}
-          />
-          <Text style={S.favoriteButtonText}>
-            {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
-          </Text>
-        </TouchableOpacity>
+        <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 16 }}>
+          <TouchableOpacity
+            style={[S.favoriteButton, { flex: 1, marginRight: 8 }]} // Tilføj margin til højre
+            onPress={toggleFavorite}
+            disabled={loading}
+          >
+            <Ionicons
+              name={isFavorite ? "heart" : "heart-outline"}
+              size={20} // Gør ikonet mindre
+              color={isFavorite ? Colors.primary : "gray"} // Grøn farve, når favoritten er sat
+            />
+            <Text style={S.favoriteButtonText}>
+              {isFavorite ? "Remove" : "Favorite"}
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[S.shareButton, { flex: 1 }]} // Brug samme højde som favorit-knappen
+            onPress={shareBeer}
+          >
+            <Ionicons name="share-outline" size={20} color={Colors.primary} />
+            <Text style={S.shareButtonText}>Share</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* Anmeldelsesformular og anmeldelser */}

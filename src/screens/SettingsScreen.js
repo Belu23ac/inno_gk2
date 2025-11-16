@@ -6,30 +6,6 @@ import { useAuth } from "../contexts/AuthContext";
 import { ProfileScreenStyle } from "../styles/ProfileScreenStyle";
 import { Colors } from "../styles/Colors";
 
-const FAVORITE_PREVIEW = [
-  {
-    id: "fav-1",
-    name: "Cervisia IPA",
-    style: "Hazy IPA",
-    location: "Copenhagen, DK",
-    rating: "4.7",
-  },
-  {
-    id: "fav-2",
-    name: "Nordic Pils",
-    style: "Crisp Pilsner",
-    location: "Aarhus, DK",
-    rating: "4.5",
-  },
-  {
-    id: "fav-3",
-    name: "Arctic Stout",
-    style: "Imperial Stout",
-    location: "Aalborg, DK",
-    rating: "4.8",
-  },
-];
-
 const INTEREST_TAGS = [
   "Hazy IPAs",
   "Barrel aged",
@@ -78,7 +54,7 @@ const SettingsScreen = ({ navigation }) => {
 
   const stats = useMemo(
     () => [
-      { label: "Beers logged", value: user?.stats?.beersLogged ?? "24" },
+      { label: "Beers logged", value: user?.stats?.beersLogged ?? "23" },
       { label: "Favorites saved", value: user?.stats?.favorites ?? "8" },
       { label: "Breweries visited", value: user?.stats?.breweries ?? "5" },
     ],
@@ -276,38 +252,7 @@ const SettingsScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
 
-        <View style={ProfileScreenStyle.sectionCard}>
-          <View style={ProfileScreenStyle.sectionHeaderRow}>
-            <Text style={ProfileScreenStyle.sectionTitle}>My favorites</Text>
-            <TouchableOpacity onPress={handleFavorites}>
-              <Text style={ProfileScreenStyle.sectionAction}>See all</Text>
-            </TouchableOpacity>
-          </View>
-          {FAVORITE_PREVIEW.map((item, index) => (
-            <View
-              key={item.id}
-              style={[
-                ProfileScreenStyle.favoriteItem,
-                index === FAVORITE_PREVIEW.length - 1 &&
-                  ProfileScreenStyle.favoriteItemLast,
-              ]}
-            >
-              <View style={ProfileScreenStyle.favoriteIcon}>
-                <Ionicons
-                  name="sparkles-outline"
-                  size={22}
-                  color={Colors.black}
-                />
-              </View>
-              <View style={ProfileScreenStyle.favoriteMeta}>
-                <Text style={ProfileScreenStyle.favoriteName}>{item.name}</Text>
-                <Text style={ProfileScreenStyle.favoriteDetails}>
-                  {item.style} • {item.location} • {item.rating}★
-                </Text>
-              </View>
-            </View>
-          ))}
-        </View>
+        
 
         <View style={ProfileScreenStyle.sectionCard}>
           <View style={ProfileScreenStyle.sectionHeaderRow}>

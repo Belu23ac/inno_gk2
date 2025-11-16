@@ -25,19 +25,27 @@ export const SelectedBeerScreenStyle = StyleSheet.create({
     textAlign: "center",
   },
   favoriteButton: {
-    flexDirection: "row", // Placer ikon og tekst i en række
-    alignItems: "center", // Centrer ikon og tekst lodret
-    justifyContent: "center", // Centrer indholdet vandret
-    padding: 8, // Reducer padding
-    borderRadius: 8, // Gør knappen lidt rund
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 12, // Ensartet padding
+    paddingHorizontal: 16,
+    borderRadius: 8,
     backgroundColor: "#f5f5f5", // Lys baggrund
+    shadowColor: "rgba(0, 0, 0, 0.1)", // Skygge for dybde
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2, // Skygge for Android
     marginVertical: 16, // Tilføj lidt afstand over og under knappen
     alignSelf: "center", // Centrer knappen på skærmen
+    height: 48, // Ensartet højde
   },
   favoriteButtonText: {
-    fontSize: 14, // Reducer tekststørrelsen
+    marginLeft: 8,
+    fontSize: 14,
+    fontWeight: "600",
     color: "gray",
-    marginLeft: 8, // Tilføj lidt afstand mellem ikon og tekst
   },
   reviewsContainer: {
     marginTop: 24,
@@ -92,5 +100,28 @@ export const SelectedBeerScreenStyle = StyleSheet.create({
   submitButtonText: {
     color: Colors.buttonText,
     fontWeight: "700",
+  },
+  shareButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 12, // Ensartet padding
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    backgroundColor: "#f5f5f5", // Lys baggrund
+    shadowColor: "rgba(0, 0, 0, 0.1)", // Skygge for dybde
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2, // Skygge for Android
+    marginVertical: 16, // Tilføj lidt afstand over og under knappen
+    alignSelf: "center", // Centrer knappen på skærmen
+    height: 48, // Ensartet højde
+  },
+  shareButtonText: {
+    marginLeft: 8,
+    fontSize: 14,
+    fontWeight: "600",
+    color: Colors.primary, // Grøn farve fra Colors.js
   },
 });
