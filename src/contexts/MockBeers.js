@@ -1,7 +1,8 @@
-import hoppyTrailsImg from "../assets/hoppy-trails.png";
-import sunsetLagerImg from "../assets/sunset-lager.png";
-import midnightStoutImg from "../assets/midnight-stout.png";
-import citrusAleImg from "../assets/citrus-ale.png";
+import hoppyTrailsImg from "../assets/hoppy-trails.avif";
+import sunsetLagerImg from "../assets/sunset-lager.avif";
+import midnightStoutImg from "../assets/midnight-stout.avif";
+import citrusAleImg from "../assets/citrus-ale.avif";
+import auroraImage from "../assets/aurora-borealis.png";
 
 const SAMPLE_BEERS = [
   {
@@ -60,6 +61,20 @@ const SAMPLE_BEERS = [
       image: citrusAleImg
     }
   },
+  {
+    id: "5",
+    name: "Aurora Borealis Triple IPA",
+      brewery: "Fjord & Foam",
+      abv: "9.5%",
+      _raw: {
+        style: "Triple IPA",
+        ibu: "75",
+        country: "Denmark",
+        category: "Craft Beer",
+        description: "Spruce tipped seasonal from Fjord & Foam. Pre-order and save 20%. A bold, hoppy triple IPA with notes of pine and citrus.",
+        image: auroraImage
+      }
+  }
 ];
 
 export default SAMPLE_BEERS;
