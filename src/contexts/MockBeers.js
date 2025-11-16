@@ -2,7 +2,7 @@ import hoppyTrailsImg from "../assets/hoppy-trails.avif";
 import sunsetLagerImg from "../assets/sunset-lager.avif";
 import midnightStoutImg from "../assets/midnight-stout.avif";
 import citrusAleImg from "../assets/citrus-ale.avif";
-import auroraImage from "../assets/aurora-borealis.png";
+import auroraImage from "../assets/aurora-borealis.avif";
 
 const SAMPLE_BEERS = [
   {
@@ -12,12 +12,15 @@ const SAMPLE_BEERS = [
     abv: "6.5%",
     _raw: {
       style: "American IPA",
+      abv: "6.5%",
       ibu: "65",
       country: "USA",
-      category: "Craft Beer",
-      description: "A bold IPA with citrus and pine notes from Cascade hops. Perfect for hop lovers seeking adventure.",
-      image: hoppyTrailsImg
-    }
+      region: "Oregon",
+      sub_category_1: "Craft Beer",
+      description:
+        "A bold IPA with citrus and pine notes from Cascade hops. Perfect for hop lovers seeking adventure.",
+      image: hoppyTrailsImg,
+    },
   },
   {
     id: "2",
@@ -26,12 +29,15 @@ const SAMPLE_BEERS = [
     abv: "4.7%",
     _raw: {
       style: "American Lager",
+      abv: "4.7%",
       ibu: "20",
       country: "USA",
-      category: "Lager",
-      description: "Smooth and crisp lager with golden hues, ideal for watching the sunset. Clean finish with subtle malt sweetness.",
-      image: sunsetLagerImg
-    }
+      region: "California",
+      sub_category_1: "Lager",
+      description:
+        "Smooth and crisp lager with golden hues, ideal for watching the sunset. Clean finish with subtle malt sweetness.",
+      image: sunsetLagerImg,
+    },
   },
   {
     id: "3",
@@ -40,12 +46,15 @@ const SAMPLE_BEERS = [
     abv: "8.2%",
     _raw: {
       style: "Russian Imperial Stout",
+      abv: "8.2%",
       ibu: "75",
       country: "USA",
-      category: "Stout",
-      description: "Rich and robust imperial stout with notes of dark chocolate, coffee, and roasted malt. A midnight indulgence.",
-      image: midnightStoutImg
-    }
+      region: "Maine",
+      sub_category_1: "Stout",
+      description:
+        "Rich and robust imperial stout with notes of dark chocolate, coffee, and roasted malt. A midnight indulgence.",
+      image: midnightStoutImg,
+    },
   },
   {
     id: "4",
@@ -54,27 +63,33 @@ const SAMPLE_BEERS = [
     abv: "5.0%",
     _raw: {
       style: "American Pale Ale",
+      abv: "5.0%",
       ibu: "45",
       country: "USA",
-      category: "Ale",
-      description: "Bright and refreshing pale ale bursting with citrus flavors from American hops. A sunny companion for any occasion.",
-      image: citrusAleImg
-    }
+      region: "Florida",
+      sub_category_1: "Ale",
+      description:
+        "Bright and refreshing pale ale bursting with citrus flavors from American hops. A sunny companion for any occasion.",
+      image: citrusAleImg,
+    },
   },
   {
     id: "5",
-    name: "Aurora Borealis Triple IPA",
-      brewery: "Fjord & Foam",
+    name: "Aurora Borealis IPA",
+    brewery: "Fjord & Foam",
+    abv: "9.5%",
+    _raw: {
+      style: "Triple IPA",
       abv: "9.5%",
-      _raw: {
-        style: "Triple IPA",
-        ibu: "75",
-        country: "Denmark",
-        category: "Craft Beer",
-        description: "Spruce tipped seasonal from Fjord & Foam. Pre-order and save 20%. A bold, hoppy triple IPA with notes of pine and citrus.",
-        image: auroraImage
-      }
-  }
+      ibu: "75",
+      country: "Denmark",
+      region: "Copenhagen",
+      sub_category_1: "Craft Beer",
+      description:
+        "Spruce tipped seasonal from Fjord & Foam. Pre-order and save 20%. A bold, hoppy triple IPA with notes of pine and citrus.",
+      image: auroraImage,
+    },
+  },
 ];
 
 export default SAMPLE_BEERS;

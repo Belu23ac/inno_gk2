@@ -3,12 +3,20 @@ import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from '../screens/HomeScreen';
 import FavoritesScreen from '../screens/StackScreens/FavoritesScreen';
 import SelectedBeerScreen from '../screens/StackScreens/SelectedBeerScreen';
+import { GlobalNavigation } from '../styles/GlobalNavigation';
 
 const Stack = createStackNavigator();
 
 export default function HomeStack() {
   return (
-    <Stack.Navigator initialRouteName="HomeScreen">
+    <Stack.Navigator
+      initialRouteName="HomeScreen"
+      screenOptions={{
+        headerStyle: GlobalNavigation.headerStyle,
+        headerTitleStyle: GlobalNavigation.title,
+        headerTintColor: GlobalNavigation.headerTintColor,
+      }}
+    >
       <Stack.Screen
         name="HomeScreen"
         component={HomeScreen}
@@ -17,10 +25,10 @@ export default function HomeStack() {
       <Stack.Screen
         name="FavoritesScreen"
         component={FavoritesScreen}
-        options={{ title: "My Favorites" }}
+        options={{ title: "Favorites" }}
       />
       <Stack.Screen
-        name="SelectedBeer"
+        name="Selected Beer"
         component={SelectedBeerScreen}
         options={{ title: "Beer Details" }}
       />

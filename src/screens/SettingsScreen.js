@@ -64,7 +64,7 @@ const SettingsScreen = ({ navigation }) => {
   // Handlers (always declared so hook order is stable)
   const handleEditProfile = () => navigation.navigate("User Profile");
   const handleAccountSettings = () => navigation.navigate("Account Settings");
-  const handleFavorites = () => navigation.navigate("My Favorites");
+  const handleFavorites = () => navigation.navigate("Favorites");
   const handleAppDetails = () => navigation.navigate("App Details");
 
   const handleSupport = () => {
@@ -212,7 +212,7 @@ const SettingsScreen = ({ navigation }) => {
             onPress={handleFavorites}
           >
             <View style={ProfileScreenStyle.actionLabelGroup}>
-              <Text style={ProfileScreenStyle.actionLabel}>My favorites</Text>
+              <Text style={ProfileScreenStyle.actionLabel}>Favorites</Text>
               <Text style={ProfileScreenStyle.actionSubtitle}>
                 See saved beers & spots
               </Text>

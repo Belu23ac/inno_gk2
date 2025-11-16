@@ -8,8 +8,8 @@ export const HomeScreenStyle = StyleSheet.create({
   },
   scrollContent: {
     padding: 24,
-    paddingBottom: 40,
-    paddingTop: 40,
+    paddingBottom: 24,
+    paddingTop: 24,
     width: '100%',
     maxWidth: 720,
     alignSelf: 'center',
@@ -136,8 +136,11 @@ export const HomeScreenStyle = StyleSheet.create({
     fontWeight: "700",
     color: Colors.primary,
   },
-  section: {
+  curatedSection: {
     marginBottom: 28,
+  },
+  section: {
+    marginBottom: 0,
   },
   sectionHeader: {
     flexDirection: "row",

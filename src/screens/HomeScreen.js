@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import {
   View,
   Text,
@@ -13,42 +13,38 @@ import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../contexts/AuthContext";
 import { HomeScreenStyle } from "../styles/HomeScreenStyle";
 import { Colors } from "../styles/Colors";
-import auroraImage from "../assets/aurora-borealis.png";
-const importedMockBeers = require("../contexts/MockBeers");
+import * as MockBeers from "../contexts/MockBeers";
+
+const importedMockBeers = MockBeers.SAMPLE_BEERS || MockBeers.default || [];
+
+const getRandomBeer = (beers) => {
+  if (!Array.isArray(beers) || beers.length === 0) return null;
+  const index = Math.floor(Math.random() * beers.length);
+  return beers[index];
+};
+
+const OFFER_BEER = getRandomBeer(importedMockBeers);
 
 const OFFER_OF_WEEK = {
   label: "Offer of the week",
-  name: "Aurora Borealis Triple IPA",
-  blurb: "Spruce tipped seasonal from Fjord & Foam. Pre-order and save 20%.",
-  price: "Member price 89 kr",
-  beer: {
-    name: "Aurora Borealis Triple IPA",
-    brewery: "Fjord & Foam",
-    abv: "9.5%",
-    _raw: {
-      style: "Triple IPA",
-      ibu: "75",
-      country: "Denmark",
-      category: "Craft Beer",
-      description: "Spruce tipped seasonal from Fjord & Foam. Pre-order and save 20%. A bold, hoppy triple IPA with notes of pine and citrus.",
-      image: auroraImage
-    }
-  }
+  name: OFFER_BEER?.name,
+  blurb:
+    OFFER_BEER?._raw?.description ||
+    OFFER_BEER?.blurb ||
+    "Spruce tipped seasonal from Fjord & Foam. Pre-order and save 20%.",
+  price: OFFER_BEER?.price || "Member price 89 kr",
+  beer: OFFER_BEER,
 };
 
-// load mock beers (use require so this can sit inside the file)
-const mockBeers = importedMockBeers?.default || importedMockBeers || [];
-
 // keep original meta values and map them onto the first beers from mockBeers
-const METAS = ["5 bottles", "Curated by Lina", "6 picks", "Brewed 2 km away"];
+const METAS = ["5 bottles", "Curated by Lina", "6 picks", "Brewed 2 km away", "New arrival"];
 
-const CURATED_PICKS = (Array.isArray(mockBeers) ? mockBeers.slice(0, METAS.length) : []).map((beer, idx) => ({
+const CURATED_PICKS = (Array.isArray(importedMockBeers) ? importedMockBeers.slice(0, METAS.length) : []).map((beer, idx) => ({
   id: beer.id || `pick-${idx + 1}`,
   label: beer._raw?.style || beer.style || "Recommended",
   title: beer.name || beer.title || `Beer ${idx + 1}`,
   subtitle: beer._raw?.description || beer.brewery || beer._raw?.country || "",
   meta: METAS[idx],
-  // keep a reference to the original/full beer object so detail screens receive complete data
   beer,
 }));
 
@@ -130,7 +126,7 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        <View style={HomeScreenStyle.section}>
+        <View style={HomeScreenStyle.curatedSection}>
           <View style={HomeScreenStyle.sectionHeader}>
             <Text style={HomeScreenStyle.sectionTitle}>Curated picks for you</Text>   
           </View>

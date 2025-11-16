@@ -7,9 +7,9 @@ export const ProfileScreenStyle = StyleSheet.create({
     backgroundColor: Colors.background,
   },
   scrollContent: {
-    paddingTop: 40,
+    paddingTop: 24,
     paddingHorizontal: 24,
-    paddingBottom: 40,
+    paddingBottom: 24,
     width: '100%',
     maxWidth: 720,
     alignSelf: 'center',

@@ -11,49 +11,18 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../contexts/AuthContext';
-import { db } from '../../database/firebase';
-import {
-  doc,
-  getDoc,
-  collection,
-  addDoc,
-  setDoc,
-  deleteDoc,
-  getDocs,
-  query,
-  where,
-} from 'firebase/firestore';
 import { SelectedBeerScreenStyle as S } from '../../styles/SelectedBeerScreenStyle';
 import { useFocusEffect } from "@react-navigation/native";
 import { Colors } from "../../styles/Colors";
-
-const StarRating = ({ rating, onRatingChange }) => {
-  const stars = [1, 2, 3, 4, 5];
-
-  return (
-    <View style={{ flexDirection: "row" }}>
-      {stars.map((star) => (
-        <TouchableOpacity
-          key={star}
-          onPress={() => onRatingChange(star)}
-          onLongPress={() => onRatingChange(star - 0.5)}
-        >
-          <Ionicons
-            name={
-              rating >= star
-                ? "star"
-                : rating >= star - 0.5
-                ? "star-half"
-                : "star-outline"
-            }
-            size={24}
-            color="gold"
-          />
-        </TouchableOpacity>
-      ))}
-    </View>
-  );
-};
+import {
+  checkBeerFavoriteStatus,
+  toggleBeerFavoriteStatus,
+} from '../../components/favoriteHelpers';
+import {
+  fetchBeerReviews,
+  submitBeerReview,
+  StarRating,
+} from '../../components/reviewHelpers';
 
 function SelectedBeerScreen({ route }) {
   const { user } = useAuth();
@@ -74,14 +43,32 @@ function SelectedBeerScreen({ route }) {
     );
   }
 
+  const displayStyle =
+    beer.sub_category_1 ||
+    beer.style ||
+    beer._raw?.style ||
+    beer._raw?.category ||
+    "Unknown Style";
+  const displayRegion =
+    beer.region ||
+    beer._raw?.region ||
+    beer._raw?.country ||
+    "Unknown Region";
+  const displayAbv =
+    beer.abv ||
+    beer._raw?.abv ||
+    beer._raw?.abv_percent ||
+    "Unknown ABV";
+  const displayCountry =
+    beer.country || beer._raw?.country || "Unknown Country";
+
   // Check if beer is in favorites
   useEffect(() => {
     const checkIfFavorite = async () => {
       if (!user?.uid || !beer?.id) return;
       try {
-        const userFavoritesRef = doc(db, 'favorites', `${user.uid}_${beer.id}`);
-        const docSnap = await getDoc(userFavoritesRef);
-        setIsFavorite(docSnap.exists());
+        const favoriteStatus = await checkBeerFavoriteStatus(user.uid, beer.id);
+        setIsFavorite(favoriteStatus);
       } catch (error) {
         console.error('Error checking favorite status:', error);
       }
@@ -94,19 +81,12 @@ function SelectedBeerScreen({ route }) {
     if (!user?.uid || !beer) return;
     setLoading(true);
     try {
-      const userFavoritesRef = doc(db, 'favorites', `${user.uid}_${beer.id}`);
-
-      if (isFavorite) {
-        await deleteDoc(userFavoritesRef);
-        setIsFavorite(false);
-      } else {
-        await setDoc(userFavoritesRef, {
-          ...beer,
-          userId: user.uid,
-          addedAt: new Date(),
-        });
-        setIsFavorite(true);
-      }
+      const updatedStatus = await toggleBeerFavoriteStatus({
+        userId: user.uid,
+        beer,
+        isFavorite,
+      });
+      setIsFavorite(updatedStatus);
     } catch (error) {
       console.error('Error toggling favorite:', error);
     } finally {
@@ -117,16 +97,7 @@ function SelectedBeerScreen({ route }) {
   const fetchReviews = async () => {
     setLoading(true);
     try {
-      const reviewsRef = collection(db, "reviews");
-      const q = query(reviewsRef, where("beerId", "==", beer.id));
-      const snapshot = await getDocs(q);
-      const fetchedReviews = snapshot.docs
-        .map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-          createdAt: doc.data().createdAt?.toDate(), // Konverter Firestore Timestamp til JavaScript Date
-        }))
-        .sort((a, b) => b.createdAt - a.createdAt); // Sortér nyeste først
+      const fetchedReviews = await fetchBeerReviews(beer.id);
       setReviews(fetchedReviews);
     } catch (error) {
       console.error("Error fetching reviews:", error);
@@ -142,7 +113,8 @@ function SelectedBeerScreen({ route }) {
   );
 
   const submitReview = async () => {
-    if (!reviewText.trim()) {
+    const trimmedReviewText = reviewText.trim();
+    if (!trimmedReviewText) {
       Alert.alert("Error", "Review cannot be empty.");
       return;
     }
@@ -152,31 +124,17 @@ function SelectedBeerScreen({ route }) {
     }
 
     try {
-      const reviewsRef = collection(db, "reviews");
-      const docRef = await addDoc(reviewsRef, {
+      const newReview = await submitBeerReview({
         beerId: beer.id,
         userId: user.uid,
-        displayName: isAnonymous ? "Anonymous" : user.displayName || "Anonymous",
-        text: reviewText.trim(),
-        stars: reviewStars,
-        createdAt: new Date(),
+        displayName: user.displayName,
+        reviewText: trimmedReviewText,
+        reviewStars,
+        isAnonymous,
       });
 
-      // Tilføj den nye anmeldelse til state og sørg for, at den vises øverst
-      setReviews((prev) => [
-        {
-          id: docRef.id, // Inkluder det genererede Firestore ID
-          beerId: beer.id,
-          userId: user.uid,
-          displayName: isAnonymous ? "Anonymous" : user.displayName || "Anonymous",
-          text: reviewText.trim(),
-          stars: reviewStars,
-          createdAt: new Date(),
-        },
-        ...prev, // Bevar de eksisterende anmeldelser
-      ]);
+      setReviews((prev) => [newReview, ...prev]);
 
-      // Nulstil formularen
       setReviewText("");
       setReviewStars(0);
       setIsAnonymous(false);
@@ -196,15 +154,28 @@ function SelectedBeerScreen({ route }) {
     }
   };
 
+  const formatDate = (value) => {
+    if (!value) return "Unknown Date";
+    try {
+      const date = value?.toDate ? value.toDate() : (value instanceof Date ? value : new Date(value));
+      return isNaN(date.getTime()) ? "Unknown Date" : date.toLocaleDateString();
+    } catch (e) {
+      return "Unknown Date";
+    }
+  };
+
   return (
     <ScrollView style={{ flex: 1, backgroundColor: "white" }}>
       <View style={{ padding: 16 }}>
         <Text style={{ fontSize: 24, fontWeight: "bold" }}>{beer.name}</Text>
         <Text style={{ fontSize: 16, color: "gray", marginTop: 8 }}>
-          {beer.style || "Unknown Style"} - {beer.location || "Unknown Location"}
+          Style: {displayStyle}
+        </Text>
+        <Text style={{ fontSize: 14, color: "gray", marginTop: 4 }}>
+          Region: {displayRegion}{displayCountry ? `, ${displayCountry}` : ""}
         </Text>
         <Text style={{ fontSize: 14, marginTop: 16 }}>
-          ABV: {beer.abv || "Unknown ABV"}
+          ABV: {displayAbv}
         </Text>
         <Text style={{ fontSize: 14, marginTop: 16 }}>
           Description: {beer._raw?.description || "No description available"}
@@ -212,16 +183,16 @@ function SelectedBeerScreen({ route }) {
 
         <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 16 }}>
           <TouchableOpacity
-            style={[S.favoriteButton, { flex: 1, marginRight: 8 }]}
+            style={[S.shareButton, { flex: 1, marginRight: 8 }]}
             onPress={toggleFavorite}
             disabled={loading}
           >
             <Ionicons
               name={isFavorite ? "heart" : "heart-outline"}
               size={20}
-              color={isFavorite ? Colors.primary : "gray"}
+              color={Colors.primary}
             />
-            <Text style={S.favoriteButtonText}>
+            <Text style={S.shareButtonText}>
               {isFavorite ? "Remove" : "Favorite"}
             </Text>
           </TouchableOpacity>
@@ -301,11 +272,7 @@ function SelectedBeerScreen({ route }) {
 
               <Text style={S.reviewAuthor}>{review.displayName || "Anonymous"}</Text>
               <Text style={S.reviewText}>{review.text}</Text>
-              <Text style={S.reviewDate}>
-                {review.createdAt
-                  ? review.createdAt.toLocaleDateString()
-                  : "Unknown Date"}
-              </Text>
+              <Text style={S.reviewDate}>{formatDate(review.createdAt)}</Text>
             </View>
           ))
         )}

@@ -16,7 +16,7 @@ import { Colors } from "../styles/Colors";
 
 // RapidAPI constants
 const RAPIDAPI_HOST = "beer9.p.rapidapi.com";
-const RAPIDAPI_KEY = "8da79668e7msha3588088efb524bp1d2d3fjsn362d5dd71216";
+const RAPIDAPI_KEY = "880453b9efmsha140ab8a52b81cdp173abcjsn3399c41c0ca1";
 
 export default function SearchScreen({ navigation }) {
   const [searchText, setSearchText] = React.useState("");
@@ -57,10 +57,21 @@ export default function SearchScreen({ navigation }) {
       abvRaw == null
         ? "N/A"
         : `${String(abvRaw).includes("%") ? abvRaw : `${abvRaw}%`}`;
+    const style =
+      item?.sub_category_1 ||
+      item?.style ||
+      item?._raw?.style ||
+      item?.category ||
+      "Unknown Style";
+    const region =
+      item?.region ||
+      item?._raw?.region ||
+      item?._raw?.country ||
+      "Unknown Region";
     const id = String(
       item?.id || item?._id || item?.beer_id || `${name}-${brewery}-${idx}`
     );
-    return { id, name, brewery, abv, _raw: item };
+    return { id, name, brewery, abv, style, region, sub_category_1: style, _raw: item };
   }, []);
 
   const runSearch = useCallback(

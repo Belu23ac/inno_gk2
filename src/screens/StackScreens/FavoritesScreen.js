@@ -49,7 +49,7 @@ const FavoritesScreen = () => {
   return (
     <ScrollView style={FavoritesScreenStyle.container} contentContainerStyle={FavoritesScreenStyle.listContent}>
       <View style={FavoritesScreenStyle.header}>
-        <Text style={FavoritesScreenStyle.title}>My favorites</Text>
+        <Text style={FavoritesScreenStyle.title}>Favorites</Text>
         <Text style={FavoritesScreenStyle.subtitle}>Saved beers, breweries, and taprooms you want to revisit or share with friends.</Text>
       </View>
 
@@ -74,7 +74,7 @@ const FavoritesScreen = () => {
           <View style={FavoritesScreenStyle.favoriteMeta}>
             <Text style={FavoritesScreenStyle.favoriteName}>{favorite.name}</Text>
             <Text style={FavoritesScreenStyle.favoriteDetails}>
-              {favorite.style || favorite._raw?.sub_category_1 || favorite._raw?.sub_category_2 || "Unknown Style"} - {favorite._raw?.region || "Unknown Region"} - {favorite._raw?.abv || "Unknown"}
+              {favorite.style || favorite._raw?.sub_category_1 || favorite._raw?.sub_category_2 || "Unknown Style"} - {favorite._raw?.region || "Unknown Region"}, {favorite._raw?.country || "Unknown Country"} - {favorite._raw?.abv || "Unknown"}
             </Text>
           </View>
         </TouchableOpacity>

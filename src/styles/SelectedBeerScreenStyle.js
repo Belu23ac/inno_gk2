@@ -74,6 +74,11 @@ export const SelectedBeerScreenStyle = StyleSheet.create({
     color: Colors.text,
     fontSize: 14,
   },
+  reviewDate: {
+    marginTop: 4,
+    color: "gray",
+    fontSize: 12,
+  },
   reviewStars: {
     marginTop: 4,
     color: Colors.subtitle,
