@@ -79,6 +79,12 @@ export const SelectedBeerScreenStyle = StyleSheet.create({
     color: Colors.subtitle,
     fontSize: 12,
   },
+  reviewAuthor: {
+    fontSize: 14,
+    fontWeight: "bold",
+    color: "#333",
+    marginTop: 4,
+  },
   reviewInput: {
     borderWidth: 1,
     borderColor: Colors.border,
@@ -123,5 +129,21 @@ export const SelectedBeerScreenStyle = StyleSheet.create({
     fontSize: 14,
     fontWeight: "600",
     color: Colors.primary, // Grøn farve fra Colors.js
+  },
+  reviewContainer: {
+    marginTop: 24,
+    paddingHorizontal: 16, // Tilføj vandret padding
+  },
+  checkboxContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 8,
+  },
+  checkbox: {
+    marginRight: 8,
+  },
+  checkboxLabel: {
+    fontSize: 14,
+    color: "#333",
   },
 });
