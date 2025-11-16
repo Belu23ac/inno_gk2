@@ -1,148 +1,89 @@
-import { StyleSheet } from 'react-native';
-import { Colors } from './Colors';
+import { StyleSheet } from "react-native";
+import { Colors } from "../styles/Colors";
 
 export const FavoritesScreenStyle = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.background,
-    paddingVertical: 24,
   },
   listContent: {
-    paddingHorizontal: 20,
-    paddingBottom: 40,
+    padding: 20,
   },
   header: {
-    paddingHorizontal: 20,
-    marginBottom: 24,
+    marginBottom: 28,
   },
   title: {
-    fontSize: 26,
-    fontWeight: '700',
+    fontSize: 24,
+    fontWeight: "700",
     color: Colors.text,
     marginBottom: 6,
   },
   subtitle: {
     fontSize: 14,
     color: Colors.subtitle,
-  },
-  card: {
-    backgroundColor: Colors.surface,
-    borderRadius: 18,
-    padding: 18,
-    marginBottom: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    boxShadow: `0px 12px 26px ${Colors.shadowSoft}`,
-    elevation: 3,
-  },
-  badge: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 16,
-  },
-  badgeText: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: Colors.black,
-  },
-  info: {
-    flex: 1,
-  },
-  name: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: Colors.text,
-  },
-  meta: {
-    marginTop: 4,
-    fontSize: 13,
-    color: Colors.subtitle,
-  },
-  ratingRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 12,
-  },
-  ratingText: {
-    marginLeft: 6,
-    fontSize: 13,
-    color: Colors.subtitle,
-  },
-  emptyState: {
-    alignItems: 'center',
-    marginTop: 80,
-    paddingHorizontal: 20,
-  },
-  emptyIcon: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: Colors.surface,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 18,
-  },
-  emptyTitle: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: Colors.text,
-    marginBottom: 8,
-  },
-  emptyDescription: {
-    textAlign: 'center',
-    fontSize: 14,
-    color: Colors.subtitle,
     lineHeight: 20,
   },
-  // Guest user styles
-  guestContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 32,
-    paddingVertical: 40,
-  },
-  guestTitle: {
-    fontSize: 22,
-    fontWeight: '700',
-    color: Colors.text,
-    marginTop: 24,
-    marginBottom: 12,
-    textAlign: 'center',
-  },
-  guestText: {
-    fontSize: 15,
-    color: Colors.subtitle,
-    textAlign: 'center',
-    lineHeight: 22,
-    marginBottom: 32,
-  },
-  guestButton: {
-    width: '100%',
-    backgroundColor: Colors.primary,
-    borderRadius: 16,
-    paddingVertical: 16,
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  guestButtonText: {
-    color: Colors.buttonText,
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  guestButtonSecondary: {
-    width: '100%',
+  favoriteItem: {
+    flexDirection: "row",
+    alignItems: "center",
     backgroundColor: Colors.surface,
-    borderRadius: 16,
+    borderRadius: 20,
     paddingVertical: 16,
-    alignItems: 'center',
+    paddingHorizontal: 18,
+    marginBottom: 16,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 2,
   },
-  guestButtonSecondaryText: {
-    color: Colors.text,
+  favoriteIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: Colors.favorite, // den gule baggrund
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  favoriteIconText: {
+    color: Colors.buttonText,
+    fontSize: 20,
+    fontWeight: "700",
+  },
+  favoriteMeta: {
+    flex: 1,
+    marginLeft: 16,
+  },
+  favoriteName: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
+    color: Colors.text,
+  },
+  favoriteDetails: {
+    fontSize: 13,
+    color: Colors.subtitle,
+    marginTop: 4,
+  },
+  starsContainer: {
+    flexDirection: "row",
+    marginTop: 6,
+  },
+  emptyState: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 60,
+  },
+  emptyText: {
+    fontSize: 16,
+    color: Colors.subtitle,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  loadingText: {
+    fontSize: 16,
+    color: Colors.subtitle,
   },
 });

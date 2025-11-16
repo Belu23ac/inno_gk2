@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
-import Ionicons from "@react-native-vector-icons/ionicons";
+import { Ionicons } from "@expo/vector-icons";
 import { GlobalStyle } from "../styles/GlobalStyle";
 import { SearchScreenStyle } from "../styles/SearchScreenStyle";
 import { Colors } from "../styles/Colors";
@@ -142,10 +142,7 @@ export default function SearchScreen({ navigation }) {
   }, []);
 
   const handlePressBeer = (beer) => {
-    navigation.navigate("Selected Beer", {
-      screen: "SelectedBeer",
-      params: { beer },
-    });
+    navigation.navigate("Selected Beer", { beer });
   };
 
   // Reset when navigating away so that coming back shows the initial state
@@ -309,7 +306,7 @@ export default function SearchScreen({ navigation }) {
               {results.map((beer) => (
                 <Pressable
                   key={beer.id}
-                  onPress={() => handlePressBeer(beer)}
+                  onPress={() => navigation.navigate("Selected Beer", { beer })}
                   style={({ pressed }) => [
                     SearchScreenStyle.resultCard,
                     pressed && { opacity: 0.9 },

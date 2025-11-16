@@ -1,132 +1,317 @@
-import { StatusBar } from "expo-status-bar";
-import React from "react";
-import { Text, View, Image, TextInput, Pressable, ScrollView, ActivityIndicator } from "react-native";
-import { GlobalStyle } from "../../styles/GlobalStyle";
+import React, { useState, useEffect } from 'react';
+import {
+  Text,
+  View,
+  ScrollView,
+  TouchableOpacity,
+  TextInput,
+  Alert,
+  ActivityIndicator,
+  Share,
+} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { useAuth } from '../../contexts/AuthContext';
+import { db } from '../../database/firebase';
+import {
+  doc,
+  getDoc,
+  collection,
+  addDoc,
+  setDoc,
+  deleteDoc,
+  getDocs,
+  query,
+  where,
+} from 'firebase/firestore';
+import { SelectedBeerScreenStyle as S } from '../../styles/SelectedBeerScreenStyle';
+import { useFocusEffect } from "@react-navigation/native";
 import { Colors } from "../../styles/Colors";
-import { SelectedBeerScreenStyle as S } from "../../styles/SelectedBeerScreenStyle";
 
-export default function SelectedBeerScreen({ route }) {
-  const [reviews, setReviews] = React.useState([]);
-  const [stars, setStars] = React.useState(0);
-  const [comment, setComment] = React.useState("");
-  // safely handle nested params coming from nested navigators
-  const beer =
-    route?.params?.beer ?? // normal case
-    route?.params?.params?.beer ?? // nested params (as in your log)
-    undefined;
+const StarRating = ({ rating, onRatingChange }) => {
+  const stars = [1, 2, 3, 4, 5];
 
-  const raw = beer?._raw ?? {};
-  const imageUrl = raw?.image || raw?.image_url || raw?.label || raw?.logo || raw?.photo || raw?.thumb || raw?.icon || null;
+  return (
+    <View style={{ flexDirection: "row" }}>
+      {stars.map((star) => (
+        <TouchableOpacity
+          key={star}
+          onPress={() => onRatingChange(star)}
+          onLongPress={() => onRatingChange(star - 0.5)}
+        >
+          <Ionicons
+            name={
+              rating >= star
+                ? "star"
+                : rating >= star - 0.5
+                ? "star-half"
+                : "star-outline"
+            }
+            size={24}
+            color="gold"
+          />
+        </TouchableOpacity>
+      ))}
+    </View>
+  );
+};
 
-  const [imageLoading, setImageLoading] = React.useState(false);
+function SelectedBeerScreen({ route }) {
+  const { user } = useAuth();
+  const { beer } = route.params;
 
-  const resolveImageSource = (img) => {
-    if (!img) return null;
-    // already a module id (number) or object accepted by <Image>
-    if (typeof img === 'number' || (typeof img === 'object' && img !== null && (img.uri || img.default))) return img;
-    if (typeof img === 'string') {
-      const s = img.trim();
-      // remote, file or data URIs
-      if (s.startsWith('http') || s.startsWith('file:') || s.startsWith('data:')) return { uri: s };
-      // fallback: try as uri
-      return { uri: s };
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [reviewText, setReviewText] = useState('');
+  const [reviewStars, setReviewStars] = useState(0);
+  const [reviews, setReviews] = useState([]);
+  const [isAnonymous, setIsAnonymous] = useState(false);
+
+  if (!beer) {
+    return (
+      <View style={S.container}>
+        <Text>No beer selected</Text>
+      </View>
+    );
+  }
+
+  // Check if beer is in favorites
+  useEffect(() => {
+    const checkIfFavorite = async () => {
+      if (!user?.uid || !beer?.id) return;
+      try {
+        const userFavoritesRef = doc(db, 'favorites', `${user.uid}_${beer.id}`);
+        const docSnap = await getDoc(userFavoritesRef);
+        setIsFavorite(docSnap.exists());
+      } catch (error) {
+        console.error('Error checking favorite status:', error);
+      }
+    };
+
+    checkIfFavorite();
+  }, [user?.uid, beer?.id]);
+
+  const toggleFavorite = async () => {
+    if (!user?.uid || !beer) return;
+    setLoading(true);
+    try {
+      const userFavoritesRef = doc(db, 'favorites', `${user.uid}_${beer.id}`);
+
+      if (isFavorite) {
+        await deleteDoc(userFavoritesRef);
+        setIsFavorite(false);
+      } else {
+        await setDoc(userFavoritesRef, {
+          ...beer,
+          userId: user.uid,
+          addedAt: new Date(),
+        });
+        setIsFavorite(true);
+      }
+    } catch (error) {
+      console.error('Error toggling favorite:', error);
+    } finally {
+      setLoading(false);
     }
-    return null;
   };
-  const resolvedImage = resolveImageSource(imageUrl);
-  const info = [
-    { label: 'Brewery', value: beer?.brewery },
-    { label: 'ABV', value: beer?.abv },
-    { label: 'Style', value: raw?.style || raw?.beer_style || raw?.type },
-    { label: 'IBU', value: raw?.ibu },
-    { label: 'Country', value: raw?.country || raw?.origin || raw?.location },
-    { label: 'Category', value: raw?.category },
-    { label: 'Description', value: raw?.description || raw?.desc },
-  ].filter((row) => row.value != null && row.value !== '');
 
-  const handleSubmitReview = () => {
-    if (!stars || !comment.trim()) return;
-    setReviews((prev) => [
-      { id: String(Date.now()), user: 'You', stars, text: comment.trim() },
-      ...prev,
-    ]);
-    setStars(0);
-    setComment("");
+  const fetchReviews = async () => {
+    setLoading(true);
+    try {
+      const reviewsRef = collection(db, "reviews");
+      const q = query(reviewsRef, where("beerId", "==", beer.id));
+      const snapshot = await getDocs(q);
+      const fetchedReviews = snapshot.docs
+        .map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+          createdAt: doc.data().createdAt?.toDate(), // Konverter Firestore Timestamp til JavaScript Date
+        }))
+        .sort((a, b) => b.createdAt - a.createdAt); // Sortér nyeste først
+      setReviews(fetchedReviews);
+    } catch (error) {
+      console.error("Error fetching reviews:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchReviews();
+    }, [beer.id])
+  );
+
+  const submitReview = async () => {
+    if (!reviewText.trim()) {
+      Alert.alert("Error", "Review cannot be empty.");
+      return;
+    }
+    if (reviewStars < 1 || reviewStars > 5) {
+      Alert.alert("Error", "Please select a valid star rating.");
+      return;
+    }
+
+    try {
+      const reviewsRef = collection(db, "reviews");
+      const docRef = await addDoc(reviewsRef, {
+        beerId: beer.id,
+        userId: user.uid,
+        displayName: isAnonymous ? "Anonymous" : user.displayName || "Anonymous",
+        text: reviewText.trim(),
+        stars: reviewStars,
+        createdAt: new Date(),
+      });
+
+      // Tilføj den nye anmeldelse til state og sørg for, at den vises øverst
+      setReviews((prev) => [
+        {
+          id: docRef.id, // Inkluder det genererede Firestore ID
+          beerId: beer.id,
+          userId: user.uid,
+          displayName: isAnonymous ? "Anonymous" : user.displayName || "Anonymous",
+          text: reviewText.trim(),
+          stars: reviewStars,
+          createdAt: new Date(),
+        },
+        ...prev, // Bevar de eksisterende anmeldelser
+      ]);
+
+      // Nulstil formularen
+      setReviewText("");
+      setReviewStars(0);
+      setIsAnonymous(false);
+    } catch (error) {
+      console.error("Error submitting review:", error);
+      Alert.alert("Error", "Could not submit review.");
+    }
+  };
+
+  const shareBeer = async () => {
+    try {
+      const message = `Check out this beer: ${beer.name}\n\nStyle: ${beer.style || "Unknown Style"}\nABV: ${beer.abv || "Unknown ABV"}\n\nDescription: ${beer._raw?.description || "No description available"}\n\nLink: https://yourapp.com/beers/${beer.id}`;
+      await Share.share({ message });
+    } catch (error) {
+      console.error("Error sharing beer:", error);
+      Alert.alert("Error", "Could not share the beer.");
+    }
   };
 
   return (
-    <ScrollView contentContainerStyle={[GlobalStyle.content, S.container]}>
-      {beer ? (
-        <View style={S.card}>
-          {resolvedImage ? (
-            <View style={S.hero}>
-              <Image
-                source={resolvedImage}
-                style={S.hero}
-                resizeMode="cover"
-                onLoadStart={() => setImageLoading(true)}
-                onLoadEnd={() => setImageLoading(false)}
-                onError={() => setImageLoading(false)}
-              />
-              {imageLoading && (
-                <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' }}>
-                  <ActivityIndicator size="large" color={Colors.primary} />
-                </View>
-              )}
-            </View>
-          ) : null}
-          <Text style={S.title}>{beer.name}</Text>
-          <View style={S.divider} />
-          {info.map((row) => (
-            <View key={row.label} style={S.row}>
-              <Text style={S.label}>{row.label}:</Text>
-              <Text style={S.value}>{String(row.value)}</Text>
-            </View>
-          ))}
+    <ScrollView style={{ flex: 1, backgroundColor: "white" }}>
+      <View style={{ padding: 16 }}>
+        <Text style={{ fontSize: 24, fontWeight: "bold" }}>{beer.name}</Text>
+        <Text style={{ fontSize: 16, color: "gray", marginTop: 8 }}>
+          {beer.style || "Unknown Style"} - {beer.location || "Unknown Location"}
+        </Text>
+        <Text style={{ fontSize: 14, marginTop: 16 }}>
+          ABV: {beer.abv || "Unknown ABV"}
+        </Text>
+        <Text style={{ fontSize: 14, marginTop: 16 }}>
+          Description: {beer._raw?.description || "No description available"}
+        </Text>
 
-          <View style={S.reviewCard}>
-            <Text style={{ fontSize: 16, fontWeight: '700', marginBottom: 6 }}>Add a review</Text>
-            <View style={S.starsRow}>
-              {[1,2,3,4,5].map((i) => (
-                <Pressable key={i} onPress={() => setStars(i)}>
-                  <Text style={[S.star, { opacity: i <= stars ? 1 : 0.35 }]}>{i <= stars ? '★' : '☆'}</Text>
-                </Pressable>
-              ))}
-            </View>
-            <TextInput
-              style={[S.input, { marginTop: 10 }]}
-              placeholder="Write your review"
-              multiline
-              value={comment}
-              onChangeText={setComment}
+        <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 16 }}>
+          <TouchableOpacity
+            style={[S.favoriteButton, { flex: 1, marginRight: 8 }]}
+            onPress={toggleFavorite}
+            disabled={loading}
+          >
+            <Ionicons
+              name={isFavorite ? "heart" : "heart-outline"}
+              size={20}
+              color={isFavorite ? Colors.primary : "gray"}
             />
-            <Pressable style={S.submitBtn} onPress={handleSubmitReview}>
-              <Text style={S.submitText}>Submit</Text>
-            </Pressable>
+            <Text style={S.favoriteButtonText}>
+              {isFavorite ? "Remove" : "Favorite"}
+            </Text>
+          </TouchableOpacity>
 
-          </View>
-
-          <View style={S.reviewCard}>
-            <Text style={{ fontSize: 16, fontWeight: '700', marginBottom: 6 }}>Reviews</Text>
-            {reviews.length === 0 ? (
-              <Text style={{ color: '#666' }}>no reviews yet</Text>
-            ) : (
-              reviews.map((r) => (
-                <View key={r.id} style={S.reviewItem}>
-                  <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Text style={S.reviewAuthor}>{r.user}</Text>
-                    <Text style={{ color: '#f1c40f' }}>{'★'.repeat(r.stars) + '☆'.repeat(5 - r.stars)}</Text>
-                  </View>
-                  <Text style={S.reviewText}>{r.text}</Text>
-                </View>
-              ))
-            )}
-          </View>
+          <TouchableOpacity
+            style={[S.shareButton, { flex: 1 }]}
+            onPress={shareBeer}
+          >
+            <Ionicons name="share-outline" size={20} color={Colors.primary} />
+            <Text style={S.shareButtonText}>Share</Text>
+          </TouchableOpacity>
         </View>
-      ) : (
-        <Text>No beer data provided.</Text>
-      )}
-      <StatusBar style="auto" />
+      </View>
+
+      <View style={S.reviewContainer}>
+        <Text style={S.sectionTitle}>Leave a Review</Text>
+
+        <StarRating rating={reviewStars} onRatingChange={setReviewStars} />
+
+        <View style={S.checkboxContainer}>
+          <TouchableOpacity
+            style={S.checkbox}
+            onPress={() => setIsAnonymous((prev) => !prev)} // Skift mellem true og false
+          >
+            <Ionicons
+              name={isAnonymous ? "checkbox" : "square-outline"} // Skift ikon baseret på state
+              size={20}
+              color={Colors.primary}
+            />
+          </TouchableOpacity>
+          <Text style={S.checkboxLabel}>Post as Anonymous</Text>
+        </View>
+
+        <TextInput
+          style={S.reviewInput}
+          placeholder="Write your review here..."
+          value={reviewText}
+          onChangeText={setReviewText}
+        />
+
+        <TouchableOpacity
+          style={S.submitButton}
+          onPress={submitReview}
+          disabled={loading}
+        >
+          <Text style={S.submitButtonText}>
+            {loading ? "Submitting..." : "Submit Review"}
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={S.reviewsContainer}>
+        <Text style={S.sectionTitle}>Reviews</Text>
+        {loading ? (
+          <ActivityIndicator size="large" color="blue" />
+        ) : reviews.length === 0 ? (
+          <Text>No reviews yet.</Text>
+        ) : (
+          reviews.map((review) => (
+            <View key={review.id} style={S.reviewItem}>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <Ionicons
+                    key={`star-${review.id}-${star}`}
+                    name={
+                      review.stars >= star
+                        ? "star"
+                        : review.stars >= star - 0.5
+                        ? "star-half"
+                        : "star-outline"
+                    }
+                    size={20}
+                    color="gold"
+                  />
+                ))}
+              </View>
+
+              <Text style={S.reviewAuthor}>{review.displayName || "Anonymous"}</Text>
+              <Text style={S.reviewText}>{review.text}</Text>
+              <Text style={S.reviewDate}>
+                {review.createdAt
+                  ? review.createdAt.toLocaleDateString()
+                  : "Unknown Date"}
+              </Text>
+            </View>
+          ))
+        )}
+      </View>
     </ScrollView>
   );
 }
+
+export default SelectedBeerScreen;

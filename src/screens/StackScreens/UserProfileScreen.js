@@ -13,7 +13,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { updateProfile } from 'firebase/auth';
-import Ionicons from '@react-native-vector-icons/ionicons';
+import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../contexts/AuthContext';
 import { GlobalStyle } from '../../styles/GlobalStyle';
 import { UserProfileScreenStyle } from '../../styles/UserProfileScreenStyle';

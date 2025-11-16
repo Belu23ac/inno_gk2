@@ -8,7 +8,7 @@ import {
   Alert,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Ionicons from '@react-native-vector-icons/ionicons';
+import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../contexts/AuthContext';
 import { AccountSettingsStyle } from '../../styles/AccountSettingsStyle';
 import { Colors } from '../../styles/Colors';
