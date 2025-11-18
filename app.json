@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "gk1",
-    "slug": "gk1",
-    "version": "1.0.0",
+    "name": "Cervisia",
+    "slug": "Cervisia",
+    "version": "0.0.1",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,

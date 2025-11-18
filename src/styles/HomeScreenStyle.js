@@ -202,21 +202,32 @@ export const HomeScreenStyle = StyleSheet.create({
   trendingCard: {
     backgroundColor: Colors.surface,
     borderRadius: 18,
-    padding: 18,
+    padding: 12,
     marginBottom: 12,
     borderWidth: 1,
     borderColor: Colors.border,
+    flexDirection: 'row',
+    alignItems: 'center',
+    minHeight: 84,
   },
   trendingHeader: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 6,
   },
+  trendingLogo: {
+    width: 80,
+    height: '100%',
+    borderRadius: 12,
+    marginRight: 12,
+    resizeMode: 'cover',
+    backgroundColor: Colors.lightGray,
+  },
   trendingName: {
     fontSize: 16,
     fontWeight: "600",
     color: Colors.text,
-    marginLeft: 8,
+    marginLeft: 0,
   },
   trendingLocation: {
     fontSize: 13,
@@ -226,5 +237,10 @@ export const HomeScreenStyle = StyleSheet.create({
     fontSize: 13,
     color: Colors.textPrimary,
     marginTop: 6,
+  },
+  trendingText: {
+    flex: 1,
+    paddingLeft: 12,
+    justifyContent: 'center',
   },
 });

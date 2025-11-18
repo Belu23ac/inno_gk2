@@ -1,10 +1,5 @@
 import { Colors } from "./Colors";
 
-// GlobalNavigation contains both style objects (headerStyle, title) and
-// navigator options (headerTintColor, tabBarActiveTintColor, ...). Using
-// StyleSheet.create here caused errors because some values are not style
-// objects (strings/booleans). Export a plain object instead and only use
-// StyleSheet.create for values meant as `style` props.
 export const GlobalNavigation = {
   headerStyle: {
     backgroundColor: Colors.primary,

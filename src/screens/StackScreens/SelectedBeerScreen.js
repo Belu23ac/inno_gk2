@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   Text,
   View,
@@ -8,11 +8,12 @@ import {
   Alert,
   ActivityIndicator,
   Share,
+  Image,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../contexts/AuthContext';
 import { SelectedBeerScreenStyle as S } from '../../styles/SelectedBeerScreenStyle';
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { Colors } from "../../styles/Colors";
 import {
   checkBeerFavoriteStatus,
@@ -26,6 +27,7 @@ import {
 
 function SelectedBeerScreen({ route }) {
   const { user } = useAuth();
+  const navigation = useNavigation();
   const { beer } = route.params;
 
   const [isFavorite, setIsFavorite] = useState(false);
@@ -62,6 +64,15 @@ function SelectedBeerScreen({ route }) {
   const displayCountry =
     beer.country || beer._raw?.country || "Unknown Country";
 
+  const imageSource = useMemo(() => {
+    const rawImage = beer.image || beer._raw?.image;
+    if (!rawImage) return null;
+    if (typeof rawImage === "string") {
+      return { uri: rawImage };
+    }
+    return rawImage;
+  }, [beer]);
+
   // Check if beer is in favorites
   useEffect(() => {
     const checkIfFavorite = async () => {
@@ -78,7 +89,10 @@ function SelectedBeerScreen({ route }) {
   }, [user?.uid, beer?.id]);
 
   const toggleFavorite = async () => {
-    if (!user?.uid || !beer) return;
+    if (!user?.uid || !beer) {
+      // Do nothing; the CTA is handled in the button press (navigation to Login)
+      return;
+    }
     setLoading(true);
     try {
       const updatedStatus = await toggleBeerFavoriteStatus({
@@ -92,6 +106,16 @@ function SelectedBeerScreen({ route }) {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Press handler for favorite button — if not logged in navigate to Login
+  const handleFavoritePress = async () => {
+    if (!user?.uid) {
+      navigation.navigate('Profile', { screen: 'Login' });
+      return;
+    }
+
+    await toggleFavorite();
   };
 
   const fetchReviews = async () => {
@@ -165,117 +189,153 @@ function SelectedBeerScreen({ route }) {
   };
 
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: "white" }}>
-      <View style={{ padding: 16 }}>
-        <Text style={{ fontSize: 24, fontWeight: "bold" }}>{beer.name}</Text>
-        <Text style={{ fontSize: 16, color: "gray", marginTop: 8 }}>
-          Style: {displayStyle}
-        </Text>
-        <Text style={{ fontSize: 14, color: "gray", marginTop: 4 }}>
-          Region: {displayRegion}{displayCountry ? `, ${displayCountry}` : ""}
-        </Text>
-        <Text style={{ fontSize: 14, marginTop: 16 }}>
-          ABV: {displayAbv}
-        </Text>
-        <Text style={{ fontSize: 14, marginTop: 16 }}>
-          Description: {beer._raw?.description || "No description available"}
-        </Text>
-
-        <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 16 }}>
-          <TouchableOpacity
-            style={[S.shareButton, { flex: 1, marginRight: 8 }]}
-            onPress={toggleFavorite}
-            disabled={loading}
-          >
-            <Ionicons
-              name={isFavorite ? "heart" : "heart-outline"}
-              size={20}
-              color={Colors.primary}
-            />
-            <Text style={S.shareButtonText}>
-              {isFavorite ? "Remove" : "Favorite"}
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[S.shareButton, { flex: 1 }]}
-            onPress={shareBeer}
-          >
-            <Ionicons name="share-outline" size={20} color={Colors.primary} />
-            <Text style={S.shareButtonText}>Share</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <View style={S.reviewContainer}>
-        <Text style={S.sectionTitle}>Leave a Review</Text>
-
-        <StarRating rating={reviewStars} onRatingChange={setReviewStars} />
-
-        <View style={S.checkboxContainer}>
-          <TouchableOpacity
-            style={S.checkbox}
-            onPress={() => setIsAnonymous((prev) => !prev)} // Skift mellem true og false
-          >
-            <Ionicons
-              name={isAnonymous ? "checkbox" : "square-outline"} // Skift ikon baseret på state
-              size={20}
-              color={Colors.primary}
-            />
-          </TouchableOpacity>
-          <Text style={S.checkboxLabel}>Post as Anonymous</Text>
+    <ScrollView style={S.screen}>
+      <View style={S.screenContent}>
+        <View style={S.detailsCard}>
+          <View style={S.imageWrapper}>
+            {imageSource ? (
+              <Image source={imageSource} style={S.beerImage} />
+            ) : (
+              <View style={S.imagePlaceholderFrame}>
+                <Text style={S.imagePlaceholderText}>Image unavailable</Text>
+              </View>
+            )}
+          </View>
+          <Text style={S.beerName}>{beer.name}</Text>
+          <View style={S.metaBox}>
+            <View style={S.metaLeft}>
+              <Text style={S.metaText}>Style: <Text style={S.metaSubText}>{displayStyle}</Text></Text>
+              <Text style={S.metaText}>Region: <Text style={S.metaSubText}>{displayRegion}{displayCountry ? `, ${displayCountry}` : ""}</Text></Text>
+            </View>
+            <View style={S.metaRight}>
+              <Text style={S.abvLabel}>ABV</Text>
+              <Text style={S.abvValue}>{displayAbv}</Text>
+            </View>
+          </View>
+          <Text style={S.descriptionText}>Description: {beer._raw?.description || "No description available"}</Text>
         </View>
 
-        <TextInput
-          style={S.reviewInput}
-          placeholder="Write your review here..."
-          value={reviewText}
-          onChangeText={setReviewText}
-        />
+        <View style={S.sectionCard}>
+          <Text style={S.cardTitle}>Quick Actions</Text>
+          <View style={S.actionsRow}>
+            <TouchableOpacity
+              style={[S.favoriteButton, !user && S.favoriteButtonGuest, { flex: 1, marginRight: 8 }]}
+              onPress={handleFavoritePress}
+              disabled={loading}
+            >
+              <Ionicons
+                name={user ? (isFavorite ? 'heart' : 'heart-outline') : 'heart-outline'}
+                size={20}
+                color={Colors.primary}
+              />
+              <Text style={S.favoriteButtonText}>
+                {user ? (isFavorite ? 'Remove' : 'Favorite') : 'Sign in to favorite'}
+              </Text>
+            </TouchableOpacity>
 
-        <TouchableOpacity
-          style={S.submitButton}
-          onPress={submitReview}
-          disabled={loading}
-        >
-          <Text style={S.submitButtonText}>
-            {loading ? "Submitting..." : "Submit Review"}
-          </Text>
-        </TouchableOpacity>
-      </View>
+            <TouchableOpacity
+              style={[S.shareButton, { flex: 1 }]}
+              onPress={shareBeer}
+            >
+              <Ionicons name="share-outline" size={20} color={Colors.primary} />
+              <Text style={S.shareButtonText}>Share</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
 
-      <View style={S.reviewsContainer}>
-        <Text style={S.sectionTitle}>Reviews</Text>
-        {loading ? (
-          <ActivityIndicator size="large" color="blue" />
-        ) : reviews.length === 0 ? (
-          <Text>No reviews yet.</Text>
-        ) : (
-          reviews.map((review) => (
-            <View key={review.id} style={S.reviewItem}>
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                {[1, 2, 3, 4, 5].map((star) => (
+        <View style={S.sectionCard}>
+          <Text style={S.cardTitle}>Leave a Review</Text>
+          {!user ? (
+            <View style={S.reviewGuestContainer}>
+              <Ionicons name="person-circle" size={48} color={Colors.subtitle} />
+              <Text style={S.reviewGuestTitle}>Log in to leave a review</Text>
+              <Text style={S.reviewGuestText}>
+                Sign in to share your beer rating and help others discover great brews.
+              </Text>
+              <TouchableOpacity
+                style={S.reviewGuestButton}
+                onPress={() => navigation.navigate('Profile', { screen: 'Login' })}
+              >
+                <Text style={S.reviewGuestButtonText}>Log In</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={S.reviewGuestButtonSecondary}
+                onPress={() => navigation.navigate('Profile', { screen: 'Register' })}
+              >
+                <Text style={S.reviewGuestButtonSecondaryText}>Create Account</Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <>
+              <StarRating rating={reviewStars} onRatingChange={setReviewStars} />
+
+              <View style={S.checkboxContainer}>
+                <TouchableOpacity
+                  style={S.checkbox}
+                  onPress={() => setIsAnonymous((prev) => !prev)}
+                >
                   <Ionicons
-                    key={`star-${review.id}-${star}`}
-                    name={
-                      review.stars >= star
-                        ? "star"
-                        : review.stars >= star - 0.5
-                        ? "star-half"
-                        : "star-outline"
-                    }
+                    name={isAnonymous ? "checkbox" : "square-outline"}
                     size={20}
-                    color="gold"
+                    color={Colors.primary}
                   />
-                ))}
+                </TouchableOpacity>
+                <Text style={S.checkboxLabel}>Post as Anonymous</Text>
               </View>
 
-              <Text style={S.reviewAuthor}>{review.displayName || "Anonymous"}</Text>
-              <Text style={S.reviewText}>{review.text}</Text>
-              <Text style={S.reviewDate}>{formatDate(review.createdAt)}</Text>
-            </View>
-          ))
-        )}
+              <TextInput
+                style={S.reviewInput}
+                placeholder="Write your review here..."
+                value={reviewText}
+                onChangeText={setReviewText}
+              />
+
+              <TouchableOpacity
+                style={S.submitButton}
+                onPress={submitReview}
+                disabled={loading}
+              >
+                <Text style={S.submitButtonText}>
+                  {loading ? "Submitting..." : "Submit Review"}
+                </Text>
+              </TouchableOpacity>
+            </>
+          )}
+        </View>
+
+        <View style={S.sectionCard}>
+          <Text style={S.cardTitle}>Reviews</Text>
+          {loading ? (
+            <ActivityIndicator size="large" color="blue" />
+          ) : reviews.length === 0 ? (
+            <Text>No reviews yet.</Text>
+          ) : (
+            reviews.map((review) => (
+              <View key={review.id} style={S.reviewItem}>
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <Ionicons
+                      key={`star-${review.id}-${star}`}
+                      name={
+                        review.stars >= star
+                          ? "star"
+                          : review.stars >= star - 0.5
+                          ? "star-half"
+                          : "star-outline"
+                      }
+                      size={20}
+                      color="gold"
+                    />
+                  ))}
+                </View>
+
+                <Text style={S.reviewAuthor}>{review.displayName || "Anonymous"}</Text>
+                <Text style={S.reviewText}>{review.text}</Text>
+                <Text style={S.reviewDate}>{formatDate(review.createdAt)}</Text>
+              </View>
+            ))
+          )}
+        </View>
       </View>
     </ScrollView>
   );
