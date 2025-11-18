@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import {
   View,
   Text,
@@ -24,6 +24,35 @@ const getRandomBeer = (beers) => {
   return beers[index];
 };
 
+const FLAVOR_KEYWORDS = [
+  { keyword: "citrus", label: "Citrus peel" },
+  { keyword: "pine", label: "Pine resin" },
+  { keyword: "chocolate", label: "Dark cocoa" },
+  { keyword: "coffee", label: "Roasted coffee" },
+  { keyword: "malt", label: "Toasty malt" },
+  { keyword: "spruce", label: "Nordic spruce" },
+  { keyword: "oak", label: "Oak aged" },
+  { keyword: "crisp", label: "Crisp finish" },
+  { keyword: "smooth", label: "Silky mouthfeel" },
+];
+
+const buildFlavorNotes = (beer) => {
+  const description = (beer?._raw?.description || beer?.description || "")
+    .toLowerCase()
+    .trim();
+  const matches = FLAVOR_KEYWORDS.filter((pair) =>
+    description.includes(pair.keyword)
+  ).map((pair) => pair.label);
+  if (matches.length === 0 && beer?._raw?.style) {
+    matches.push(beer._raw.style);
+  }
+  while (matches.length < 2) {
+    matches.push("Small batch");
+  }
+  return matches.slice(0, 3);
+};
+
+
 const OFFER_BEER = getRandomBeer(importedMockBeers);
 
 const OFFER_OF_WEEK = {
@@ -37,17 +66,36 @@ const OFFER_OF_WEEK = {
   beer: OFFER_BEER,
 };
 
-// keep original meta values and map them onto the first beers from mockBeers
-const METAS = ["5 bottles", "Curated by Lina", "6 picks", "Brewed 2 km away", "New arrival"];
+// Focus-friendly tags — these appear in the "Focus" stat on curated cards
+// Short, clear labels that describe what to focus on for this beer
+const METAS = [
+  "Citrus-forward",
+  "Lina's pick",
+  "Hop-forward",
+  "Oak-aged",
+  "New arrival",
+];
 
-const CURATED_PICKS = (Array.isArray(importedMockBeers) ? importedMockBeers.slice(0, METAS.length) : []).map((beer, idx) => ({
-  id: beer.id || `pick-${idx + 1}`,
-  label: beer._raw?.style || beer.style || "Recommended",
-  title: beer.name || beer.title || `Beer ${idx + 1}`,
-  subtitle: beer._raw?.description || beer.brewery || beer._raw?.country || "",
-  meta: METAS[idx],
-  beer,
-}));
+const CURATED_PICKS = (Array.isArray(importedMockBeers)
+  ? importedMockBeers.slice(0, METAS.length)
+  : []).map((beer, idx) => {
+  const matchScore = 86 + (idx % 3) * 3;
+  return {
+    id: beer.id || `pick-${idx + 1}`,
+    label: beer._raw?.style || beer.style || "Recommended",
+    title: beer.name || beer.title || `Beer ${idx + 1}`,
+    subtitle:
+      beer._raw?.description || beer.brewery || beer._raw?.country || "",
+    meta: METAS[idx],
+    bottleImage: beer._raw?.bottleImage || beer.bottleImage,
+    abv: beer._raw?.abv || beer.abv || "-",
+    ibu: beer._raw?.ibu || "-",
+    distance: `${(1.2 + idx * 0.8).toFixed(1)} km away`,
+    flavorNotes: buildFlavorNotes(beer),
+    matchScore,
+    beer,
+  };
+});
 
 const TRENDING_BREWERIES = [
   {
@@ -76,6 +124,7 @@ const TRENDING_BREWERIES = [
 export default function HomeScreen() {
   const { user } = useAuth();
   const navigation = useNavigation();
+  const [statWidths, setStatWidths] = useState({});
 
   const firstName = useMemo(() => {
     if (user?.displayName && user.displayName.trim().length > 0) {
@@ -139,22 +188,60 @@ export default function HomeScreen() {
             data={CURATED_PICKS}
             keyExtractor={(item) => item.id}
             showsHorizontalScrollIndicator={false}
-            contentContainerStyle={HomeScreenStyle.horizontalList}
-            renderItem={({ item }) => (
+            contentContainerStyle={HomeScreenStyle.curatedModernList}
+            renderItem={({ item, index }) => (
               <TouchableOpacity
-                style={HomeScreenStyle.curatedCard}
+                style={[
+                  HomeScreenStyle.curatedCardModern,
+                  index === 0 && HomeScreenStyle.curatedCardFeatured,
+                ]}
                 onPress={() => {
-                  // pass the original/full beer object when available (fallback to item)
                   navigation.navigate('Selected Beer', { beer: item.beer || item });
                 }}
               >
-                <Text style={HomeScreenStyle.curatedLabel}>{item.label}</Text>
-                <Text style={HomeScreenStyle.curatedTitle}>{item.title}</Text>
-                <Text style={HomeScreenStyle.curatedSubtitle}>{item.subtitle}</Text>
-                <View style={HomeScreenStyle.curatedFooter}>
-                  <Text style={HomeScreenStyle.curatedMeta}>{item.meta}</Text>
-                  <Ionicons name="arrow-forward" size={16} color={Colors.primary} />
+                <View style={HomeScreenStyle.curatedBadgeRow}>
+                  <View style={HomeScreenStyle.curatedBadge}>
+                    <Text style={HomeScreenStyle.curatedBadgeText}>{item.label}</Text>
+                  </View>
+                  <View style={HomeScreenStyle.curatedCTA}>
+                    <Text style={HomeScreenStyle.curatedCTAText}>Open details</Text>
+                    <Ionicons name="chevron-forward" size={16} color={Colors.primary} />
+                  </View>
                 </View>
+                <Text style={HomeScreenStyle.curatedModernTitle}>{item.title}</Text>
+                <Text style={HomeScreenStyle.curatedModernSubtitle} numberOfLines={2}>
+                  {item.subtitle}
+                </Text>
+                <View style={HomeScreenStyle.curatedStatsRow} onLayout={(e) => {
+                  // save the width of the stats row so the footer can match it
+                  const w = e.nativeEvent.layout.width;
+                  setStatWidths((p) => ({ ...p, [item.id]: w }));
+                }}>
+                  <View style={HomeScreenStyle.curatedStat}>
+                    <Text style={HomeScreenStyle.curatedStatValue}>{item.abv}</Text>
+                    <Text style={HomeScreenStyle.curatedStatLabel}>ABV</Text>
+                  </View>
+                  <View style={HomeScreenStyle.curatedStat}>
+                    <Text style={HomeScreenStyle.curatedStatValue}>{item.meta}</Text>
+                    <Text style={HomeScreenStyle.curatedStatLabel}>Focus</Text>
+                  </View>
+                </View>
+                <View style={[
+                  HomeScreenStyle.curatedCardFooter,
+                  statWidths[item.id] ? { width: statWidths[item.id] } : {}
+                ]}>
+                  <View style={HomeScreenStyle.curatedSommelier}>
+                    <Ionicons name="person-outline" size={16} color={Colors.primary} />
+                    <Text style={HomeScreenStyle.curatedSommelierText}>Sommelier match {item.matchScore}%</Text>
+                  </View>
+                </View>
+                {item.bottleImage ? (
+                  <Image source={item.bottleImage} style={HomeScreenStyle.curatedBottle} />
+                ) : (
+                  <View style={[HomeScreenStyle.curatedBottle, HomeScreenStyle.curatedBottleFallback]}>
+                    <Ionicons name="beer-outline" size={28} color={Colors.primary} />
+                  </View>
+                )}
               </TouchableOpacity>
             )}
           />

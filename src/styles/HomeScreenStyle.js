@@ -158,46 +158,147 @@ export const HomeScreenStyle = StyleSheet.create({
     fontWeight: "600",
     color: Colors.primary,
   },
-  horizontalList: {
+  /* filter chips removed */
+  curatedModernList: {
     paddingRight: 8,
   },
-  curatedCard: {
-    width: 240,
+  curatedCardModern: {
     backgroundColor: Colors.surface,
-    borderRadius: 20,
+    borderRadius: 22,
     padding: 18,
-    marginRight: 14,
-    boxShadow: `0px 12px 24px ${Colors.shadowSoft}`,
-    elevation: 3,
+    paddingBottom: 36, // extra space to make room for anchored footer
+    marginRight: 16,
+    width: 300,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    shadowColor: Colors.shadowSoft,
+    shadowOpacity: 0.25,
+    shadowRadius: 18,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 4,
+    overflow: 'hidden',
   },
-  curatedLabel: {
-    fontSize: 12,
-    fontWeight: "700",
-    color: Colors.primary,
-    textTransform: "uppercase",
+  curatedCardFeatured: {
+    width: 300,
+    backgroundColor: Colors.surface, // match regular cards for a consistent look
+  },
+  curatedBadgeRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  curatedBadge: {
+    backgroundColor: Colors.primarySoft,
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    borderRadius: 12,
+  },
+  curatedBadgeText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: Colors.title,
+    textTransform: 'uppercase',
     letterSpacing: 0.6,
   },
-  curatedTitle: {
-    fontSize: 18,
-    fontWeight: "700",
+  curatedModernTitle: {
+    fontSize: 20,
+    fontWeight: '700',
     color: Colors.text,
-    marginTop: 10,
   },
-  curatedSubtitle: {
+  curatedModernSubtitle: {
     fontSize: 13,
     color: Colors.subtitle,
-    marginTop: 6,
+    marginTop: 8,
   },
-  curatedFooter: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginTop: 18,
+  curatedStatsRow: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    marginTop: 16,
   },
-  curatedMeta: {
-    fontSize: 13,
+  curatedStatsRowSingle: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    marginTop: 12,
+  },
+  curatedStat: {
+    width: 88,
+    marginRight: 10,
+    alignItems: 'flex-start',
+  },
+  curatedStatValue: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: Colors.text,
+  },
+  curatedStatLabel: {
+    fontSize: 11,
+    textTransform: 'uppercase',
     color: Colors.subtitle,
-    fontWeight: "600",
+    letterSpacing: 0.5,
+    marginTop: 2,
+  },
+  curatedFlavorRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: 14,
+    marginBottom: 8,
+  },
+  curatedFlavorPill: {
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    borderRadius: 12,
+    backgroundColor: Colors.surfaceAlt,
+    marginRight: 8,
+    marginBottom: 8,
+  },
+  curatedFlavorText: {
+    fontSize: 12,
+    color: Colors.text,
+    fontWeight: '600',
+  },
+  curatedCardFooter: {
+    position: 'absolute',
+    left: 18,
+    bottom: 12,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  curatedSommelier: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  curatedSommelierText: {
+    marginLeft: 6,
+    fontSize: 12,
+    color: Colors.subtitle,
+    fontWeight: '600',
+  },
+  curatedCTA: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  curatedCTAText: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: Colors.primary,
+    marginRight: 4,
+  },
+  curatedBottle: {
+    position: 'absolute',
+    right: -40,
+    bottom: -22,
+    width: 180,
+    height: 230,
+    resizeMode: 'contain',
+    opacity: 0.3,
+  },
+  curatedBottleFallback: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Colors.surface,
+    borderRadius: 90,
   },
   trendingCard: {
     backgroundColor: Colors.surface,

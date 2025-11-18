@@ -1,8 +1,13 @@
 import hoppyTrailsImg from "../assets/hoppy-trails.avif";
+import hoppyBottleImg from "../assets/hoppy-bottle.avif";
 import sunsetLagerImg from "../assets/sunset-lager.avif";
+import sunsetBottleImg from "../assets/sunset-bottle.avif";
 import midnightStoutImg from "../assets/midnight-stout.avif";
+import midnightBottleImg from "../assets/midnight-bottle.avif";
 import citrusAleImg from "../assets/citrus-ale.avif";
+import citrusBottleImg from "../assets/citrus-bottle.avif";
 import auroraImage from "../assets/aurora-borealis.avif";
+import auroraBottleImg from "../assets/aurora-bottle.avif";
 
 const SAMPLE_BEERS = [
   {
@@ -20,6 +25,7 @@ const SAMPLE_BEERS = [
       description:
         "A bold IPA with citrus and pine notes from Cascade hops. Perfect for hop lovers seeking adventure.",
       image: hoppyTrailsImg,
+      bottleImage: hoppyBottleImg,
     },
   },
   {
@@ -37,6 +43,7 @@ const SAMPLE_BEERS = [
       description:
         "Smooth and crisp lager with golden hues, ideal for watching the sunset. Clean finish with subtle malt sweetness.",
       image: sunsetLagerImg,
+      bottleImage: sunsetBottleImg,
     },
   },
   {
@@ -45,7 +52,7 @@ const SAMPLE_BEERS = [
     brewery: "Dark Harbor",
     abv: "8.2%",
     _raw: {
-      style: "Russian Imperial Stout",
+      style: "Imperial Stout",
       abv: "8.2%",
       ibu: "75",
       country: "USA",
@@ -54,6 +61,7 @@ const SAMPLE_BEERS = [
       description:
         "Rich and robust imperial stout with notes of dark chocolate, coffee, and roasted malt. A midnight indulgence.",
       image: midnightStoutImg,
+      bottleImage: midnightBottleImg,
     },
   },
   {
@@ -71,6 +79,7 @@ const SAMPLE_BEERS = [
       description:
         "Bright and refreshing pale ale bursting with citrus flavors from American hops. A sunny companion for any occasion.",
       image: citrusAleImg,
+      bottleImage: citrusBottleImg,
     },
   },
   {
@@ -88,6 +97,7 @@ const SAMPLE_BEERS = [
       description:
         "Spruce tipped seasonal from Fjord & Foam. Pre-order and save 20%. A bold, hoppy triple IPA with notes of pine and citrus.",
       image: auroraImage,
+      bottleImage: auroraBottleImg,
     },
   },
 ];
