@@ -172,7 +172,6 @@ export const SelectedBeerScreenStyle = StyleSheet.create({
     borderColor: Colors.primarySoft,
   },
   favoriteButtonTextGuest: {
-    // Saved as an alias for future feature flags; keep same as default to maintain consistent look
     color: Colors.primary,
     fontWeight: "700",
     fontSize: 15,
@@ -182,22 +181,35 @@ export const SelectedBeerScreenStyle = StyleSheet.create({
     paddingHorizontal: 16,
   },
   sectionTitle: {
-    fontSize: 18, // Gør teksten større
-    fontWeight: "bold", // Gør teksten fed
-    color: "#000", // Sort tekst for bedre kontrast
-    marginBottom: 8, // Tilføj lidt afstand under teksten
+    fontSize: 18, 
+    fontWeight: "bold", 
+    color: "#000",
+    marginBottom: 8, 
   },
   reviewsTitle: {
-    fontSize: 18, // Gør teksten større
-    fontWeight: "bold", // Gør teksten fed
-    color: "#000", // Sort tekst for bedre kontrast
-    marginTop: 16, // Tilføj lidt afstand over teksten
-    marginBottom: 8, // Tilføj lidt afstand under teksten
+    fontSize: 18, 
+    fontWeight: "bold", 
+    color: "#000", 
+    marginTop: 16, 
+    marginBottom: 8, 
   },
   reviewItem: {
     paddingVertical: 8,
     borderTopWidth: 1,
     borderTopColor: Colors.border,
+  },
+  reviewCard: {
+    backgroundColor: Colors.surface,
+    borderRadius: 12,
+    padding: 12,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    marginBottom: 12,
+    shadowColor: Colors.shadowLight,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 1,
   },
   reviewText: {
     marginTop: 4,
@@ -263,11 +275,11 @@ export const SelectedBeerScreenStyle = StyleSheet.create({
     marginLeft: 8,
     fontSize: 15,
     fontWeight: "700",
-    color: Colors.primary, // Grøn farve fra Colors.js
+    color: Colors.primary,
   },
   reviewContainer: {
     marginTop: 24,
-    paddingHorizontal: 16, // Tilføj vandret padding
+    paddingHorizontal: 16, 
   },
   checkboxContainer: {
     flexDirection: "row",
@@ -282,13 +294,12 @@ export const SelectedBeerScreenStyle = StyleSheet.create({
     color: "#333",
   },
   reviewGuestContainer: {
-    backgroundColor: Colors.surfaceAlt,
-    borderRadius: 16,
-    padding: 16,
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: Colors.border,
-    marginTop: 12,
+    // inner container used inside a section card — keep layout only
+    backgroundColor: Colors.transparent,
+    alignItems: 'center',
+    padding: 0,
+    borderWidth: 0,
+    marginTop: 0,
   },
   reviewGuestTitle: {
     fontSize: 20,

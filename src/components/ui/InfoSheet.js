@@ -1,6 +1,5 @@
-import React from "react";
 import { View, Text, Button } from "react-native";
-import styles from "../styles/InfoSheetStyles";
+import styles from "../../styles/InfoSheetStyles";
 
 export default function InfoSheet({ bar, onClose }) {
   return (

@@ -4,6 +4,7 @@ import HomeScreen from '../screens/HomeScreen';
 import FavoritesScreen from '../screens/StackScreens/FavoritesScreen';
 import SelectedBeerScreen from '../screens/StackScreens/SelectedBeerScreen';
 import { GlobalNavigation } from '../styles/GlobalNavigation';
+import { Colors } from '../styles/Colors';
 
 const Stack = createStackNavigator();
 
@@ -15,6 +16,7 @@ export default function HomeStack() {
         headerStyle: GlobalNavigation.headerStyle,
         headerTitleStyle: GlobalNavigation.title,
         headerTintColor: GlobalNavigation.headerTintColor,
+        cardStyle: { backgroundColor: Colors.transparent },
       }}
     >
       <Stack.Screen

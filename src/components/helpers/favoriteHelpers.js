@@ -1,4 +1,4 @@
-import { db } from '../database/firebase';
+import { db } from '../../database/firebase';
 import { doc, getDoc, setDoc, deleteDoc } from 'firebase/firestore';
 
 export const getFavoriteDocRef = (userId, beerId) =>

@@ -5,7 +5,7 @@ import { Colors } from "./Colors";
 export const SearchScreenStyle = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
+    backgroundColor: 'transparent',
   },
   content: {
     flexGrow: 1,
@@ -57,7 +57,7 @@ export const SearchScreenStyle = StyleSheet.create({
     shadowColor: Colors.black,
     shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.12,
-    shadowRadius: 22,
+    marginTop: 12,
     elevation: 6,
   },
   searchCardActive: {

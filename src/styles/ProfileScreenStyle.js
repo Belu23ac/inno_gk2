@@ -4,7 +4,7 @@ import { Colors } from './Colors';
 export const ProfileScreenStyle = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: Colors.background,
+    backgroundColor: 'transparent',
   },
   scrollContent: {
     paddingTop: 24,
@@ -58,6 +58,7 @@ export const ProfileScreenStyle = StyleSheet.create({
     fontSize: 26,
     fontWeight: '700',
     color: Colors.buttonText,
+    backgroundColor: 'transparent',
   },
   heroEmail: {
     marginTop: 6,

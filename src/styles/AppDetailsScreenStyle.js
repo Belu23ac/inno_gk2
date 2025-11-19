@@ -3,6 +3,10 @@ import { Colors } from "./Colors";
 
 export const AppDetailsScreenStyle = StyleSheet.create({
   // AppDetailsScreen specific styles
+  screen: {
+    flex: 1,
+    backgroundColor: Colors.background,
+  },
   contentAppDetails: {
     padding: 20,
     paddingBottom: 40,

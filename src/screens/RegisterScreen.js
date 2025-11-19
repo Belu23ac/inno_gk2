@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   View,
   Text,
-  TextInput,
-  TouchableOpacity,
   Alert,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
 } from 'react-native';
 import { useAuth } from '../contexts/AuthContext';
+import AuthTextField from '../components/auth/AuthTextField';
+import AuthActions from '../components/auth/AuthActions';
 import { RegisterScreenStyle } from '../styles/RegisterScreenStyle';
 
 const RegisterScreen = ({ navigation }) => {
@@ -60,75 +60,46 @@ const RegisterScreen = ({ navigation }) => {
           <Text style={RegisterScreenStyle.title}>Create Account</Text>
           <Text style={RegisterScreenStyle.subtitle}>Sign up to get started</Text>
           
-          <View style={RegisterScreenStyle.inputContainer}>
-            <Text style={RegisterScreenStyle.label}>Full Name</Text>
-            <TextInput
-              style={RegisterScreenStyle.input}
-              placeholder="Enter your full name"
-              value={displayName}
-              onChangeText={setDisplayName}
-              autoCapitalize="words"
-              autoCorrect={false}
-            />
-          </View>
+          <AuthTextField
+            label="Full Name"
+            value={displayName}
+            onChangeText={setDisplayName}
+            placeholder="Enter your full name"
+            autoCapitalize="words"
+            autoCorrect={false}
+          />
 
-          <View style={RegisterScreenStyle.inputContainer}>
-            <Text style={RegisterScreenStyle.label}>Email</Text>
-            <TextInput
-              style={RegisterScreenStyle.input}
-              placeholder="Enter your email"
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoCorrect={false}
-            />
-          </View>
+          <AuthTextField
+            label="Email"
+            value={email}
+            onChangeText={setEmail}
+            placeholder="Enter your email"
+            keyboardType="email-address"
+            autoCorrect={false}
+            autoCapitalize="none"
+          />
 
-          <View style={RegisterScreenStyle.inputContainer}>
-            <Text style={RegisterScreenStyle.label}>Password</Text>
-            <TextInput
-              style={RegisterScreenStyle.input}
-              placeholder="Enter your password"
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-              autoCapitalize="none"
-              autoCorrect={false}
-            />
-          </View>
+          <AuthTextField
+            label="Password"
+            value={password}
+            onChangeText={setPassword}
+            placeholder="Enter your password"
+            secureTextEntry
+            autoCorrect={false}
+            autoCapitalize="none"
+          />
 
-          <View style={RegisterScreenStyle.inputContainer}>
-            <Text style={RegisterScreenStyle.label}>Confirm Password</Text>
-            <TextInput
-              style={RegisterScreenStyle.input}
-              placeholder="Confirm your password"
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
-              secureTextEntry
-              autoCapitalize="none"
-              autoCorrect={false}
-            />
-          </View>
+          <AuthTextField
+            label="Confirm Password"
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
+            placeholder="Confirm your password"
+            secureTextEntry
+            autoCorrect={false}
+            autoCapitalize="none"
+          />
 
-          <TouchableOpacity
-            style={[RegisterScreenStyle.button, loading && RegisterScreenStyle.buttonDisabled]}
-            onPress={handleRegister}
-            disabled={loading}
-          >
-            <Text style={RegisterScreenStyle.buttonText}>
-              {loading ? 'Creating Account...' : 'Create Account'}
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={RegisterScreenStyle.linkButton}
-            onPress={() => navigation.navigate('Login')}
-          >
-            <Text style={RegisterScreenStyle.linkText}>
-              Already have an account? <Text style={RegisterScreenStyle.linkTextBold}>Sign In</Text>
-            </Text>
-          </TouchableOpacity>
+          <AuthActions onSubmit={handleRegister} loading={loading} onNavigateToLogin={() => navigation.navigate('Login')} />
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

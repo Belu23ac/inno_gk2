@@ -4,7 +4,7 @@ import { Colors } from './Colors';
 export const LoginScreenStyle = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
+    backgroundColor: 'transparent',
   },
   scrollContainer: {
     flexGrow: 1,

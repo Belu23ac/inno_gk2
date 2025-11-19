@@ -2,6 +2,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import SearchScreen from "../screens/SearchScreen";
 import SelectedBeerScreen from "../screens/StackScreens/SelectedBeerScreen";
 import { GlobalNavigation } from "../styles/GlobalNavigation";
+import { Colors } from "../styles/Colors";
 
 const Stack = createStackNavigator();
 
@@ -13,6 +14,7 @@ export default function SearchStackNavigation() {
         headerStyle: GlobalNavigation.headerStyle,
         headerTitleStyle: GlobalNavigation.title,
         headerTintColor: GlobalNavigation.headerTintColor,
+        cardStyle: { backgroundColor: Colors.transparent },
       }}
     >
       <Stack.Screen

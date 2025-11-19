@@ -1,10 +1,16 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { StatusBar } from "expo-status-bar";
-import { ScrollView, View, Text, TouchableOpacity, Alert } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { ScrollView, View, Alert } from "react-native";
 import { useAuth } from "../contexts/AuthContext";
 import { ProfileScreenStyle } from "../styles/ProfileScreenStyle";
-import { Colors } from "../styles/Colors";
+import {
+  GuestView,
+  HeroCard,
+  StatsRow,
+  ActionsGrid,
+  InterestsCard,
+  SupportCard,
+} from "../components/settings/SettingsParts";
 
 const INTEREST_TAGS = [
   "Hazy IPAs",
@@ -16,7 +22,6 @@ const INTEREST_TAGS = [
 
 const SettingsScreen = ({ navigation }) => {
   const { user, logout } = useAuth();
-  // Hooks and derived values must run on every render to preserve hook order
   const displayName = useMemo(
     () =>
       user?.displayName && user.displayName.trim().length > 0
@@ -61,7 +66,6 @@ const SettingsScreen = ({ navigation }) => {
     [user?.stats]
   );
 
-  // Handlers (always declared so hook order is stable)
   const handleEditProfile = () => navigation.navigate("User Profile");
   const handleAccountSettings = () => navigation.navigate("Account Settings");
   const handleFavorites = () => navigation.navigate("Favorites");
@@ -93,38 +97,11 @@ const SettingsScreen = ({ navigation }) => {
     ]);
   };
 
-  // If user is not logged in, show login prompt (render after hooks)
   if (!user) {
     return (
       <View style={ProfileScreenStyle.safeArea}>
         <StatusBar style="light" />
-        <View style={ProfileScreenStyle.guestContainer}>
-          <View style={ProfileScreenStyle.guestIcon}>
-            <Ionicons name="person-outline" size={60} color={Colors.subtitle} />
-          </View>
-          <Text style={ProfileScreenStyle.guestTitle}>
-            Sign in to unlock features
-          </Text>
-          <Text style={ProfileScreenStyle.guestText}>
-            Create an account to save your favorite beers, track breweries
-            you've visited, and personalize your beer discovery experience.
-          </Text>
-          <TouchableOpacity
-            style={ProfileScreenStyle.guestButton}
-            onPress={() => navigation.navigate("Login")}
-          >
-            <Text style={ProfileScreenStyle.guestButtonText}>Sign In</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={ProfileScreenStyle.guestButtonSecondary}
-            onPress={() => navigation.navigate("Register")}
-          >
-            <Text style={ProfileScreenStyle.guestButtonSecondaryText}>
-              Create Account
-            </Text>
-          </TouchableOpacity>
-
-        </View>
+        <GuestView navigation={navigation} />
       </View>
     );
   }
@@ -136,165 +113,18 @@ const SettingsScreen = ({ navigation }) => {
         contentContainerStyle={ProfileScreenStyle.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <View style={ProfileScreenStyle.heroCard}>
-          <View style={ProfileScreenStyle.heroOverlay} />
-          <View style={ProfileScreenStyle.heroRow}>
-            <View style={ProfileScreenStyle.avatar}>
-              <Text style={ProfileScreenStyle.initials}>{initials}</Text>
-            </View>
-            <View style={ProfileScreenStyle.heroDetails}>
-              <Text style={ProfileScreenStyle.heroName}>{displayName}</Text>
-              <Text style={ProfileScreenStyle.heroEmail}>{email}</Text>
-              <Text style={ProfileScreenStyle.heroMeta}>
-                Member since {joinedDate}
-              </Text>
-            </View>
-          </View>
-          <View style={ProfileScreenStyle.badge}>
-            <Text style={ProfileScreenStyle.badgeText}>
-              Level 4 • Trailblazer
-            </Text>
-          </View>
-        </View>
+        <HeroCard initials={initials} displayName={displayName} email={email} joinedDate={joinedDate} />
+        <StatsRow stats={stats} />
+        <ActionsGrid
+          navigation={navigation}
+          handleEditProfile={handleEditProfile}
+          handleAccountSettings={handleAccountSettings}
+          handleFavorites={handleFavorites}
+          handleAppDetails={handleAppDetails}
+        />
+        <InterestsCard />
 
-        <View style={ProfileScreenStyle.statsRow}>
-          {stats.map((stat) => (
-            <View key={stat.label} style={ProfileScreenStyle.statCard}>
-              <Text style={ProfileScreenStyle.statLabel}>{stat.label}</Text>
-              <Text style={ProfileScreenStyle.statValue}>{stat.value}</Text>
-            </View>
-          ))}
-        </View>
-
-        <View style={ProfileScreenStyle.actionGrid}>
-          <TouchableOpacity
-            style={ProfileScreenStyle.actionButton}
-            onPress={handleEditProfile}
-          >
-            <View style={ProfileScreenStyle.actionLabelGroup}>
-              <Text style={ProfileScreenStyle.actionLabel}>Edit profile</Text>
-              <Text style={ProfileScreenStyle.actionSubtitle}>
-                Update your bio and avatar
-              </Text>
-            </View>
-            <View style={ProfileScreenStyle.actionIconContainer}>
-              <Ionicons
-                name="create-outline"
-                size={22}
-                color={Colors.buttonText}
-              />
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={ProfileScreenStyle.actionButton}
-            onPress={handleAccountSettings}
-          >
-            <View style={ProfileScreenStyle.actionLabelGroup}>
-              <Text style={ProfileScreenStyle.actionLabel}>
-                Account settings
-              </Text>
-              <Text style={ProfileScreenStyle.actionSubtitle}>
-                Security & notifications
-              </Text>
-            </View>
-            <View style={ProfileScreenStyle.actionIconContainer}>
-              <Ionicons
-                name="settings-outline"
-                size={22}
-                color={Colors.buttonText}
-              />
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={ProfileScreenStyle.actionButton}
-            onPress={handleFavorites}
-          >
-            <View style={ProfileScreenStyle.actionLabelGroup}>
-              <Text style={ProfileScreenStyle.actionLabel}>Favorites</Text>
-              <Text style={ProfileScreenStyle.actionSubtitle}>
-                See saved beers & spots
-              </Text>
-            </View>
-            <View
-              style={[
-                ProfileScreenStyle.actionIconContainer,
-                { backgroundColor: Colors.favorite },
-              ]}
-            >
-              <Ionicons name="heart-outline" size={22} color={Colors.black} />
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={ProfileScreenStyle.actionButton}
-            onPress={handleAppDetails}
-          >
-            <View style={ProfileScreenStyle.actionLabelGroup}>
-              <Text style={ProfileScreenStyle.actionLabel}>App details</Text>
-              <Text style={ProfileScreenStyle.actionSubtitle}>
-                Version notes & roadmap
-              </Text>
-            </View>
-            <View
-              style={[
-                ProfileScreenStyle.actionIconContainer,
-                { backgroundColor: Colors.accent },
-              ]}
-            >
-              <Ionicons
-                name="information-circle-outline"
-                size={22}
-                color={Colors.black}
-              />
-            </View>
-          </TouchableOpacity>
-        </View>
-
-        
-
-        <View style={ProfileScreenStyle.sectionCard}>
-          <View style={ProfileScreenStyle.sectionHeaderRow}>
-            <Text style={ProfileScreenStyle.sectionTitle}>Your interests</Text>
-          </View>
-          <View style={ProfileScreenStyle.chipRow}>
-            {INTEREST_TAGS.map((chip) => (
-              <View key={chip} style={ProfileScreenStyle.chip}>
-                <Text style={ProfileScreenStyle.chipText}>{chip}</Text>
-              </View>
-            ))}
-          </View>
-        </View>
-
-        <View style={ProfileScreenStyle.supportCard}>
-          <Text style={ProfileScreenStyle.supportTitle}>Need a hand?</Text>
-          <Text style={ProfileScreenStyle.supportText}>
-            Reach out if you have questions about your account, data privacy, or
-            the next beer recommendation. Our team typically replies within a
-            day.
-          </Text>
-          <View style={ProfileScreenStyle.chipRow}>
-            <TouchableOpacity
-              style={ProfileScreenStyle.chip}
-              onPress={handleSupport}
-            >
-              <Text style={ProfileScreenStyle.chipText}>Contact support</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={ProfileScreenStyle.chip}
-              onPress={handleAppDetails}
-            >
-              <Text style={ProfileScreenStyle.chipText}>Release notes</Text>
-            </TouchableOpacity>
-          </View>
-          <TouchableOpacity
-            style={ProfileScreenStyle.signOutButton}
-            onPress={handleLogout}
-          >
-            <Text style={ProfileScreenStyle.signOutLabel}>Sign out</Text>
-          </TouchableOpacity>
-        </View>
+        <SupportCard onSupport={handleSupport} onLogout={handleLogout} />
       </ScrollView>
     </View>
   );

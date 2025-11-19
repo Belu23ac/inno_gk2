@@ -7,6 +7,10 @@ export const AccountSettingsStyle = StyleSheet.create({
     paddingBottom: 48,
     backgroundColor: Colors.background,
   },
+  screen: {
+    flex: 1,
+    backgroundColor: Colors.background,
+  },
   section: {
     marginBottom: 36,
     backgroundColor: Colors.surface,

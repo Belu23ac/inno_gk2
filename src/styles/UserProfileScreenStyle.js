@@ -106,6 +106,14 @@ export const UserProfileScreenStyle = StyleSheet.create({
     marginTop: 16,
     alignItems: 'center',
   },
+  screen: {
+    flex: 1,
+    backgroundColor: Colors.background,
+  },
+  screenContent: {
+    flexGrow: 1,
+    backgroundColor: Colors.background,
+  },
   // Guest user styles
   guestContainer: {
     flex: 1,

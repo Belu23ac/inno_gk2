@@ -1,4 +1,3 @@
-import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import {
   Text,
@@ -18,7 +17,7 @@ export default function AppDetailsScreen() {
   };
 
   return (
-    <View style={GlobalStyle.container}>
+    <View style={[GlobalStyle.container, AppDetailsScreenStyle.screen]}>
       <ScrollView contentContainerStyle={AppDetailsScreenStyle.contentAppDetails}>
         <View style={AppDetailsScreenStyle.headerAppDetails}>
           <View style={AppDetailsScreenStyle.logoPlaceholder}>

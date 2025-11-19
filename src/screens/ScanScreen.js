@@ -1,36 +1,26 @@
-// /Users/bertram/Documents/Skole/inno/gk1/screens/ScanScreen.js
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { StatusBar } from "expo-status-bar";
 import {
   Text,
   View,
   TouchableOpacity,
   Animated,
-  Easing,
   Image,
 } from "react-native";
 import { CameraView, useCameraPermissions } from "expo-camera";
+import useScanAnimation from "../hooks/useScanAnimation";
+import ScanInstructionCard from "../components/scan/ScanInstructionCard";
+import ScanCameraButton from "../components/scan/ScanCameraButton";
 import { GlobalStyle } from "../styles/GlobalStyle";
 import { ScanScreenStyle } from "../styles/ScanScreenStyle";
-import SAMPLE_BEERS from "../contexts/MockBeers";
 
 export default function ScanScreen({ navigation }) {
   const [permission, requestPermission] = useCameraPermissions();
-  const [isScanning, setIsScanning] = useState(false);
   const [showInstruction, setShowInstruction] = useState(true);
   const [capturedPhoto, setCapturedPhoto] = useState(null);
   const cameraRef = useRef(null);
-  const scanAnim = React.useRef(new Animated.Value(0)).current;
-  const animationRef = useRef(null);
+  const { scanAnim, isScanning, startScan } = useScanAnimation();
 
-  useEffect(() => {
-    return () => {
-      if (animationRef.current) {
-        animationRef.current.stop();
-        animationRef.current = null;
-      }
-    };
-  }, []);
 
   const handleStartScan = async () => {
     if (isScanning || !cameraRef.current) return;
@@ -41,40 +31,7 @@ export default function ScanScreen({ navigation }) {
       console.warn("Capture failed", error);
     }
     setShowInstruction(false);
-    startScanAnimation();
-  };
-
-  const startScanAnimation = () => {
-    setIsScanning(true);
-    // reset
-    scanAnim.setValue(0);
-
-    // one full cycle = forward (0 -> 1) then back (1 -> 0) = 1000ms
-    const cycle = Animated.sequence([
-      Animated.timing(scanAnim, {
-        toValue: 1,
-        duration: 1000,
-        easing: Easing.linear,
-        useNativeDriver: true,
-      }),
-      Animated.timing(scanAnim, {
-        toValue: 0,
-        duration: 1000,
-        easing: Easing.linear,
-        useNativeDriver: true,
-      }),
-    ]);
-
-    // run the cycle 2 times => 4 seconds total (each cycle is forward+back = 2000ms)
-    const loopAnim = Animated.loop(cycle, { iterations: 1 });
-    animationRef.current = loopAnim;
-
-    // start and navigate when all iterations complete
-    loopAnim.start(() => {
-      const beer =
-        SAMPLE_BEERS[Math.floor(Math.random() * SAMPLE_BEERS.length)];
-      animationRef.current = null;
-      setIsScanning(false);
+    startScan((beer) => {
       setShowInstruction(true);
       setCapturedPhoto(null);
       navigation.navigate("Selected Beer", { beer });
@@ -86,10 +43,9 @@ export default function ScanScreen({ navigation }) {
     outputRange: [-110, 110],
   });
 
-  // Handle camera permissions
   if (!permission) {
     return (
-      <View style={GlobalStyle.container}>
+      <View style={GlobalStyle.containerSolid}>
         <Text>Loading...</Text>
       </View>
     );
@@ -97,7 +53,7 @@ export default function ScanScreen({ navigation }) {
 
   if (!permission.granted) {
     return (
-      <View style={GlobalStyle.container}>
+      <View style={GlobalStyle.containerSolid}>
         <Text style={GlobalStyle.text}>
           We need your permission to show the camera
         </Text>
@@ -143,24 +99,8 @@ export default function ScanScreen({ navigation }) {
 
         {showInstruction && (
           <>
-            <View style={ScanScreenStyle.instructionCard}>
-              <Text style={ScanScreenStyle.instructionTitle}>
-                Keep it steady
-              </Text>
-              <Text style={ScanScreenStyle.instructionCopy}>
-                Align the label inside the frame before you start scanning.
-              </Text>
-            </View>
-
-            <TouchableOpacity
-              style={ScanScreenStyle.cameraButton}
-              onPress={handleStartScan}
-              activeOpacity={0.8}
-            >
-              <View style={ScanScreenStyle.cameraRing}>
-                <View style={ScanScreenStyle.cameraCore} />
-              </View>
-            </TouchableOpacity>
+            <ScanInstructionCard />
+            <ScanCameraButton onPress={handleStartScan} />
           </>
         )}
       </View>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { db } from '../database/firebase';
+import { db } from '../../database/firebase';
 import { collection, addDoc, getDocs, query, where } from 'firebase/firestore';
 
 export const FETCH_REVIEWS_COLLECTION = 'reviews';

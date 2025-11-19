@@ -1,14 +1,13 @@
-import React from "react";
+import { ActivityIndicator, View, StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "@react-native-vector-icons/ionicons";
-import { ActivityIndicator, View, StyleSheet } from "react-native";
 import HomeStack from "./stack/HomeStack";
 import MapScreen from "./screens/MapScreen";
 import ScanStack from "./stack/ScanStack";
 import SearchStack from "./stack/SearchStack";
 import SettingsStack from "./stack/SettingsStack";
-import AuthStack from "./stack/AuthStack";
+import AppBackground from './components/ui/AppBackground';
 import { GlobalNavigation } from "./styles/GlobalNavigation";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { Colors } from "./styles/Colors";
@@ -59,14 +58,21 @@ const AppNavigator = () => {
       >
         <Tab.Screen
           name="Home"
-          component={HomeStack}
           options={{ headerShown: false }}
-        />
-        <Tab.Screen
-          name="Search"
-          component={SearchStack}
-          options={{ headerShown: false }}
-        />
+        >
+          {() => (
+            <AppBackground>
+              <HomeStack />
+            </AppBackground>
+          )}
+        </Tab.Screen>
+        <Tab.Screen name="Search" options={{ headerShown: false }}>
+          {() => (
+            <AppBackground>
+              <SearchStack />
+            </AppBackground>
+          )}
+        </Tab.Screen>
         <Tab.Screen
           name="Scan"
           component={ScanStack}
@@ -77,11 +83,13 @@ const AppNavigator = () => {
           component={MapScreen}
           options={{ headerShown: false }}
         />
-        <Tab.Screen
-          name="Profile"
-          component={SettingsStack}
-          options={{ headerShown: false }}
-        />
+        <Tab.Screen name="Profile" options={{ headerShown: false }}>
+          {() => (
+            <AppBackground>
+              <SettingsStack />
+            </AppBackground>
+          )}
+        </Tab.Screen>
       </Tab.Navigator>
     </NavigationContainer>
   );

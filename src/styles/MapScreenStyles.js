@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { Colors } from './Colors';
 
 const MapScreenStyles = StyleSheet.create({
   map: {
@@ -15,3 +16,6 @@ const MapScreenStyles = StyleSheet.create({
 });
 
 export default MapScreenStyles;
+
+// Provide the default loading color for the map spinner so screens can reuse it
+export const spinnerColor = Colors.primary;

@@ -5,13 +5,13 @@ export const GlobalStyle = StyleSheet.create({
   // ===== LAYOUT =====
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
+    backgroundColor: 'transparent',
     paddingHorizontal: 12, // centrering fjernet her!
   },
   screen: {
     flex: 1,
     padding: 16,
-    backgroundColor: Colors.background,
+    backgroundColor: 'transparent',
     alignItems: "center",
   },
   content: {
@@ -178,5 +178,46 @@ export const GlobalStyle = StyleSheet.create({
     height: 4,
     backgroundColor: Colors.barcodeScanner,
     boxShadow: `0px 0px 6px ${Colors.shadowScanLine}`,
+  },
+  backgroundImage: {
+    position: 'absolute',
+    right: -80,
+    top: -70,
+    width: 620,
+    height: 620,
+    opacity: 0.06,
+    resizeMode: 'contain',
+    zIndex: 0,
+    pointerEvents: 'none',
+  },
+  // App background components — used by `AppBackground.js`
+  appBackgroundRoot: {
+    flex: 1,
+    position: 'relative',
+  },
+  appBackgroundContent: {
+    flex: 1,
+    position: 'relative',
+    zIndex: 1,
+  },
+  appBackgroundWrap: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 0,
+  },
+  appBackgroundCentered: {
+    width: 620,
+    height: 620,
+    opacity: 0.06,
+    resizeMode: 'contain',
+  },
+  containerSolid: {
+    flex: 1,
+    backgroundColor: Colors.background,
   },
 });

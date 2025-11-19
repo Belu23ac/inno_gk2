@@ -9,6 +9,7 @@ import SelectedBeerScreen from '../screens/StackScreens/SelectedBeerScreen';
 import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import { GlobalNavigation } from '../styles/GlobalNavigation';
+import { Colors } from '../styles/Colors';
 
 const Stack = createStackNavigator();
 
@@ -20,6 +21,7 @@ export default function SettingsStackNavigation() {
         headerStyle: GlobalNavigation.headerStyle,
         headerTitleStyle: GlobalNavigation.title,
         headerTintColor: GlobalNavigation.headerTintColor,
+        cardStyle: { backgroundColor: Colors.transparent },
       }}
     >
       <Stack.Screen name="SettingsMain" component={SettingsScreen} options={{ title: "Profile" }} />

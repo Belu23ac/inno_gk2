@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import {
   Text,
   View,
-  TextInput,
-  TouchableOpacity,
   Alert,
   ScrollView,
   KeyboardAvoidingView,
@@ -13,11 +11,12 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { updateProfile } from 'firebase/auth';
-import { Ionicons } from '@expo/vector-icons';
+import ProfileGuestView from '../../components/account/ProfileGuestView';
+import ProfileField from '../../components/account/ProfileField';
+import ProfileActionButtons from '../../components/account/ProfileActionButtons';
 import { useAuth } from '../../contexts/AuthContext';
 import { GlobalStyle } from '../../styles/GlobalStyle';
 import { UserProfileScreenStyle } from '../../styles/UserProfileScreenStyle';
-import { Colors } from '../../styles/Colors';
 
 export default function UserProfileScreen() {
   const { user } = useAuth();
@@ -52,26 +51,11 @@ export default function UserProfileScreen() {
   // If user is not logged in, show login prompt
   if (!user) {
     return (
-      <ScrollView contentContainerStyle={UserProfileScreenStyle.guestContainer}>
-        <View style={UserProfileScreenStyle.guestIcon}>
-          <Ionicons name="person-outline" size={60} color={Colors.subtitle} />
-        </View>
-        <Text style={UserProfileScreenStyle.guestTitle}>Log in to edit your profile</Text>
-        <Text style={UserProfileScreenStyle.guestText}>
-          Sign in to update your profile information, add a bio, and personalize your account.
-        </Text>
-        <TouchableOpacity
-          style={UserProfileScreenStyle.guestButton}
-          onPress={() => navigation.navigate('Login')}
-        >
-          <Text style={UserProfileScreenStyle.guestButtonText}>Sign In</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={UserProfileScreenStyle.guestButtonSecondary}
-          onPress={() => navigation.navigate('Register')}
-        >
-          <Text style={UserProfileScreenStyle.guestButtonSecondaryText}>Create Account</Text>
-        </TouchableOpacity>
+      <ScrollView
+        style={UserProfileScreenStyle.screen}
+        contentContainerStyle={UserProfileScreenStyle.guestContainer}
+      >
+        <ProfileGuestView />
       </ScrollView>
     );
   }
@@ -101,68 +85,44 @@ export default function UserProfileScreen() {
 
   return (
     <KeyboardAvoidingView
-      style={{ flex: 1 }}
+      style={UserProfileScreenStyle.screen}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <ScrollView contentContainerStyle={[GlobalStyle.container]}>
+      <ScrollView contentContainerStyle={[GlobalStyle.container, UserProfileScreenStyle.screenContent]}>
         <View style={UserProfileScreenStyle.profileCard}>
           <Text style={UserProfileScreenStyle.title}>Edit Profile</Text>
 
-          <View style={UserProfileScreenStyle.inputContainer}>
-            <Text style={UserProfileScreenStyle.label}>Display Name</Text>
-            <TextInput
-              style={UserProfileScreenStyle.input}
-              value={displayName}
-              onChangeText={setDisplayName}
-              placeholder="Enter your display name"
-              autoCapitalize="words"
-            />
-          </View>
+          <ProfileField
+            label="Display Name"
+            value={displayName}
+            onChangeText={setDisplayName}
+            placeholder="Enter your display name"
+            inputStyle={{}}
+          />
 
-          <View style={UserProfileScreenStyle.inputContainer}>
-            <Text style={UserProfileScreenStyle.label}>Email</Text>
-            <TextInput
-              style={[UserProfileScreenStyle.input, UserProfileScreenStyle.inputDisabled]}
-              value={email}
-              editable={false}
-              placeholder="Your email"
-            />
-            <Text style={UserProfileScreenStyle.caption}>
-              Email cannot be changed here. Contact support if needed.
-            </Text>
-          </View>
+          <ProfileField
+            label="Email"
+            value={email}
+            onChangeText={setEmail}
+            placeholder="Your email"
+            editable={false}
+            inputStyle={UserProfileScreenStyle.inputDisabled}
+          />
+          <Text style={UserProfileScreenStyle.caption}>
+            Email cannot be changed here. Contact support if needed.
+          </Text>
 
-          <View style={UserProfileScreenStyle.inputContainer}>
-            <Text style={UserProfileScreenStyle.label}>Bio</Text>
-            <TextInput
-              style={[UserProfileScreenStyle.input, UserProfileScreenStyle.bioInput]}
-              value={bio}
-              onChangeText={setBio}
-              placeholder="Tell us about yourself"
-              multiline
-              numberOfLines={3}
-              textAlignVertical="top"
-            />
-          </View>
+          <ProfileField
+            label="Bio"
+            value={bio}
+            onChangeText={setBio}
+            placeholder="Tell us about yourself"
+            multiline
+            numberOfLines={3}
+            inputStyle={UserProfileScreenStyle.bioInput}
+          />
 
-          <View style={UserProfileScreenStyle.buttonsRow}>
-            <TouchableOpacity
-              style={[UserProfileScreenStyle.buttonProfile, UserProfileScreenStyle.secondary]}
-              onPress={handleCancel}
-            >
-              <Text style={[UserProfileScreenStyle.buttonText, UserProfileScreenStyle.secondaryText]}>Cancel</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[UserProfileScreenStyle.buttonProfile, UserProfileScreenStyle.primary, loading && UserProfileScreenStyle.buttonDisabled]}
-              onPress={handleSave}
-              disabled={loading}
-            >
-              <Text style={[UserProfileScreenStyle.buttonText, UserProfileScreenStyle.primaryText]}>
-                {loading ? 'Saving...' : 'Save Changes'}
-              </Text>
-            </TouchableOpacity>
-          </View>
+          <ProfileActionButtons onCancel={handleCancel} onSave={handleSave} loading={loading} />
         </View>
 
         <StatusBar style="auto" />
