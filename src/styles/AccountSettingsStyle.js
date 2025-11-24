@@ -120,4 +120,40 @@ export const AccountSettingsStyle = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
+  // Profile editing styles
+  inputGroup: {
+    marginBottom: 20,
+  },
+  input: {
+    backgroundColor: Colors.surfaceAlt,
+    borderRadius: 12,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    fontSize: 15,
+    color: Colors.text,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    marginTop: 8,
+  },
+  inputDisabled: {
+    backgroundColor: Colors.lightGray,
+    color: Colors.subtitle,
+  },
+  bioInput: {
+    minHeight: 80,
+    textAlignVertical: 'top',
+  },
+  saveButton: {
+    backgroundColor: Colors.primary,
+    borderRadius: 12,
+    paddingVertical: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 8,
+  },
+  saveButtonText: {
+    color: Colors.buttonText,
+    fontSize: 16,
+    fontWeight: '700',
+  },
 });

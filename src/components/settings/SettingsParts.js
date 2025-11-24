@@ -41,73 +41,82 @@ export const GuestView = ({ navigation }) => (
 
 export const HeroCard = ({ initials, displayName, email, joinedDate }) => (
   <View style={ProfileScreenStyle.heroCard}>
-    <View style={ProfileScreenStyle.heroOverlay} />
-    <View style={ProfileScreenStyle.heroRow}>
+    <View style={ProfileScreenStyle.heroContent}>
       <View style={ProfileScreenStyle.avatar}>
         <Text style={ProfileScreenStyle.initials}>{initials}</Text>
       </View>
       <View style={ProfileScreenStyle.heroDetails}>
         <Text style={ProfileScreenStyle.heroName}>{displayName}</Text>
         <Text style={ProfileScreenStyle.heroEmail}>{email}</Text>
-        <Text style={ProfileScreenStyle.heroMeta}>Member since {joinedDate}</Text>
+        <View style={ProfileScreenStyle.heroMetaRow}>
+          <Ionicons name="calendar-outline" size={14} color={Colors.subtitle} />
+          <Text style={ProfileScreenStyle.heroMeta}>Joined {joinedDate}</Text>
+        </View>
       </View>
-    </View>
-    <View style={ProfileScreenStyle.badge}>
-      <Text style={ProfileScreenStyle.badgeText}>Level 4 • Trailblazer</Text>
     </View>
   </View>
 );
 
-export const StatsRow = ({ stats }) => (
+export const StatsRow = ({ stats, handleReviews, handleFavorites }) => (
   <View style={ProfileScreenStyle.statsRow}>
-    {stats.map((stat) => (
-      <View key={stat.label} style={ProfileScreenStyle.statCard}>
-        <Text style={ProfileScreenStyle.statLabel}>{stat.label}</Text>
-        <Text style={ProfileScreenStyle.statValue}>{stat.value}</Text>
+    <TouchableOpacity 
+      style={ProfileScreenStyle.statActionButton}
+      onPress={handleReviews}
+      activeOpacity={0.7}
+    >
+      <View style={[ProfileScreenStyle.actionIconContainer, { backgroundColor: Colors.primary }]}>
+        <Ionicons name="beer" size={24} color={Colors.buttonText} />
       </View>
-    ))}
+      <View style={ProfileScreenStyle.actionContent}>
+        <Text style={ProfileScreenStyle.actionLabel}>Beers reviewed</Text>
+        <Text style={ProfileScreenStyle.actionSubtitle}>{stats[0].value} {stats[0].value === 1 ? 'review' : 'reviews'}</Text>
+      </View>
+      <Ionicons name="chevron-forward" size={20} color={Colors.subtitle} />
+    </TouchableOpacity>
+
+    <TouchableOpacity 
+      style={ProfileScreenStyle.statActionButton}
+      onPress={handleFavorites}
+      activeOpacity={0.7}
+    >
+      <View style={[ProfileScreenStyle.actionIconContainer, { backgroundColor: '#ff3b30' }]}>
+        <Ionicons name="heart" size={24} color={Colors.buttonText} />
+      </View>
+      <View style={ProfileScreenStyle.actionContent}>
+        <Text style={ProfileScreenStyle.actionLabel}>Favorites</Text>
+        <Text style={ProfileScreenStyle.actionSubtitle}>{stats[1].value} saved {stats[1].value === 1 ? 'beer' : 'beers'}</Text>
+      </View>
+      <Ionicons name="chevron-forward" size={20} color={Colors.subtitle} />
+    </TouchableOpacity>
   </View>
 );
 
 const ActionItem = ({ onPress, icon, title, subtitle, backgroundColor }) => (
   <TouchableOpacity style={ProfileScreenStyle.actionButton} onPress={onPress}>
-    <View style={ProfileScreenStyle.actionLabelGroup}>
-      <Text style={ProfileScreenStyle.actionLabel}>{title}</Text>
-      <Text style={ProfileScreenStyle.actionSubtitle}>{subtitle}</Text>
-    </View>
     <View
       style={[
         ProfileScreenStyle.actionIconContainer,
         backgroundColor ? { backgroundColor } : {},
       ]}
     >
-      <Ionicons name={icon} size={22} color={Colors.buttonText} />
+      <Ionicons name={icon} size={24} color={Colors.buttonText} />
     </View>
+    <View style={ProfileScreenStyle.actionContent}>
+      <Text style={ProfileScreenStyle.actionLabel}>{title}</Text>
+      <Text style={ProfileScreenStyle.actionSubtitle}>{subtitle}</Text>
+    </View>
+    <Ionicons name="chevron-forward" size={20} color={Colors.subtitle} />
   </TouchableOpacity>
 );
 
-export const ActionsGrid = ({ navigation, handleFavorites, handleAppDetails, handleAccountSettings, handleEditProfile }) => (
+export const ActionsGrid = ({ navigation, handleAppDetails, handleAccountSettings }) => (
   <View style={ProfileScreenStyle.actionGrid}>
-    <ActionItem
-      onPress={handleEditProfile}
-      icon="create-outline"
-      title="Edit profile"
-      subtitle="Update your bio and avatar"
-    />
-
     <ActionItem
       onPress={handleAccountSettings}
       icon="settings-outline"
       title="Account settings"
-      subtitle="Security & notifications"
-    />
-
-    <ActionItem
-      onPress={handleFavorites}
-      icon="heart-outline"
-      title="Favorites"
-      subtitle="See saved beers & spots"
-      backgroundColor={Colors.favorite}
+      subtitle="Profile & notifications"
+      backgroundColor="#1e3a5f"
     />
 
     <ActionItem
@@ -135,23 +144,25 @@ export const InterestsCard = () => (
   </View>
 );
 
-export const SupportCard = ({ onSupport, onLogout }) => (
+export const SignOutButton = ({ onLogout }) => (
+  <TouchableOpacity style={ProfileScreenStyle.signOutButton} onPress={onLogout}>
+    <Ionicons name="log-out-outline" size={20} color={Colors.buttonText} />
+    <Text style={ProfileScreenStyle.signOutLabel}>Sign out</Text>
+  </TouchableOpacity>
+);
+
+export const SupportCard = ({ onSupport }) => (
   <View style={ProfileScreenStyle.supportCard}>
-    <Text style={ProfileScreenStyle.supportTitle}>Need a hand?</Text>
-    <Text style={ProfileScreenStyle.supportText}>
-      Reach out if you have questions about your account, data privacy, or the
-      next beer recommendation. Our team typically replies within a day.
-    </Text>
-    <View style={ProfileScreenStyle.chipRow}>
-      <TouchableOpacity style={ProfileScreenStyle.chip} onPress={onSupport}>
-        <Text style={ProfileScreenStyle.chipText}>Contact support</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={ProfileScreenStyle.chip} onPress={onSupport}>
-        <Text style={ProfileScreenStyle.chipText}>Release notes</Text>
-      </TouchableOpacity>
+    <View style={ProfileScreenStyle.supportHeader}>
+      <Ionicons name="help-circle-outline" size={24} color={Colors.primary} />
+      <Text style={ProfileScreenStyle.supportTitle}>Need help?</Text>
     </View>
-    <TouchableOpacity style={ProfileScreenStyle.signOutButton} onPress={onLogout}>
-      <Text style={ProfileScreenStyle.signOutLabel}>Sign out</Text>
+    <Text style={ProfileScreenStyle.supportText}>
+      Have questions or feedback? We're here to help with any issues or suggestions.
+    </Text>
+    <TouchableOpacity style={ProfileScreenStyle.supportButton} onPress={onSupport}>
+      <Ionicons name="mail-outline" size={20} color={Colors.buttonText} />
+      <Text style={ProfileScreenStyle.supportButtonText}>Contact Support</Text>
     </TouchableOpacity>
   </View>
 );

@@ -27,13 +27,32 @@ export const fetchBeerReviews = async (beerId) => {
   return fetchedReviews;
 };
 
+export const calculateAverageRating = (reviews) => {
+  if (!reviews || reviews.length === 0) return 0;
+  
+  const sum = reviews.reduce((acc, review) => acc + (review.stars || 0), 0);
+  return sum / reviews.length;
+};
+
+export const generateBeerPrice = (beerId) => {
+  // Use beerId as seed for consistent price per beer
+  const hash = beerId.split('').reduce((acc, char) => {
+    return acc + char.charCodeAt(0);
+  }, 0);
+  
+  // Generate price between 25 and 75 DKK
+  const price = 25 + (hash % 51);
+  return price;
+};
+
 export const submitBeerReview = async ({
   beerId,
+  beerName,
+  beer,
   userId,
   displayName,
   reviewText,
   reviewStars,
-  isAnonymous,
 }) => {
   if (!beerId || !userId || !reviewText || !reviewStars) {
     throw new Error('Missing required review information');
@@ -42,8 +61,10 @@ export const submitBeerReview = async ({
   const reviewsRef = collection(db, FETCH_REVIEWS_COLLECTION);
   const docRef = await addDoc(reviewsRef, {
     beerId,
+    name: beerName || 'Unknown Beer',
+    beer: beer || null,
     userId,
-    displayName: isAnonymous ? 'Anonymous' : displayName || 'Anonymous',
+    displayName: displayName || 'Anonymous',
     text: reviewText,
     stars: reviewStars,
     createdAt: new Date(),
@@ -52,8 +73,10 @@ export const submitBeerReview = async ({
   return {
     id: docRef.id,
     beerId,
+    name: beerName || 'Unknown Beer',
+    beer: beer || null,
     userId,
-    displayName: isAnonymous ? 'Anonymous' : displayName || 'Anonymous',
+    displayName: displayName || 'Anonymous',
     text: reviewText,
     stars: reviewStars,
     createdAt: new Date(),
@@ -64,12 +87,17 @@ export const StarRating = ({ rating, onRatingChange }) => {
   const stars = [1, 2, 3, 4, 5];
 
   return (
-    <View style={{ flexDirection: 'row' }}>
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between', flex: 1 }}>
       {stars.map((star) => (
         <TouchableOpacity
           key={star}
           onPress={() => onRatingChange(star)}
-          onLongPress={() => onRatingChange(star - 0.5)}
+          style={{
+            padding: 4,
+            backgroundColor: rating >= star ? 'rgba(245, 179, 1, 0.1)' : 'transparent',
+            borderRadius: 8,
+          }}
+          activeOpacity={0.7}
         >
           <Ionicons
             name={
@@ -79,8 +107,8 @@ export const StarRating = ({ rating, onRatingChange }) => {
                 ? 'star-half'
                 : 'star-outline'
             }
-            size={24}
-            color="gold"
+            size={32}
+            color={rating >= star - 0.5 ? '#f5b301' : '#ccc'}
           />
         </TouchableOpacity>
       ))}

@@ -1,8 +1,10 @@
 import { useMemo } from 'react';
 import { Text, View, Image } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { SelectedBeerScreenStyle as S } from '../../styles/SelectedBeerScreenStyle';
+import { Colors } from '../../styles/Colors';
 
-export default function BeerHeader({ beer }){
+export default function BeerHeader({ beer, averageRating, price, reviewCount }){
   const displayStyle =
     beer.sub_category_1 ||
     beer.style ||
@@ -32,17 +34,73 @@ export default function BeerHeader({ beer }){
         <Image source={imageSource} style={S.beerImage} />
       </View>
       <Text style={S.beerName}>{beer.name}</Text>
-      <View style={S.metaBox}>
-        <View style={S.metaLeft}>
-          <Text style={S.metaText}>Style: <Text style={S.metaSubText}>{displayStyle}</Text></Text>
-          <Text style={S.metaText}>Region: <Text style={S.metaSubText}>{displayRegion}{displayCountry ? `, ${displayCountry}` : ""}</Text></Text>
+      
+      {/* Rating and Price Cards */}
+      <View style={S.statsGrid}>
+        <View style={S.statCard}>
+          <View style={S.statIconRow}>
+            <Ionicons name="star" size={24} color={Colors.starYellow} />
+          </View>
+          <Text style={S.statValue}>
+            {averageRating > 0 ? averageRating.toFixed(1) : '—'}
+          </Text>
+          <Text style={S.statLabel}>
+            {averageRating > 0 && reviewCount > 0 
+              ? `${reviewCount} ${reviewCount === 1 ? 'rating' : 'ratings'}` 
+              : 'No ratings yet'}
+          </Text>
         </View>
-        <View style={S.metaRight}>
-          <Text style={S.abvLabel}>ABV</Text>
-          <Text style={S.abvValue}>{displayAbv}</Text>
+        
+        <View style={S.statCard}>
+          <View style={S.statIconRow}>
+            <Ionicons name="cash-outline" size={24} color={Colors.primary} />
+          </View>
+          <Text style={S.statValue}>{price}</Text>
+          <Text style={S.statLabel}>DKK</Text>
+        </View>
+
+        <View style={S.statCard}>
+          <View style={S.statIconRow}>
+            <Ionicons name="water-outline" size={24} color={Colors.accent} />
+          </View>
+          <Text style={S.statValue}>{displayAbv}</Text>
+          <Text style={S.statLabel}>ABV</Text>
         </View>
       </View>
-      <Text style={S.descriptionText}>Description: {beer._raw?.description || "No description available"}</Text>
+
+      {/* Style & Region Info */}
+      <View style={S.infoSection}>
+        <View style={S.infoRow}>
+          <View style={S.infoItem}>
+            <Ionicons name="beer-outline" size={18} color={Colors.primary} />
+            <View style={S.infoTextContainer}>
+              <Text style={S.infoLabel}>Style</Text>
+              <Text style={S.infoValue}>{displayStyle}</Text>
+            </View>
+          </View>
+        </View>
+        
+        <View style={[S.infoRow, S.infoRowLast]}>
+          <View style={S.infoItem}>
+            <Ionicons name="location-outline" size={18} color={Colors.primary} />
+            <View style={S.infoTextContainer}>
+              <Text style={S.infoLabel}>Origin</Text>
+              <Text style={S.infoValue}>{displayRegion}{displayCountry ? `, ${displayCountry}` : ""}</Text>
+            </View>
+          </View>
+        </View>
+      </View>
+
+      {/* Description */}
+      {beer._raw?.description && (
+        <View style={S.descriptionSection}>
+          <View style={S.descriptionHeader}>
+            <Ionicons name="document-text-outline" size={18} color={Colors.subtitle} />
+            <Text style={S.descriptionTitle}>About this beer</Text>
+          </View>
+          <Text style={S.descriptionText}>{beer._raw.description}</Text>
+        </View>
+      )}
     </View>
   );
 }

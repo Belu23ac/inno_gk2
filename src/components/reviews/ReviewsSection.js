@@ -12,7 +12,6 @@ export default function ReviewsSection({ beer, user }){
   const [loading, setLoading] = useState(false);
   const [reviewText, setReviewText] = useState('');
   const [reviewStars, setReviewStars] = useState(0);
-  const [isAnonymous, setIsAnonymous] = useState(false);
 
   const fetchReviews = async () => {
     setLoading(true);
@@ -38,7 +37,7 @@ export default function ReviewsSection({ beer, user }){
       Alert.alert('Error', 'Review cannot be empty.');
       return;
     }
-    if (reviewStars < 1 || reviewStars > 5) {
+    if (reviewStars < 0 || reviewStars > 5) {
       Alert.alert('Error', 'Please select a valid star rating.');
       return;
     }
@@ -47,17 +46,17 @@ export default function ReviewsSection({ beer, user }){
     try {
       const newReview = await submitBeerReview({
         beerId: beer.id,
+        beerName: beer.name,
+        beer: beer,
         userId: user.uid,
         displayName: user.displayName,
         reviewText: trimmedReviewText,
         reviewStars,
-        isAnonymous,
       });
 
       setReviews((prev) => [newReview, ...prev]);
       setReviewText('');
       setReviewStars(0);
-      setIsAnonymous(false);
     } catch (error) {
       console.error('Error submitting review:', error);
       Alert.alert('Error', 'Could not submit review.');
@@ -74,8 +73,6 @@ export default function ReviewsSection({ beer, user }){
         user={user}
         reviewStars={reviewStars}
         setReviewStars={setReviewStars}
-        isAnonymous={isAnonymous}
-        setIsAnonymous={setIsAnonymous}
         reviewText={reviewText}
         setReviewText={setReviewText}
         loading={loading}

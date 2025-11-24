@@ -5,6 +5,7 @@ import UserProfileScreen from '../screens/StackScreens/UserProfileScreen';
 import AppDetailsScreen from '../screens/StackScreens/AppDetailsScreen';
 import AccountSettingsScreen from '../screens/StackScreens/AccountSettingsScreen';
 import FavoritesScreen from '../screens/StackScreens/FavoritesScreen';
+import ReviewsScreen from '../screens/StackScreens/ReviewsScreen';
 import SelectedBeerScreen from '../screens/StackScreens/SelectedBeerScreen';
 import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
@@ -28,6 +29,7 @@ export default function SettingsStackNavigation() {
       <Stack.Screen name="User Profile" component={UserProfileScreen} />
       <Stack.Screen name="Account Settings" component={AccountSettingsScreen} />
       <Stack.Screen name="Favorites" component={FavoritesScreen} />
+      <Stack.Screen name="Reviews" component={ReviewsScreen} />
       <Stack.Screen name="SelectedBeer" component={SelectedBeerScreen} options={{ title: "Beer Details" }} />
       <Stack.Screen name="App Details" component={AppDetailsScreen} />
       <Stack.Screen name="Login" component={LoginScreen} options={{ title: "Sign In" }} />

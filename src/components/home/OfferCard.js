@@ -28,21 +28,39 @@ export const OFFER_OF_WEEK = {
 export default function OfferCard({ offer = OFFER_OF_WEEK, navigation }) {
   if (!offer) return null;
   return (
-    <View style={HomeScreenStyle.offerCard}>
-      <View style={HomeScreenStyle.offerBadge}>
-        <Text style={HomeScreenStyle.offerBadgeText}>{offer.label}</Text>
+    <TouchableOpacity 
+      style={HomeScreenStyle.offerCard}
+      onPress={() => navigation.navigate('Selected Beer', { beer: offer.beer })}
+      activeOpacity={0.95}
+    >
+      <View style={HomeScreenStyle.offerHeader}>
+        <View style={HomeScreenStyle.offerBadge}>
+          <Ionicons name="star" size={13} color={Colors.primary} />
+          <Text style={HomeScreenStyle.offerBadgeText}>{offer.label}</Text>
+        </View>
+        <View style={HomeScreenStyle.discountBadge}>
+          <Text style={HomeScreenStyle.discountText}>-44%</Text>
+        </View>
       </View>
-      <Text style={HomeScreenStyle.offerTitle}>{offer.name}</Text>
-      <Text style={HomeScreenStyle.offerSubtitle}>{offer.blurb}</Text>
+
+      <View style={HomeScreenStyle.offerContent}>
+        <Text style={HomeScreenStyle.offerTitle}>{offer.name}</Text>
+        <Text style={HomeScreenStyle.offerSubtitle}>{offer.blurb}</Text>
+      </View>
+
       <View style={HomeScreenStyle.offerFooter}>
-        <Text style={HomeScreenStyle.offerMeta}>{offer.price}</Text>
-        <TouchableOpacity
-          style={HomeScreenStyle.offerButton}
-          onPress={() => navigation.navigate('Selected Beer', { beer: offer.beer })}
-        >
-          <Text style={HomeScreenStyle.offerButtonText}>View details</Text>
-        </TouchableOpacity>
+        <View style={HomeScreenStyle.priceContainer}>
+          <Text style={HomeScreenStyle.memberPriceLabel}>Member price</Text>
+          <View style={HomeScreenStyle.priceRow}>
+            <Text style={HomeScreenStyle.discountedPrice}>89 kr</Text>
+            <Text style={HomeScreenStyle.originalPrice}>159 kr</Text>
+          </View>
+        </View>
+        <View style={HomeScreenStyle.offerButton}>
+          <Text style={HomeScreenStyle.offerButtonText}>View offer</Text>
+          <Ionicons name="arrow-forward" size={16} color={Colors.primary} />
+        </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }

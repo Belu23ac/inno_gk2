@@ -6,44 +6,63 @@ import { GuestLoginView } from '../beer/SelectedBeerParts';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../styles/Colors';
 
-export default function ReviewForm({ user, reviewStars, setReviewStars, isAnonymous, setIsAnonymous, reviewText, setReviewText, loading, submitReview }){
+export default function ReviewForm({ user, reviewStars, setReviewStars, reviewText, setReviewText, loading, submitReview }){
   if (!user) {
     return <GuestLoginView />;
   }
 
   return (
-    <View>
-      <StarRating rating={reviewStars} onRatingChange={setReviewStars} />
-
-      <View style={S.checkboxContainer}>
-        <TouchableOpacity
-          style={S.checkbox}
-          onPress={() => setIsAnonymous((prev) => !prev)}
-        >
-          <Ionicons
-            name={isAnonymous ? "checkbox" : "square-outline"}
-            size={20}
-            color={Colors.primary}
-          />
-        </TouchableOpacity>
-        <Text style={S.checkboxLabel}>Post as Anonymous</Text>
+    <View style={S.reviewFormContainer}>
+      {/* Rating Section */}
+      <View style={S.ratingSection}>
+        <View style={S.ratingHeader}>
+          <Ionicons name="star" size={20} color={Colors.starYellow} />
+          <Text style={S.ratingLabel}>Your Rating</Text>
+          {reviewStars > 0 && (
+            <Text style={S.ratingValue}>{Math.round(reviewStars)}/5</Text>
+          )}
+        </View>
+        <View style={S.starsContainer}>
+          <StarRating rating={reviewStars} onRatingChange={setReviewStars} />
+        </View>
       </View>
 
-      <TextInput
-        style={S.reviewInput}
-        placeholder="Write your review here..."
-        value={reviewText}
-        onChangeText={setReviewText}
-      />
+      {/* Review Text Section */}
+      <View style={S.textSection}>
+        <View style={S.textHeader}>
+          <Ionicons name="create-outline" size={20} color={Colors.primary} />
+          <Text style={S.textLabel}>Your Thoughts</Text>
+        </View>
+        <TextInput
+          style={S.reviewInput}
+          placeholder="Share your experience with this beer..."
+          placeholderTextColor={Colors.subtitle}
+          value={reviewText}
+          onChangeText={setReviewText}
+          multiline
+          numberOfLines={4}
+          textAlignVertical="top"
+        />
+      </View>
 
+      {/* Submit Button */}
       <TouchableOpacity
-        style={S.submitButton}
+        style={[S.submitButton, loading && S.submitButtonDisabled]}
         onPress={submitReview}
         disabled={loading}
+        activeOpacity={0.8}
       >
-        <Text style={S.submitButtonText}>
-          {loading ? "Submitting..." : "Submit Review"}
-        </Text>
+        {loading ? (
+          <View style={S.submitButtonContent}>
+            <Ionicons name="hourglass-outline" size={20} color={Colors.buttonText} />
+            <Text style={S.submitButtonText}>Submitting...</Text>
+          </View>
+        ) : (
+          <View style={S.submitButtonContent}>
+            <Ionicons name="checkmark-circle-outline" size={20} color={Colors.buttonText} />
+            <Text style={S.submitButtonText}>Post Review</Text>
+          </View>
+        )}
       </TouchableOpacity>
     </View>
   );
