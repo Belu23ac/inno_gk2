@@ -4,7 +4,7 @@ En mobilapp til at opdage og dele øl og bryggerier — med stregkodelæser, sø
 
 ## Demo
 
-▶️ Se demovideo på Vimeo: [___]
+▶️ Se demovideo på Youtube: [https://youtube.com/shorts/sRWCLdT1lXQ?si=dRy9YDZtIhHcwWPM]
 
 ## Funktioner
 
